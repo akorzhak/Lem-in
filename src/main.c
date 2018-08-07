@@ -67,7 +67,7 @@ int		main(void)
 	}
 	pave_the_ways(&ways, &l, &rooms);
 	w = ways;
-	printf("\n\t%s\n", "POSSIBLE WAYS:");
+	printf("\n\t%s\n", "VALID WAYS:");
 	while (w)
 	{
 		n = 0;

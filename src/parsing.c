@@ -324,7 +324,7 @@ void	set_levels(t_lemin *l, t_room ***rooms)
 			links = links->next;
 		}
 	} while (change);
-	printf("\n\t%s\n", "ROOMS' LEVELS:");
+	printf("\n\t%s\n\n", "BREADTH FIRST SEARCH:");
 	while (r[i]) //@TEST ONLY !!!!!!!!!!!!!!!!!!!!!!
 	{
 		printf("name: %s\t", r[i]->name);
@@ -394,7 +394,7 @@ t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 	while (rooms)
 	{
 		if ((!lowest_lvl || rooms->room->level < lowest_lvl)
-			&& (rooms->room->used == NOT_USED))
+			&& (rooms->room->used == NOT_USED) && rooms->room->level)
 		{
 			lowest_lvl = rooms->room->level;
 			penultimate_room = rooms;
@@ -445,13 +445,14 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 		link = penultimate_room->room->linked_rooms;
 		while (len)
 		{
-			while (link && (link->room->level != len || link->room->used))
+			while (link && (link->room->level != len || (link->room->used
+				&& ft_strcmp(link->room->name, l->start_room))))
 				link = link->next;
 			if (!link)
 				break ;
 			way[--len] = ft_strdup(link->room->name);
-			if (ft_strcmp(link->room->name, l->start_room))
-				link->room->used = USED;
+			link->room->used = USED;
+
 			link = link->room->linked_rooms;
 		}
 		if (!way[0])
