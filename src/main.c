@@ -37,7 +37,7 @@ int		main(void)
 	init_lemin(&l);
 	if (!identify_ants_number(&l) || !(identify_rooms(&l, &rooms, &line)))
 		return (display_error_message());
-	if (!get_links(&l, &line))
+	if (!get_links(&l, &line, &rooms))
 		return (display_error_message());
 	set_levels(&l, &rooms);
 	drop_bad_links(&l, &rooms);

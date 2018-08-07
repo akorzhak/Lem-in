@@ -175,10 +175,14 @@ void	record_links(t_lemin *l, char *room1, char *room2)
 	ft_printf("%s-%s\n", room1, room2);
 }
 
-int 	get_links(t_lemin *l, char **line)
+int 	get_links(t_lemin *l, char **line, t_room ***rooms)
 {
 	char **arr;
+	int 	i_room1;
+	int 	i_room2;
+	t_room 	**r;
 
+	r = *rooms;
 	do
 	{
 		if (**line == '#')
@@ -189,7 +193,10 @@ int 	get_links(t_lemin *l, char **line)
 			continue ;
 		}
 		arr = ft_strsplit(*line, '-');
-		if (arrlen(arr) != 2 || !ft_strcmp(arr[0], arr[1]))
+		i_room1 = dict(r, l, arr[0]);
+		i_room2 = dict(r, l, arr[1]);
+		if (arrlen(arr) != 2 || !ft_strcmp(arr[0], arr[1])
+			|| i_room1 == -1 || i_room2 == -1)
 		{
 			delete_2darray(arr);
 			return (0);
@@ -295,7 +302,7 @@ void	set_levels(t_lemin *l, t_room ***rooms)
 	t_room **r;
 	t_link *links;
 	int 	level;
-	int 	change;
+	char 	change;
 
 	r = *rooms;
 	int i = 0; //@TEST ONLY !!!!!!!!!!!!!!!!!!!!!!!!!
@@ -312,14 +319,14 @@ void	set_levels(t_lemin *l, t_room ***rooms)
 				&& !r[dict(r, l, links->room2)]->level)
 			{
 				r[dict(r, l, links->room2)]->level = level + 1;
-				change++;
+				change = 1;
 			}
 			else if (ft_strcmp(links->room2, l->end_room)
 				&& (level = r[dict(r, l, links->room2)]->level)
 				&& !r[dict(r, l, links->room1)]->level)
 			{
 				r[dict(r, l, links->room1)]->level = level + 1;
-				change++;
+				change = 1;
 			}
 			links = links->next;
 		}

@@ -15,7 +15,6 @@
 
 # include "libftprintf.h"
 # include <fcntl.h>
-# include <math.h>
 # include <stdio.h>
 
 # define ENTRANCE 1
@@ -91,7 +90,7 @@ void				delete_2darray(char **arr);
 int					delete_line_and_exit(char **line);
 void				free_namelist(t_namelist **list);
 int					display_error_message(void);
-int					get_links(t_lemin *l, char **line);
+int					get_links(t_lemin *l, char **line, t_room ***rooms);
 int					arrlen(char **arr);
 void				set_levels(t_lemin *l, t_room ***rooms);
 int					dict(t_room **rooms, t_lemin *l, char *value);
