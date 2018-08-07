@@ -295,30 +295,36 @@ void	set_levels(t_lemin *l, t_room ***rooms)
 	t_room **r;
 	t_link *links;
 	int 	level;
+	int 	change;
 
 	r = *rooms;
 	int i = 0; //@TEST ONLY !!!!!!!!!!!!!!!!!!!!!!!!!
+//	r[dict(r, l, l->end_room)]->level = -1;
 	set_1st_levels(l, rooms);
-	while (!r[dict(r, l, l->end_room)]->level)
+	do
 	{
+		change = 0;
 		links = l->links;
 		while (links)
 		{
-			if ((level = r[dict(r, l, links->room1)]->level)
-			//	&& ft_strcmp((r[dict(r, l, links->room1)]->name), l->end_room) //drop temporarily
+			if (ft_strcmp(links->room1, l->end_room)
+				&& (level = r[dict(r, l, links->room1)]->level)
 				&& !r[dict(r, l, links->room2)]->level)
 			{
 				r[dict(r, l, links->room2)]->level = level + 1;
+				change++;
 			}
-			else if ((level = r[dict(r, l, links->room2)]->level)
-			//	&& ft_strcmp((r[dict(r, l, links->room2)])->name, l->end_room) //drop temporarily
+			else if (ft_strcmp(links->room2, l->end_room)
+				&& (level = r[dict(r, l, links->room2)]->level)
 				&& !r[dict(r, l, links->room1)]->level)
 			{
 				r[dict(r, l, links->room1)]->level = level + 1;
+				change++;
 			}
 			links = links->next;
 		}
-	}
+	} while (change);
+	printf("\n\t%s\n", "ROOMS' LEVELS:");
 	while (r[i]) //@TEST ONLY !!!!!!!!!!!!!!!!!!!!!!
 	{
 		printf("name: %s\t", r[i]->name);
@@ -379,7 +385,7 @@ void	set_linkages(t_lemin *l, t_room ***rooms)
 
 t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 {
-	static int 	lowest_lvl;
+	int 	lowest_lvl = 0;
 	t_linkage 	*rooms;
 	t_linkage 	*penultimate_room;
 
@@ -398,46 +404,68 @@ t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 	return (penultimate_room);
 }
 
+void	drop_the_way(char ***way, int i)
+{
+	char **w;
+
+	w = *way;
+	while (w[i])
+		ft_strdel(&w[i--]);
+	// free(way);
+	// way = NULL;
+	ft_memdel((void **)*way);
+}
+
 void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 {
 	int 	i;
 	int 	len;
+	int 	last_room_index;
 	t_room **r;
 	t_linkage *penultimate_room;
 	t_linkage *link;
 	char	**way;
+	t_ways 	*w;
 
 	i = 0;
 	r = *rooms;
 	*ways = (t_ways *)ft_memalloc(sizeof(t_ways));
+	w = *ways;
 	while (ft_strcmp(r[i]->name, l->end_room))
 		i++;
+	r[i]->used = USED;
 	while ((penultimate_room = choose_penultimate_room(&(r[i]->linked_rooms))))
 	{
 		len = penultimate_room->room->level + 2;
 		way = (char **)ft_memalloc(sizeof(char *) * len--); //for end room & null;
 		way[--len] = ft_strdup(l->end_room);
+		last_room_index = len;
 		way[--len] = ft_strdup(penultimate_room->room->name);
 		penultimate_room->room->used = USED;
 		link = penultimate_room->room->linked_rooms;
 		while (len)
 		{
-			while (link && link->room->level != len)
+			while (link && (link->room->level != len || link->room->used))
 				link = link->next;
 			if (!link)
 				break ;
 			way[--len] = ft_strdup(link->room->name);
-			link->room->used = USED;
+			if (ft_strcmp(link->room->name, l->start_room))
+				link->room->used = USED;
 			link = link->room->linked_rooms;
 		}
-	//	if (ft_strcmp(way[len], l->start_room))
-	//		drop_the_way(&way); //@TO_DO !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-		i = 0;
-		while (way[i])
-			printf("%s\n", way[i++]);
-		exit(0);
-		(*ways)->way = (t_way *)ft_memalloc(sizeof(t_way));
-		(*ways)->way->rooms = way;
+		if (!way[0])
+		{
+			drop_the_way(&way, last_room_index);
+			break ;
+		}
+		if (w->way)
+		{
+			w->next = (t_ways *)ft_memalloc(sizeof(t_ways));
+			w = w->next;
+		}
+		w->way = (t_way *)ft_memalloc(sizeof(t_way));
+		w->way->rooms = way;
 	}
 }
 

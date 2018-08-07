@@ -28,7 +28,9 @@ int		main(void)
 	char	*line;
 	t_link	*links;
 	t_ways	*ways;
+	t_ways 	*w;
 	int 	i = 0;
+	int n = 0;
 
 	rooms = NULL;
 	line = NULL;
@@ -41,7 +43,7 @@ int		main(void)
 	drop_bad_links(&l, &rooms);
 	links = l.links;
 
-	printf("\n%s\n", "pure links:"); //@DELETE
+	printf("\n\t%s\n\n", "PURE LINKS:"); //@DELETE
 	while(links) //@DELETE
 	{
 		printf("%s-%s\n", links->room1, links->room2);
@@ -49,7 +51,7 @@ int		main(void)
 	}
 	set_linkages(&l, &rooms);
 
-	printf("\n%s\n", "adjacency list:");
+	printf("\n\t%s\n\n", "ADJACENCY LIST:");
 	r = rooms;
 	while (r[i])
 	{
@@ -63,8 +65,19 @@ int		main(void)
 		printf("\n");
 		i++;
 	}
-
 	pave_the_ways(&ways, &l, &rooms);
+	w = ways;
+	printf("\n\t%s\n", "POSSIBLE WAYS:");
+	while (w)
+	{
+		n = 0;
+		printf("\n");
+		printf("%s", w->way->rooms[n++]);
+		while (w->way->rooms[n])
+			printf("->%s", w->way->rooms[n++]);
+		w = w->next;
+	}
+	printf("\n");
 	// printf("%d\n", rooms[0]->level);
 	// printf("%d\n", rooms[3]->level);
 	// printf("%d\n", rooms[5]->level);
