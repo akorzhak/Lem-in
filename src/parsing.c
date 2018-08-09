@@ -474,34 +474,112 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 		}
 		w->way = (t_way *)ft_memalloc(sizeof(t_way));
 		w->way->rooms = way;
+		l->ways_nb++;
 	}
 }
 
-// void	remove_unlink_rooms(t_lem *l)
-// {
-// 	t_links	*ln;
-// 	t_rooms	*cur;
-// 	t_rooms	*prev;
+void	define_nb_of_transfers(t_ways **ways)
+{
+	int len;
+	t_ways 	*w;
 
-// 	cur = l->rooms;
-// 	prev = NULL;
-// 	while (cur)
-// 	{
-// 		ln = l->links;
-// 		while (ln)
-// 		{
-// 			if (cmp(ln->first, cur->name) || cmp(ln->second, cur->name))
-// 				break ;
-// 			ln = ln->next;
-// 		}
-// 		if (!ln)
-// 		{
-// 			del_room(l, &cur, &prev);
-// 		}
-// 		else
-// 		{
-// 			prev = cur;
-// 			cur = cur->next;
-// 		}
-// 	}
-// }
+	len = 0;
+	w = *ways;
+	while (w)
+	{
+		while (w->way->rooms[len])
+			len++;
+		w->way->len = --len;
+		w = w->next;
+	}
+}
+
+int 	calculate_total_ways_len(t_ways *ways)
+{
+	int 	total_len;
+
+	total_len = 0;
+	while (ways)
+	{
+		total_len += ways->way->len;
+		ways = ways->next;
+	}
+	return (total_len);
+}
+
+void	define_capacity_pc_for_2_ways(t_ways **w)
+{
+	int 	total_len;
+	float 	pc_unit;
+
+	total_len = calculate_total_ways_len(*w);
+	pc_unit = 100.0 / total_len;
+	(*w)->way->capacity_pc = (*w)->next->way->len * pc_unit / 100.0;
+	(*w)->next->way->capacity_pc = 1 - (*w)->way->capacity_pc;
+}
+
+void	define_capacity_pc_for_n_ways(t_ways **ways, int ways_nb)
+{
+	int 	way1_len;	
+	int 	sum_pc;
+	float 	pc_unit;
+	float	difference;
+	t_ways *w;
+
+	w = *ways;
+	way1_len = w->way->len;
+	pc_unit = 100.0 / ways_nb;
+	sum_pc = 0;
+	do 
+	{
+		w = *ways;
+		while (w)
+		{
+			w->way->capacity_pc = (pc_unit * way1_len) / w->way->len;
+			sum_pc += w->way->capacity_pc;
+			w = w->next;
+		}
+		difference = 100.0 - sum_pc;
+		if (difference > 1 || difference < -1)
+		{
+			pc_unit *= (difference / sum_pc);
+		}
+		else
+			difference = 0;
+	} while (difference);
+}
+
+void	define_capacity_in_percents(t_ways **w, int ways_nb)
+{
+	if (ways_nb == 1)
+		(*w)->way->capacity_pc = 1;
+	else if (ways_nb == 2)
+		define_capacity_pc_for_2_ways(w);
+	else
+		define_capacity_pc_for_n_ways(w, ways_nb); //other algo
+
+}
+
+void	define_capacity_nb_for_2_ways(t_ways **w, int ants_nb)
+{
+	(*w)->next->way->capacity_nb = ants_nb * (*w)->next->way->capacity_pc;
+	(*w)->way->capacity_nb = ants_nb - (*w)->next->way->capacity_nb;
+}
+
+void	define_capacity_in_numbers(t_ways **w, int ways_nb, int ants_nb)
+{
+	if (ways_nb == 1)
+		(*w)->way->capacity_nb = ants_nb;
+	else if (ways_nb == 2)
+		define_capacity_nb_for_2_ways(w, ants_nb);
+	else
+		return ;
+		//define_capacity_nb_for_n_ways(w, ways_nb, ants_nb); //@TO_DO !!!!!!!!
+}
+
+void	allocate_ants_by_ways(t_ways **ways, t_lemin *l)
+{
+	define_nb_of_transfers(ways);
+	define_capacity_in_percents(ways, l->ways_nb);
+	define_capacity_in_numbers(ways, l->ways_nb, l->ants_nb);
+}

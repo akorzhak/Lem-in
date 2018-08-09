@@ -49,7 +49,9 @@ struct				s_room
 
 struct				s_way //a single way with priority
 {
-	int				priority;
+	int				capacity_nb;
+	float 			capacity_pc;
+	int 			len;
 	char			**rooms;
 };
 
@@ -71,6 +73,7 @@ struct				s_lemin
 	int				ants_nb;
 	int				rooms_nb;
 	int				links_nb;
+	int 			ways_nb;
 	char			*start_room;
 	char			*end_room;
 	t_link			*links;
@@ -97,5 +100,6 @@ int					dict(t_room **rooms, t_lemin *l, char *value);
 void				drop_bad_links(t_lemin *l, t_room ***rooms);
 void				set_linkages(t_lemin *l, t_room ***rooms);
 void				pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms);
+void				allocate_ants_by_ways(t_ways **ways, t_lemin *l);
 
 #endif

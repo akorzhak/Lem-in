@@ -44,7 +44,7 @@ int		main(void)
 	links = l.links;
 
 	printf("\n\t%s\n\n", "PURE LINKS:"); //@DELETE
-	while(links) //@DELETE
+	while (links) //@DELETE
 	{
 		printf("%s-%s\n", links->room1, links->room2);
 		links = links->next;
@@ -78,6 +78,18 @@ int		main(void)
 		w = w->next;
 	}
 	printf("\n");
+	allocate_ants_by_ways(&ways, &l);
+	w = ways;
+	n = 0;
+	printf("\n");
+	printf("\t%s\n", "WAYS CAPACITIES:");
+	while (w)
+	{
+		printf("%d way: ", ++n);
+			printf("%d\n", w->way->capacity_nb);
+		w = w->next;
+	}
+
 	// printf("%d\n", rooms[0]->level);
 	// printf("%d\n", rooms[3]->level);
 	// printf("%d\n", rooms[5]->level);
