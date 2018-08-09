@@ -40,7 +40,7 @@ int		main(void)
 	if (!get_links(&l, &line, &rooms))
 		return (display_error_message());
 	set_levels(&l, &rooms);
-	drop_bad_links(&l, &rooms);
+//	drop_bad_links(&l, &rooms);
 	links = l.links;
 
 	printf("\n\t%s\n\n", "PURE LINKS:"); //@DELETE
@@ -82,11 +82,21 @@ int		main(void)
 	w = ways;
 	n = 0;
 	printf("\n");
-	printf("\t%s\n", "WAYS CAPACITIES:");
+	printf("\t%s\n", "WAYS CAPACITIES NB'S:");
 	while (w)
 	{
 		printf("%d way: ", ++n);
 			printf("%d\n", w->way->capacity_nb);
+		w = w->next;
+	}
+	w = ways;
+	n = 0;
+	printf("\n");
+	printf("\t%s\n", "WAYS CAPACITIES PC'S:");
+	while (w)
+	{
+		printf("%d way: ", ++n);
+			printf("%f\n", w->way->capacity_pc);
 		w = w->next;
 	}
 
