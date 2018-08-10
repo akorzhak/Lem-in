@@ -27,9 +27,10 @@ typedef struct s_lemin		t_lemin;
 typedef struct s_room		t_room;
 typedef struct s_link 		t_link;
 typedef struct s_linkage	t_linkage;
-typedef struct s_way		t_way;
 typedef struct s_ways		t_ways;
 typedef struct s_namelist	t_namelist;
+typedef struct s_path		t_path;
+typedef struct s_ant_room	t_ant_room;
 
 struct 				s_linkage //for adjacency list
 {
@@ -40,24 +41,19 @@ struct 				s_linkage //for adjacency list
 struct				s_room
 {
 	char			*name;
-	int				ant; //0 - if empty, 1 - ant nb 1, 2 - ant nb 2...
-	int				level; //1, 2, 0 - if invalid path
-	int				property;
+	int				ant; //0 - if empty, 1 - ant nb 1, 2 - ant nb 2...DROP
+	int				level; //1, 2, 0 - if invalid path DROP
+	int				property; //DROP ???
 	char			used;
 	t_linkage		*linked_rooms;
 };
 
-struct				s_way //a single way with priority
+struct				s_ways //list of all ways
 {
 	int				capacity_nb;
 	float 			capacity_pc;
 	int 			len;
 	char			**rooms;
-};
-
-struct				s_ways //list of all ways
-{
-	t_way			*way;
 	t_ways			*next;
 };
 
@@ -86,6 +82,20 @@ struct				s_namelist
 	t_namelist		*next;
 };
 
+// struct				s_ant_room
+// {
+// 	char			*name;
+// 	int				ant;
+// 	t_ant_room		*next;
+// };
+
+// struct				s_path
+// {
+// 	int				capacity;
+// 	t_ant_room		*room;
+// 	t_path			*next;
+// };
+
 void				init_lemin(t_lemin *l);
 int					identify_ants_number(t_lemin *l);
 int					identify_rooms(t_lemin *l, t_room ***rooms, char **line);
@@ -101,5 +111,6 @@ void				drop_bad_links(t_lemin *l, t_room ***rooms);
 void				set_linkages(t_lemin *l, t_room ***rooms);
 void				pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms);
 void				allocate_ants_by_ways(t_ways **ways, t_lemin *l);
+void				move_ants(t_lemin *l, t_ways **ways);
 
 #endif

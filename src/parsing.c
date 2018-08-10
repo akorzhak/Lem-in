@@ -431,7 +431,6 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 	t_room **r;
 	t_linkage *penultimate_room;
 	t_linkage *link;
-//	t_linkage *head;
 	char	**way;
 	t_ways 	*w;
 	int fl;
@@ -446,46 +445,35 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 	r[i]->used = USED;
 	while ((penultimate_room = choose_penultimate_room(&(r[i]->linked_rooms))))
 	{
+		if (w->rooms)
+		{
+			w->next = (t_ways *)ft_memalloc(sizeof(t_ways));
+			w = w->next;
+		}
 		len = penultimate_room->room->level + 2;
-		way = (char **)ft_memalloc(sizeof(char *) * len--); //for end room & null;
+		way = (char **)ft_memalloc(sizeof(char *) * len--);
 		way[--len] = ft_strdup(l->end_room);
 		last_room_index = len;
 		way[--len] = ft_strdup(penultimate_room->room->name);
 		penultimate_room->room->used = USED;
 		link = penultimate_room->room->linked_rooms;
-//		head = link; //kick
 		while (len)
 		{
 			while (link && (link->room->level != (len + fl) || (link->room->used
 				&& ft_strcmp(link->room->name, l->start_room))))
 				link = link->next;
-			// if (!link && !fl) //maybe kick
-			// {
-			// 	link = head;
-			// 	fl = 1;
-			// 	continue ;
-			// }
-			// else if (!link && fl) //kick
-			// 	break ;
 			if (!link)
 				break ;
 			way[--len] = ft_strdup(link->room->name);
 			link->room->used = USED;
 			link = link->room->linked_rooms;
-		//	head = link;
 		}
 		if (!way[0])
 		{
 			drop_the_way(&way, last_room_index);
 			break ;
 		}
-		if (w->way)
-		{
-			w->next = (t_ways *)ft_memalloc(sizeof(t_ways));
-			w = w->next;
-		}
-		w->way = (t_way *)ft_memalloc(sizeof(t_way));
-		w->way->rooms = way;
+		w->rooms = way;
 		l->ways_nb++;
 	}
 }
@@ -499,9 +487,9 @@ void	define_nb_of_transfers(t_ways **ways)
 	w = *ways;
 	while (w)
 	{
-		while (w->way->rooms[len])
+		while (w->rooms[len])
 			len++;
-		w->way->len = --len;
+		w->len = --len;
 		w = w->next;
 	}
 }
@@ -513,7 +501,7 @@ int 	calculate_total_ways_len(t_ways *ways)
 	total_len = 0;
 	while (ways)
 	{
-		total_len += ways->way->len;
+		total_len += ways->len;
 		ways = ways->next;
 	}
 	return (total_len);
@@ -526,8 +514,8 @@ void	define_capacity_pc_for_2_ways(t_ways **w)
 
 	total_len = calculate_total_ways_len(*w);
 	pc_unit = 100.0 / total_len;
-	(*w)->way->capacity_pc = (*w)->next->way->len * pc_unit / 100.0;
-	(*w)->next->way->capacity_pc = 1 - (*w)->way->capacity_pc;
+	(*w)->capacity_pc = (*w)->next->len * pc_unit / 100.0;
+	(*w)->next->capacity_pc = 1 - (*w)->capacity_pc;
 }
 
 void	define_capacity_pc_for_n_ways(t_ways **ways, int ways_nb)
@@ -540,7 +528,7 @@ void	define_capacity_pc_for_n_ways(t_ways **ways, int ways_nb)
 	char flag = 2;
 
 	w = *ways;
-	way1_len = w->way->len;
+	way1_len = w->len;
 	pc_unit = 100.0 / ways_nb;
 	while (flag--) 
 	{
@@ -548,8 +536,8 @@ void	define_capacity_pc_for_n_ways(t_ways **ways, int ways_nb)
 		w = *ways;
 		while (w)
 		{
-			w->way->capacity_pc = (pc_unit * way1_len) / w->way->len / 100.0;
-			sum_pc += w->way->capacity_pc;
+			w->capacity_pc = (pc_unit * way1_len) / w->len / 100.0;
+			sum_pc += w->capacity_pc;
 			w = w->next;
 		}
 		difference = 1.0 - sum_pc;
@@ -568,7 +556,7 @@ void	define_capacity_pc_for_n_ways(t_ways **ways, int ways_nb)
 void	define_capacity_in_percents(t_ways **w, int ways_nb)
 {
 	if (ways_nb == 1)
-		(*w)->way->capacity_pc = 1;
+		(*w)->capacity_pc = 1;
 	else if (ways_nb == 2)
 		define_capacity_pc_for_2_ways(w);
 	else
@@ -578,8 +566,8 @@ void	define_capacity_in_percents(t_ways **w, int ways_nb)
 
 void	define_capacity_nb_for_2_ways(t_ways **w, int ants_nb)
 {
-	(*w)->next->way->capacity_nb = ants_nb * (*w)->next->way->capacity_pc;
-	(*w)->way->capacity_nb = ants_nb - (*w)->next->way->capacity_nb;
+	(*w)->next->capacity_nb = ants_nb * (*w)->next->capacity_pc;
+	(*w)->capacity_nb = ants_nb - (*w)->next->capacity_nb;
 }
 
 void	define_capacity_nb_for_n_ways(t_ways **ways, int ants_nb)
@@ -591,18 +579,18 @@ void	define_capacity_nb_for_n_ways(t_ways **ways, int ants_nb)
 	w = (*ways)->next;
 	while (w)
 	{
-		w->way->capacity_nb = ants_nb * w->way->capacity_pc;
-		ants_allocated += w->way->capacity_nb;
+		w->capacity_nb = ants_nb * w->capacity_pc;
+		ants_allocated += w->capacity_nb;
 		w = w->next;
 	}
 	w = *ways;
-	w->way->capacity_nb = ants_nb - ants_allocated;
+	w->capacity_nb = ants_nb - ants_allocated;
 }
 
 void	define_capacity_in_numbers(t_ways **w, int ways_nb, int ants_nb)
 {
 	if (ways_nb == 1)
-		(*w)->way->capacity_nb = ants_nb;
+		(*w)->capacity_nb = ants_nb;
 	else if (ways_nb == 2)
 		define_capacity_nb_for_2_ways(w, ants_nb);
 	else
@@ -615,3 +603,49 @@ void	allocate_ants_by_ways(t_ways **ways, t_lemin *l)
 	define_capacity_in_percents(ways, l->ways_nb);
 	define_capacity_in_numbers(ways, l->ways_nb, l->ants_nb);
 }
+
+// void	move_ants(t_lemin *l, t_ways **ways)
+// {
+// 	t_path	*path;
+// 	t_ways 	*w;
+// 	t_path	*p;
+// 	int 	i;
+
+// 	w = *ways;
+// 	path = (t_path *)ft_memalloc(sizeof(t_path));
+// 	p = path;
+// 	while (l->ways_nb--)
+// 	{	
+// 		p->capacity = w->capacity_nb;
+// 		p->room = (t_ant_room *)ft_memalloc(sizeof(t_ant_room));
+// 		i = 1;
+// 		p->room->name = ft_strdup(w->rooms[i]);
+// 		while (w->rooms[++i])
+// 		{
+// 			p->room->next = (t_ant_room *)ft_memalloc(sizeof(t_ant_room));
+// 			p->room = p->room->next;
+// 			p->room->name = ft_strdup(w->rooms[i]);
+// 		}
+// 		if (!l->ways_nb)
+// 			p->next = NULL;
+// 		else
+// 		{
+// 			p->next = (t_path *)ft_memalloc(sizeof(t_path));
+// 			p = p->next;
+// 		}
+// 		w = w->next;	
+// 	}
+// 	p = path;
+// 	while (p)
+// 	{
+// 		printf("\n\nWAY CAPACITY: %d\n", p->capacity);
+// 		printf("%s\n", p->room->name);
+// 		p->room = p->room->next;
+// 		while (p->room)
+// 		{
+// 			printf("->%s\n", p->room->name);
+// 			p->room = p->room->next;
+// 		}
+// 		p = p->next;
+// 	}
+// }
