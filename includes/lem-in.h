@@ -48,12 +48,18 @@ struct				s_room
 	t_linkage		*linked_rooms;
 };
 
+struct				s_ant_room
+{
+	char			*name;
+	int				ant;
+};
+
 struct				s_ways //list of all ways
 {
 	int				capacity_nb;
 	float 			capacity_pc;
 	int 			len;
-	char			**rooms;
+	t_ant_room		**rooms;
 	t_ways			*next;
 };
 
@@ -82,12 +88,7 @@ struct				s_namelist
 	t_namelist		*next;
 };
 
-// struct				s_ant_room
-// {
-// 	char			*name;
-// 	int				ant;
-// 	t_ant_room		*next;
-// };
+
 
 // struct				s_path
 // {

@@ -70,12 +70,11 @@ int		main(void)
 	printf("\n\t%s\n", "VALID WAYS:");
 	while (w)
 	{
-		
 		n = 0;
 		printf("\n");
-		printf("%s", w->rooms[n++]);
+		printf("%s", w->rooms[n++]->name);
 		while (w->rooms[n])
-			printf("->%s", w->rooms[n++]);
+			printf("->%s", w->rooms[n++]->name);
 		w = w->next;
 	}
 	printf("\n");
@@ -100,7 +99,7 @@ int		main(void)
 			printf("%f\n", w->capacity_pc);
 		w = w->next;
 	}
-//	move_ants(&l, &ways);
+	move_ants(&l, &ways);
 
 	// printf("%d\n", rooms[0]->level);
 	// printf("%d\n", rooms[3]->level);

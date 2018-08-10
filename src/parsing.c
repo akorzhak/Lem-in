@@ -427,6 +427,7 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 {
 	int 	i;
 	int 	len;
+	int 	lenth;
 	int 	last_room_index;
 	t_room **r;
 	t_linkage *penultimate_room;
@@ -445,12 +446,8 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 	r[i]->used = USED;
 	while ((penultimate_room = choose_penultimate_room(&(r[i]->linked_rooms))))
 	{
-		if (w->rooms)
-		{
-			w->next = (t_ways *)ft_memalloc(sizeof(t_ways));
-			w = w->next;
-		}
 		len = penultimate_room->room->level + 2;
+		lenth = len;
 		way = (char **)ft_memalloc(sizeof(char *) * len--);
 		way[--len] = ft_strdup(l->end_room);
 		last_room_index = len;
@@ -473,7 +470,17 @@ void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
 			drop_the_way(&way, last_room_index);
 			break ;
 		}
-		w->rooms = way;
+		if (w->rooms)
+		{
+			w->next = (t_ways *)ft_memalloc(sizeof(t_ways));
+			w = w->next;
+		}
+		w->rooms = (t_ant_room **)ft_memalloc(sizeof(t_ant_room *) * lenth--);
+		while (lenth--)
+		{
+			w->rooms[lenth] = (t_ant_room *)ft_memalloc(sizeof(t_ant_room));
+			w->rooms[lenth]->name = ft_strdup(way[lenth]);
+		}
 		l->ways_nb++;
 	}
 }
@@ -604,48 +611,70 @@ void	allocate_ants_by_ways(t_ways **ways, t_lemin *l)
 	define_capacity_in_numbers(ways, l->ways_nb, l->ants_nb);
 }
 
-// void	move_ants(t_lemin *l, t_ways **ways)
-// {
-// 	t_path	*path;
-// 	t_ways 	*w;
-// 	t_path	*p;
-// 	int 	i;
+void	move_ants(t_lemin *l, t_ways **ways)
+{
+	int n;
+	int ant;
+	int tmp;
+	int temp;
+	char not_first;
+	t_ways *w;
 
-// 	w = *ways;
-// 	path = (t_path *)ft_memalloc(sizeof(t_path));
-// 	p = path;
-// 	while (l->ways_nb--)
-// 	{	
-// 		p->capacity = w->capacity_nb;
-// 		p->room = (t_ant_room *)ft_memalloc(sizeof(t_ant_room));
-// 		i = 1;
-// 		p->room->name = ft_strdup(w->rooms[i]);
-// 		while (w->rooms[++i])
-// 		{
-// 			p->room->next = (t_ant_room *)ft_memalloc(sizeof(t_ant_room));
-// 			p->room = p->room->next;
-// 			p->room->name = ft_strdup(w->rooms[i]);
-// 		}
-// 		if (!l->ways_nb)
-// 			p->next = NULL;
-// 		else
-// 		{
-// 			p->next = (t_path *)ft_memalloc(sizeof(t_path));
-// 			p = p->next;
-// 		}
-// 		w = w->next;	
-// 	}
-// 	p = path;
-// 	while (p)
-// 	{
-// 		printf("\n\nWAY CAPACITY: %d\n", p->capacity);
-// 		printf("%s\n", p->room->name);
-// 		p->room = p->room->next;
-// 		while (p->room)
-// 		{
-// 			printf("->%s\n", p->room->name);
-// 			p->room = p->room->next;
-// 		}
-// 		p = p->next;
-// 	}
-// }
+	tmp = 0;
+	ant = 0;
+	printf("\n");
+	while (ant < l->ants_nb)
+	{
+		w = *ways;
+		not_first = 0;
+		while (w)
+		{	
+			n = 1;
+			if (w->rooms[n]->ant)
+				tmp = w->rooms[n]->ant;
+			if (w->capacity_nb)
+			{
+				w->rooms[n]->ant = ++ant;
+				w->capacity_nb--;
+				(not_first) ? (printf(" ")) : 0;
+				printf("L%d-%s", w->rooms[n]->ant, w->rooms[n]->name);
+				not_first = 1;
+			}
+			n++;
+			while (w->rooms[n])
+			{
+				temp = 0;
+				if (w->rooms[n]->ant)
+					temp = w->rooms[n]->ant;
+				if ((w->rooms[n]->ant = tmp))
+				{
+					(not_first) ? (printf(" ")) : 0;
+					printf("L%d-%s", w->rooms[n]->ant, w->rooms[n]->name);
+					not_first = 1;
+				}
+				tmp = 0;
+				if (w->rooms[++n])
+				{
+					if (w->rooms[n]->ant)
+					{
+						tmp = w->rooms[n]->ant;
+					}
+					if ((w->rooms[n]->ant = temp))
+					{
+						(not_first) ? (printf(" ")) : 0;
+						printf("L%d-%s", w->rooms[n]->ant, w->rooms[n]->name);
+						not_first = 1;
+					}
+				}
+				else
+					break ;
+				n++;
+			}
+			w = w->next;
+		}
+		printf("\n");
+		//ft_putchar('\n');
+	}
+}
+
+
