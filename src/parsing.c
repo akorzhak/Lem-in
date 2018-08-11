@@ -501,114 +501,55 @@ void	define_nb_of_transfers(t_ways **ways)
 	}
 }
 
-int 	calculate_total_ways_len(t_ways *ways)
+void	define_capacity_nb_for_n_ways(t_ways **ways, t_lemin *l)
 {
-	int 	total_len;
-
-	total_len = 0;
-	while (ways)
-	{
-		total_len += ways->len;
-		ways = ways->next;
-	}
-	return (total_len);
-}
-
-void	define_capacity_pc_for_2_ways(t_ways **w)
-{
-	int 	total_len;
-	float 	pc_unit;
-
-	total_len = calculate_total_ways_len(*w);
-	pc_unit = 100.0 / total_len;
-	(*w)->capacity_pc = (*w)->next->len * pc_unit / 100.0;
-	(*w)->next->capacity_pc = 1 - (*w)->capacity_pc;
-}
-
-void	define_capacity_pc_for_n_ways(t_ways **ways, int ways_nb)
-{
-	int 	way1_len;	
-	float	sum_pc;
-	float 	pc_unit;
-	float	difference;
 	t_ways *w;
-	char flag = 2;
+	int 	turns;
+	int 	sum_ants;
+	int 	difference;
 
-	w = *ways;
-	way1_len = w->len;
-	pc_unit = 100.0 / ways_nb;
-	while (flag--) 
+	turns = 1;
+	do
 	{
-		sum_pc = 0;
-		w = *ways;
+		w = (*ways);
+		sum_ants = 0;
 		while (w)
 		{
-			w->capacity_pc = (pc_unit * way1_len) / w->len / 100.0;
-			sum_pc += w->capacity_pc;
+			w->capacity_nb = turns - w->len + 1;
+			sum_ants += w->capacity_nb;
 			w = w->next;
 		}
-		difference = 1.0 - sum_pc;
-	//	printf("sum_pc: %f\n", sum_pc);
-	//	printf("difference: %f\n", difference);
-		if (difference > 0.01)
-		{
-			pc_unit += pc_unit * (difference / sum_pc);
-	//		printf("PC_UNIT: %f\n", pc_unit);
-		}
-		else
-			break ;
-	}
-}
-
-void	define_capacity_in_percents(t_ways **w, int ways_nb)
-{
-	if (ways_nb == 1)
-		(*w)->capacity_pc = 1;
-	else if (ways_nb == 2)
-		define_capacity_pc_for_2_ways(w);
-	else
-		define_capacity_pc_for_n_ways(w, ways_nb); //other algo
-
-}
-
-void	define_capacity_nb_for_2_ways(t_ways **w, int ants_nb)
-{
-	(*w)->next->capacity_nb = ants_nb * (*w)->next->capacity_pc;
-	(*w)->capacity_nb = ants_nb - (*w)->next->capacity_nb;
-}
-
-void	define_capacity_nb_for_n_ways(t_ways **ways, int ants_nb)
-{
-	t_ways *w;
-	int 	ants_allocated;
-
-	ants_allocated = 0;
-	w = (*ways)->next;
-	while (w)
+		difference = l->ants_nb - sum_ants;
+		turns += difference / l->ways_nb;
+		(difference % l->ways_nb) ? (turns++) : 0;
+	} while (difference > 0);
+	if (difference < 0)
 	{
-		w->capacity_nb = ants_nb * w->capacity_pc;
-		ants_allocated += w->capacity_nb;
-		w = w->next;
+		w = (*ways);
+		while (w && difference)
+		{
+			w->capacity_nb--;
+			difference++;
+			w = w->next;
+		}
 	}
-	w = *ways;
-	w->capacity_nb = ants_nb - ants_allocated;
+	l->turns = turns;
 }
 
-void	define_capacity_in_numbers(t_ways **w, int ways_nb, int ants_nb)
+void	define_capacity_in_numbers(t_ways **w, t_lemin *l)
 {
-	if (ways_nb == 1)
-		(*w)->capacity_nb = ants_nb;
-	else if (ways_nb == 2)
-		define_capacity_nb_for_2_ways(w, ants_nb);
+	if (l->ways_nb == 1)
+		(*w)->capacity_nb = l->ants_nb;
 	else
-		define_capacity_nb_for_n_ways(w, ants_nb);
+		define_capacity_nb_for_n_ways(w, l);
 }
 
 void	allocate_ants_by_ways(t_ways **ways, t_lemin *l)
 {
 	define_nb_of_transfers(ways);
-	define_capacity_in_percents(ways, l->ways_nb);
-	define_capacity_in_numbers(ways, l->ways_nb, l->ants_nb);
+//	define_capacity_in_percents(ways, l->ways_nb);
+//	exit(0);
+	define_capacity_in_numbers(ways, l);
 }
 
 void	move_ants(t_lemin *l, t_ways **ways)
@@ -620,18 +561,21 @@ void	move_ants(t_lemin *l, t_ways **ways)
 	char not_first;
 	t_ways *w;
 
-	tmp = 0;
 	ant = 0;
 	printf("\n");
-	while (ant < l->ants_nb)
+	while (l->turns--)
 	{
 		w = *ways;
 		not_first = 0;
 		while (w)
 		{	
 			n = 1;
+			tmp = 0;
 			if (w->rooms[n]->ant)
+			{
 				tmp = w->rooms[n]->ant;
+				w->rooms[n]->ant = 0;
+			}
 			if (w->capacity_nb)
 			{
 				w->rooms[n]->ant = ++ant;
@@ -658,6 +602,7 @@ void	move_ants(t_lemin *l, t_ways **ways)
 					if (w->rooms[n]->ant)
 					{
 						tmp = w->rooms[n]->ant;
+						w->rooms[n]->ant = 0;
 					}
 					if ((w->rooms[n]->ant = temp))
 					{
@@ -673,7 +618,6 @@ void	move_ants(t_lemin *l, t_ways **ways)
 			w = w->next;
 		}
 		printf("\n");
-		//ft_putchar('\n');
 	}
 }
 

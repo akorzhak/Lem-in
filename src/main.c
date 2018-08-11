@@ -78,6 +78,7 @@ int		main(void)
 		w = w->next;
 	}
 	printf("\n");
+//	exit(0);
 	allocate_ants_by_ways(&ways, &l);
 	w = ways;
 	n = 0;
@@ -87,16 +88,6 @@ int		main(void)
 	{
 		printf("%d way: ", ++n);
 			printf("%d\n", w->capacity_nb);
-		w = w->next;
-	}
-	w = ways;
-	n = 0;
-	printf("\n");
-	printf("\t%s\n", "WAYS CAPACITIES PC'S:");
-	while (w)
-	{
-		printf("%d way: ", ++n);
-			printf("%f\n", w->capacity_pc);
 		w = w->next;
 	}
 	move_ants(&l, &ways);

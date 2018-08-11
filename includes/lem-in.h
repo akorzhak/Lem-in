@@ -57,7 +57,6 @@ struct				s_ant_room
 struct				s_ways //list of all ways
 {
 	int				capacity_nb;
-	float 			capacity_pc;
 	int 			len;
 	t_ant_room		**rooms;
 	t_ways			*next;
@@ -76,6 +75,7 @@ struct				s_lemin
 	int				rooms_nb;
 	int				links_nb;
 	int 			ways_nb;
+	int 			turns;
 	char			*start_room;
 	char			*end_room;
 	t_link			*links;
