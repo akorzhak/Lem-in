@@ -18,13 +18,17 @@ int		ft_strcmp(const char *s1, const char *s2)
 	unsigned char	*s;
 	int				i;
 
-	f = (unsigned char *)s1;
-	s = (unsigned char *)s2;
-	i = 0;
-	while (f[i] && f[i] == s[i])
-		i++;
-	if (f[i] == '\0' && s[i] == '\0')
-		return (0);
-	else
-		return (f[i] - s[i]);
+	if (s1 && s2)
+	{
+		f = (unsigned char *)s1;
+		s = (unsigned char *)s2;
+		i = 0;
+		while (f[i] && f[i] == s[i])
+			i++;
+		if (f[i] == '\0' && s[i] == '\0')
+			return (0);
+		else
+			return (f[i] - s[i]);
+	}
+	return (-1);
 }

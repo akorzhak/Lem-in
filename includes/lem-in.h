@@ -24,6 +24,7 @@
 # define USED 1
 
 typedef struct s_lemin		t_lemin;
+typedef struct s_map		t_map;
 typedef struct s_room		t_room;
 typedef struct s_link 		t_link;
 typedef struct s_linkage	t_linkage;
@@ -31,6 +32,13 @@ typedef struct s_ways		t_ways;
 typedef struct s_namelist	t_namelist;
 typedef struct s_path		t_path;
 typedef struct s_ant_room	t_ant_room;
+
+struct 				s_map
+{
+	char			*line;
+	int 			nb;
+	t_map			*next;
+};
 
 struct 				s_linkage //for adjacency list
 {
@@ -41,7 +49,6 @@ struct 				s_linkage //for adjacency list
 struct				s_room
 {
 	char			*name;
-	int				ant; //0 - if empty, 1 - ant nb 1, 2 - ant nb 2...DROP
 	int				level; //1, 2, 0 - if invalid path DROP
 	int				property; //DROP ???
 	char			used;
@@ -71,6 +78,8 @@ struct				s_link
 
 struct				s_lemin
 {
+	char			e;
+	char			a;
 	int				ants_nb;
 	int				rooms_nb;
 	int				links_nb;
@@ -78,6 +87,7 @@ struct				s_lemin
 	int 			turns;
 	char			*start_room;
 	char			*end_room;
+	t_map			*map;
 	t_link			*links;
 };
 
@@ -98,6 +108,7 @@ struct				s_namelist
 // };
 
 void				init_lemin(t_lemin *l);
+int 				display_usage_message(void);
 int					identify_ants_number(t_lemin *l);
 int					identify_rooms(t_lemin *l, t_room ***rooms, char **line);
 void				delete_2darray(char **arr);
@@ -111,7 +122,7 @@ int					dict(t_room **rooms, t_lemin *l, char *value);
 void				drop_bad_links(t_lemin *l, t_room ***rooms);
 void				set_linkages(t_lemin *l, t_room ***rooms);
 void				pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms);
-void				allocate_ants_by_ways(t_ways **ways, t_lemin *l);
+void				define_ways_capacity(t_ways **w, t_lemin *l);
 void				move_ants(t_lemin *l, t_ways **ways);
 
 #endif

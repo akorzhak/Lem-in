@@ -349,14 +349,14 @@ void	link_the_rooms(t_lemin *l, t_room ***rooms, int i, char *linked_room)
 	linked_rooms = r[i]->linked_rooms;
 	if (!linked_rooms)
 	{
-		linked_rooms = (t_linkage *)malloc(sizeof(t_linkage));
+		linked_rooms = (t_linkage *)ft_memalloc(sizeof(t_linkage));
 		r[i]->linked_rooms = linked_rooms;
 	}
 	else
 	{
 		while (linked_rooms->next)
 			linked_rooms = linked_rooms->next;
-		linked_rooms->next = (t_linkage *)malloc(sizeof(t_linkage));
+		linked_rooms->next = (t_linkage *)ft_memalloc(sizeof(t_linkage));
 		linked_rooms = linked_rooms->next;
 	}
 	linked_rooms->room = r[dict(r, l, linked_room)];
@@ -501,7 +501,7 @@ void	define_nb_of_transfers(t_ways **ways)
 	}
 }
 
-void	define_capacity_nb_for_n_ways(t_ways **ways, t_lemin *l)
+void	define_ways_capacity(t_ways **ways, t_lemin *l)
 {
 	t_ways *w;
 	int 	turns;
@@ -509,6 +509,12 @@ void	define_capacity_nb_for_n_ways(t_ways **ways, t_lemin *l)
 	int 	difference;
 
 	turns = 1;
+	define_nb_of_transfers(ways);
+	if (l->ways_nb == 1)
+	{
+		(*ways)->capacity_nb = l->ants_nb;
+		return ;
+	}
 	do
 	{
 		w = (*ways);
@@ -534,22 +540,6 @@ void	define_capacity_nb_for_n_ways(t_ways **ways, t_lemin *l)
 		}
 	}
 	l->turns = turns;
-}
-
-void	define_capacity_in_numbers(t_ways **w, t_lemin *l)
-{
-	if (l->ways_nb == 1)
-		(*w)->capacity_nb = l->ants_nb;
-	else
-		define_capacity_nb_for_n_ways(w, l);
-}
-
-void	allocate_ants_by_ways(t_ways **ways, t_lemin *l)
-{
-	define_nb_of_transfers(ways);
-//	define_capacity_in_percents(ways, l->ways_nb);
-//	exit(0);
-	define_capacity_in_numbers(ways, l);
 }
 
 void	move_ants(t_lemin *l, t_ways **ways)

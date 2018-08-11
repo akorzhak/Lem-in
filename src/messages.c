@@ -17,3 +17,9 @@ int		display_error_message(void)
 	ft_putstr("ERROR\n");
 	return (1);
 }
+
+int 	display_usage_message(void)
+{
+	ft_putstr("lem-in: usage: ./lem-in [-e] [-a] < map\n");
+	return (1);
+}
