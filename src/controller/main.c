@@ -45,9 +45,14 @@ int		main(int argc, char **argv)
 	t_link	*links;
 	t_ways	*ways;
 	t_ways 	*w;
+	t_map 	*map;
+	t_turn	**turns;
+	t_turn	**t;
+	t_turn	*step;
 	int 	i = 0;
 	int n = 0;
 
+	printf("%s\n", "ZZZZZ");
 	if (argc <= 3)
 	{
 		init_lemin(&l);
@@ -59,6 +64,12 @@ int		main(int argc, char **argv)
 			return (display_error_message());
 		if (!get_links(&l, &line, &rooms))
 			return (display_error_message());
+		map = l.map;
+		while (map)
+		{
+			printf("%s\n", map->line);
+			map = map->next;
+		}
 		set_levels(&l, &rooms);
 		//	drop_bad_links(&l, &rooms);
 		links = l.links;
@@ -109,7 +120,20 @@ int		main(int argc, char **argv)
 				printf("%d\n", w->capacity_nb);
 			w = w->next;
 		}
-		move_ants(&l, &ways);
+		move_ants(&l, &ways, &turns);
+		t = turns;
+		n = 0;
+		while (t[n])
+		{
+			step = t[n];
+			while (step)
+			{
+				printf("L%d-%s ", step->ant, step->room);
+				step = step->next;
+			}
+			n++;
+			printf("\n");
+		}
 		return (0);
 	}
 	// ls: invalid option -- 'z'

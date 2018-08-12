@@ -12,6 +12,62 @@
 
 #include "lem-in.h"
 
+int line_nb = 1;
+
+t_map	*record_line(char *line)
+{
+	t_map *map;
+
+	map = (t_map *)ft_memalloc(sizeof(t_map));
+	map->line = ft_strdup(line);
+	map->nb = line_nb++;
+	return (map);
+}
+
+void	add_line_to_list(t_lemin *l, char *line)
+{
+	static t_map 	*map;
+
+	if (l->map)
+	{
+		map->next = record_line(line);
+		map = map->next;
+	}
+	else
+	{
+		l->map = record_line(line);
+		map = l->map;
+	}
+}
+
+t_turn 	*record_step(char *room, int ant)
+{
+	t_turn *step;
+
+	step = (t_turn *)ft_memalloc(sizeof(t_turn));
+	step->room = ft_strdup(room);
+	step->ant = ant;
+	return (step);
+}
+
+void	add_step_to_turns(t_turn ***turns, char *room, int ant)
+{
+	static t_turn **t;
+	static t_turn *step;
+
+	t = *turns;
+	if (t[line_nb])
+	{
+		step->next = record_step(room, ant);
+		step = step->next;
+	}
+	else
+	{
+		t[line_nb] = record_step(room, ant);
+		step = t[line_nb];
+	}
+}
+
 int		add_name_to_list(t_namelist **names, char *name, int property)
 {
 	t_namelist *temp;
@@ -108,7 +164,8 @@ int 	identify_rooms(t_lemin *l, t_room ***rooms, char **line)
 	names = NULL;
 	while (get_next_line(0, line) > 0 && !ft_strchr(*line, '-'))
 	{
-		ft_printf("%s\n", *line);
+		add_line_to_list(l, *line);
+	//	ft_printf("%s\n", *line);
 		if (**line == '#')
 		{
 			if (handle_commands(*line, &property) == -1)
@@ -133,12 +190,12 @@ int		identify_ants_number(t_lemin *l)
 	line = NULL;
 	while (get_next_line(0, &line) > 0)
 	{
-		ft_printf("%s\n", line);
+		add_line_to_list(l, line);
+	//	ft_printf("%s\n", line);
 		if (*line == '#')
 		{
 			if (ft_strstr(line, "##start") || ft_strstr(line, "##end"))
 				return (delete_line_and_exit(&line));
-			ft_printf("%s\n", *line);
 			continue ;
 		}
 		else if (ft_isdigit(*line))
@@ -172,7 +229,7 @@ void	record_links(t_lemin *l, char *room1, char *room2)
 	}
 	links->room1 = ft_strdup(room1);
 	links->room2 = ft_strdup(room2);
-	ft_printf("%s-%s\n", room1, room2);
+//	ft_printf("%s-%s\n", room1, room2);
 }
 
 int 	get_links(t_lemin *l, char **line, t_room ***rooms)
@@ -189,7 +246,8 @@ int 	get_links(t_lemin *l, char **line, t_room ***rooms)
 		{
 			if (ft_strstr(*line, "##start") || ft_strstr(*line, "##end"))
 				return (delete_line_and_exit(line));
-			ft_printf("%s\n", *line);
+			add_line_to_list(l, *line);
+		//	ft_printf("%s\n", *line);
 			continue ;
 		}
 		arr = ft_strsplit(*line, '-');
@@ -202,6 +260,7 @@ int 	get_links(t_lemin *l, char **line, t_room ***rooms)
 			return (0);
 		}
 		record_links(l, arr[0], arr[1]);
+		add_line_to_list(l, *line);
 		delete_2darray(arr);
 		ft_strdel(line);
 	} while (get_next_line(0, line) > 0);
@@ -542,21 +601,20 @@ void	define_ways_capacity(t_ways **ways, t_lemin *l)
 	l->turns = turns;
 }
 
-void	move_ants(t_lemin *l, t_ways **ways)
+void	move_ants(t_lemin *l, t_ways **ways, t_turn ***turns)
 {
 	int n;
 	int ant;
 	int tmp;
 	int temp;
-	char not_first;
 	t_ways *w;
 
 	ant = 0;
-	printf("\n");
-	while (l->turns--)
+	line_nb = 0;
+	*turns = (t_turn **)ft_memalloc(sizeof(t_turn *) * (l->turns + 1));
+	while (line_nb < l->turns)
 	{
 		w = *ways;
-		not_first = 0;
 		while (w)
 		{	
 			n = 1;
@@ -570,9 +628,7 @@ void	move_ants(t_lemin *l, t_ways **ways)
 			{
 				w->rooms[n]->ant = ++ant;
 				w->capacity_nb--;
-				(not_first) ? (printf(" ")) : 0;
-				printf("L%d-%s", w->rooms[n]->ant, w->rooms[n]->name);
-				not_first = 1;
+				add_step_to_turns(turns, w->rooms[n]->name, w->rooms[n]->ant);
 			}
 			n++;
 			while (w->rooms[n])
@@ -581,11 +637,7 @@ void	move_ants(t_lemin *l, t_ways **ways)
 				if (w->rooms[n]->ant)
 					temp = w->rooms[n]->ant;
 				if ((w->rooms[n]->ant = tmp))
-				{
-					(not_first) ? (printf(" ")) : 0;
-					printf("L%d-%s", w->rooms[n]->ant, w->rooms[n]->name);
-					not_first = 1;
-				}
+					add_step_to_turns(turns, w->rooms[n]->name, w->rooms[n]->ant);
 				tmp = 0;
 				if (w->rooms[++n])
 				{
@@ -595,11 +647,7 @@ void	move_ants(t_lemin *l, t_ways **ways)
 						w->rooms[n]->ant = 0;
 					}
 					if ((w->rooms[n]->ant = temp))
-					{
-						(not_first) ? (printf(" ")) : 0;
-						printf("L%d-%s", w->rooms[n]->ant, w->rooms[n]->name);
-						not_first = 1;
-					}
+						add_step_to_turns(turns, w->rooms[n]->name, w->rooms[n]->ant);
 				}
 				else
 					break ;
@@ -607,7 +655,7 @@ void	move_ants(t_lemin *l, t_ways **ways)
 			}
 			w = w->next;
 		}
-		printf("\n");
+		line_nb++;
 	}
 }
 
