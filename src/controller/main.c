@@ -52,9 +52,9 @@ int		main(int argc, char **argv)
 		rooms = NULL;
 		line = NULL;
 		if (!identify_ants_number(&l) || !(identify_rooms(&l, &rooms, &line)))
-			return (display_error_message());
+			return (display_error_message(&l));
 		if (!get_links(&l, &line, &rooms))
-			return (display_error_message());
+			return (display_error_message(&l));
 		map = l.map;
 		while (map)
 		{
@@ -93,5 +93,5 @@ int		main(int argc, char **argv)
 	// }
 //	line is on first relation between rooms
 //	free_memory(&f);
-	return (display_error_message());
+	return (display_error_message(&l));
 }

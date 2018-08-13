@@ -21,6 +21,7 @@ void	display_ways_capacity(t_ways **ways)
 	w = *ways;
 
 	red();
+	underline();
 	ft_putstr("\nWAYS' CAPACITIES:\n\n");
 	reset();
 	while (w)
@@ -39,6 +40,7 @@ void	display_valid_ways(t_ways **ways)
 
 	w = *ways;
 	yellow();
+	underline();
 	ft_putstr("\nVALID WAYS:\n\n");
 	reset();
 	while (w)
@@ -61,6 +63,7 @@ void	display_adjacency_list(t_room ***rooms)
 	i = 0;
 	r = *rooms;
 	green();
+	underline();
 	ft_putstr("\nADJACENCY LIST:\n\n");
 	reset();
 	while (r[i])
@@ -85,6 +88,7 @@ void	display_bfs(t_room ***rooms)
 	i = 0;
 	r = *rooms;
 	blue();
+	underline();
 	ft_putstr("BREADTH FIRST SEARCH:\n\n");
 	reset();
 	while (r[i])

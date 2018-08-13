@@ -30,18 +30,18 @@ static char		**fill(char *str, char **arr)
 
 	i = 0;
 	a = 0;
-	b = 0;
 	while (str[i])
 	{
+		b = 0;
 		while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
 			i++;
-		arr[a] = (char*)malloc(sizeof(char) * let_count(str, i));
+		if (!str[i])
+			break ;
+		arr[a] = (char*)ft_memalloc(sizeof(char) * let_count(str, i));
 		while (str[i] != ' ' && str[i] != '\n' && str[i] != '\t' && str[i])
 			arr[a][b++] = str[i++];
 		arr[a++][b] = '\0';
-		b = 0;
 	}
-	arr[a] = NULL;
 	return (arr);
 }
 
@@ -70,7 +70,7 @@ char			**ft_split_white(char *str)
 
 	if (str)
 	{
-		arr = (char**)malloc(sizeof(char*) * (word_count(str)));
+		arr = (char**)ft_memalloc(sizeof(char*) * (word_count(str)));
 		return (fill(str, arr));
 	}
 	return (0);

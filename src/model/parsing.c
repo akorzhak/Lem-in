@@ -98,7 +98,10 @@ int 	record_room_name(char *line, t_namelist **names, int property, t_lem *l)
 		return (-1);
 	arr = ft_split_white(line);
 	if (arrlen(arr) != 3)
+	{
+		l->e_message = ft_strdup(INCOMPLETE_ROOM_DATA);
 		return (-1);
+	}
 	if (add_name_to_list(names, arr[0], property) == -1)
 	{
 		delete_2darray(arr);
@@ -246,9 +249,16 @@ int 	get_links(t_lem *l, char **line, t_room ***rooms)
 			add_line_to_list(l, *line);
 			continue ;
 		}
+		add_line_to_list(l, *line);
 		arr = ft_strsplit(*line, '-');
 		i_room1 = dict(r, l, arr[0]);
 		i_room2 = dict(r, l, arr[1]);
+		if (i_room1 == -1)
+			l->e_message = ft_strjoin(arr[0], INVALID_ROOM);
+		else if (i_room2 == -1)
+			l->e_message = ft_strjoin(arr[1], INVALID_ROOM);
+		else if (arrlen(arr) != 2)
+			l->e_message = ft_strdup(INCOMPLETE_LINK_DATA);
 		if (arrlen(arr) != 2 || !ft_strcmp(arr[0], arr[1])
 			|| i_room1 == -1 || i_room2 == -1)
 		{
@@ -256,7 +266,6 @@ int 	get_links(t_lem *l, char **line, t_room ***rooms)
 			return (0);
 		}
 		record_links(l, arr[0], arr[1]);
-		add_line_to_list(l, *line);
 		delete_2darray(arr);
 		ft_strdel(line);
 	} while (get_next_line(0, line) > 0);

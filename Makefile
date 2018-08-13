@@ -32,10 +32,12 @@ MODELDIR = $(SRCDIR)model/
 
 VIEWDIR = $(SRCDIR)view/
 
+UTILDIR = $(MODELDIR)util/
+
 OBJDIR = obj/
 
 SRC = main.c init.c free.c parsing.c util.c sort.c messages.c all_steps.c\
-	colors.c
+	colors.c formats.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -48,24 +50,27 @@ OBJ = $(SRC:.c=.o)
 	@$(C) $(CFLAG) -c $< $(INC)
 
 %.o: $(VIEWDIR)%.c
-	@$(C) $(CFLAG) -c $< $(INC)	
+	@$(C) $(CFLAG) -c $< $(INC)
+
+%.o: $(UTILDIR)%.c
+	@$(C) $(CFLAG) -c $< $(INC)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
 	@make -C $(PRINTFDIR)
 	@$(C) $(CFLAG) -o $(NAME) $(OBJ) $(LIBS)
-	@echo "\e[38;5;82m$(NAME) compilation is done\033[0m"
+	@echo "\e[38;5;82m$(NAME) compilation is done\e[0m"
 
 clean:
 	@make clean -C $(PRINTFDIR)
 	@/bin/rm -f $(OBJ) *~
-	@echo "\e[93mobject files have been cleaned\033[0m"
+	@echo "\e[93mobject files have been cleaned\e[0m"
 
 fclean: clean
 	@make fclean -C $(PRINTFDIR)
 	@/bin/rm -f $(NAME)
-	@echo "\e[31m$(NAME) has been removed\033[0m"
+	@echo "\e[31m$(NAME) has been removed\e[0m"
 
 re: fclean all
 

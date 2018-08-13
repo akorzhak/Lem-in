@@ -22,6 +22,9 @@
 # define ORDINARY 0
 # define NOT_USED 0
 # define USED 1
+# define INCOMPLETE_ROOM_DATA "room name or coordinate is absent"
+# define INCOMPLETE_LINK_DATA "room name or dash is absent"
+# define INVALID_ROOM " - no such room"
 
 extern int line_nb;
 
@@ -90,6 +93,7 @@ struct				s_lem
 	int 			turns;
 	char			*start_room;
 	char			*end_room;
+	char			*e_message;
 	t_map			*map;
 	t_link			*links;
 };
@@ -123,7 +127,7 @@ int					identify_rooms(t_lem *l, t_room ***rooms, char **line);
 void				delete_2darray(char **arr);
 int					delete_line_and_exit(char **line);
 void				free_namelist(t_namelist **list);
-int					display_error_message(void);
+int					display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line, t_room ***rooms);
 void				set_levels(t_lem *l, t_room ***rooms);
 void				set_linkages(t_lem *l, t_room ***rooms);
@@ -142,7 +146,7 @@ int					dict(t_room **rooms, t_lem *l, char *value);
 int					arrlen(char **arr);
 int					ft_ceil(int nb1, int nb2);
 
-/*************************** ALL STEPS FUNCTION ***********************/
+/*************************** VIEW FUNCTIONS ***************************/
 void				display_all_steps(t_room ***rooms, t_ways **ways);
 
 /*************************** COLORS FUNCTIONS *************************/
@@ -150,8 +154,10 @@ void				red(void);
 void				yellow(void);
 void				green(void);
 void				blue(void);
+
+/*************************** FORMAT FUNCTIONS **************************/
+void				blink(void);
+void				underline(void);
 void				reset(void);
-
-
 
 #endif

@@ -13,30 +13,25 @@
 #include "lem-in.h"
 
 /**
-* Control sequenses for color and underlining.
+* Control sequenses for color.
 */
 
 void	red(void)
 {
-  ft_putstr("\e[4m\e[38;5;160m");
+  ft_putstr("\e[38;5;160m");
 }
 
 void	yellow(void)
 {
-  ft_putstr("\e[4m\e[38;5;226m");
+  ft_putstr("\e[38;5;226m");
 }
 
 void	green(void)
 {
-  ft_putstr("\e[4m\e[38;5;82m");
+  ft_putstr("\e[38;5;82m");
 }
 
 void	blue(void)
 {
-  ft_putstr("\e[4m\e[38;5;38m");
-}
-
-void	reset(void)
-{
-	ft_putstr("\e[0m");
+  ft_putstr("\e[38;5;38m");
 }

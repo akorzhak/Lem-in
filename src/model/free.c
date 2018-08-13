@@ -28,6 +28,26 @@ void	free_namelist(t_namelist **list)
 	}
 }
 
+void	delete_2darray(char **arr)
+{
+	int i;
+
+	i = 0;
+	while (arr[i])
+	{
+	//	printf("%s\n", arr[i]);
+		ft_strdel(&arr[i]);
+	//	printf("%s\n", arr[i]);
+		i++;
+	}
+	ft_memdel((void **)arr);
+}
+
+int 	delete_line_and_exit(char **line)
+{
+	ft_strdel(line);
+	return (0);
+}
 // void	free_the_grid_data(t_grid *grid)
 // {
 // 	int i;
