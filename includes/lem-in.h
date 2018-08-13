@@ -25,7 +25,7 @@
 
 extern int line_nb;
 
-typedef struct s_lemin		t_lemin;
+typedef struct s_lem		t_lem;
 typedef struct s_map		t_map;
 typedef struct s_room		t_room;
 typedef struct s_link 		t_link;
@@ -34,6 +34,7 @@ typedef struct s_ways		t_ways;
 typedef struct s_namelist	t_namelist;
 typedef struct s_turn		t_turn;
 typedef struct s_ant_room	t_ant_room;
+typedef struct s_sort		t_sort;
 
 struct 				s_map
 {
@@ -78,7 +79,7 @@ struct				s_link
 	t_link 			*next;
 };
 
-struct				s_lemin
+struct				s_lem
 {
 	char			e;
 	char			a;
@@ -107,22 +108,50 @@ struct				s_turn
 	t_turn			*next;
 };
 
-void				init_lemin(t_lemin *l);
+struct 				s_sort
+{
+	t_turn			*prior;
+	t_turn			*loop;
+	t_turn			*prev;
+	t_turn			*sort;
+};
+
+void				init_lemin(t_lem *l);
 int 				display_usage_message(void);
-int					identify_ants_number(t_lemin *l);
-int					identify_rooms(t_lemin *l, t_room ***rooms, char **line);
+int					identify_ants_number(t_lem *l);
+int					identify_rooms(t_lem *l, t_room ***rooms, char **line);
 void				delete_2darray(char **arr);
 int					delete_line_and_exit(char **line);
 void				free_namelist(t_namelist **list);
 int					display_error_message(void);
-int					get_links(t_lemin *l, char **line, t_room ***rooms);
+int					get_links(t_lem *l, char **line, t_room ***rooms);
+void				set_levels(t_lem *l, t_room ***rooms);
+void				set_linkages(t_lem *l, t_room ***rooms);
+void				pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms);
+void				define_ways_capacity(t_ways **w, t_lem *l);
+void				move_ants(t_lem *l, t_ways **ways, t_turn ***turns);
+
+/*************************** SORT FUNCTION ****************************/
+void				sort_result(t_turn ***turns);
+
+
+void				print_result(t_turn ***turns);
+
+/*************************** UTIL FUNCTIONS ***************************/
+int					dict(t_room **rooms, t_lem *l, char *value);
 int					arrlen(char **arr);
-void				set_levels(t_lemin *l, t_room ***rooms);
-int					dict(t_room **rooms, t_lemin *l, char *value);
-void				drop_bad_links(t_lemin *l, t_room ***rooms);
-void				set_linkages(t_lemin *l, t_room ***rooms);
-void				pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms);
-void				define_ways_capacity(t_ways **w, t_lemin *l);
-void				move_ants(t_lemin *l, t_ways **ways, t_turn ***turns);
+int					ft_ceil(int nb1, int nb2);
+
+/*************************** ALL STEPS FUNCTION ***********************/
+void				display_all_steps(t_room ***rooms, t_ways **ways);
+
+/*************************** COLORS FUNCTIONS *************************/
+void				red(void);
+void				yellow(void);
+void				green(void);
+void				blue(void);
+void				reset(void);
+
+
 
 #endif

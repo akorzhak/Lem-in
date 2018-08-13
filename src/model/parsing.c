@@ -24,7 +24,7 @@ t_map	*record_line(char *line)
 	return (map);
 }
 
-void	add_line_to_list(t_lemin *l, char *line)
+void	add_line_to_list(t_lem *l, char *line)
 {
 	static t_map 	*map;
 
@@ -52,7 +52,7 @@ t_turn 	*record_step(char *room, int ant)
 
 void	add_step_to_turns(t_turn ***turns, char *room, int ant)
 {
-	static t_turn **t;
+	static t_turn **t; //maybe not static
 	static t_turn *step;
 
 	t = *turns;
@@ -90,7 +90,7 @@ int		add_name_to_list(t_namelist **names, char *name, int property)
 	return (0);
 }
 
-int 	record_room_name(char *line, t_namelist **names, int property, t_lemin *l)
+int 	record_room_name(char *line, t_namelist **names, int property, t_lem *l)
 {
 	char **arr;
 
@@ -129,7 +129,7 @@ int 	handle_commands(char *line, int *property)
 	return (0);
 }
 
-int		form_adjacency_list(t_lemin *l, t_room ***rooms, t_namelist *names)
+int		form_adjacency_list(t_lem *l, t_room ***rooms, t_namelist *names)
 {
 	int i;
 	t_namelist *head;
@@ -155,7 +155,7 @@ int		form_adjacency_list(t_lemin *l, t_room ***rooms, t_namelist *names)
 	return (0);
 }
 
-int 	identify_rooms(t_lemin *l, t_room ***rooms, char **line)
+int 	identify_rooms(t_lem *l, t_room ***rooms, char **line)
 {
 	int property;
 	t_namelist *names;
@@ -165,7 +165,6 @@ int 	identify_rooms(t_lemin *l, t_room ***rooms, char **line)
 	while (get_next_line(0, line) > 0 && !ft_strchr(*line, '-'))
 	{
 		add_line_to_list(l, *line);
-	//	ft_printf("%s\n", *line);
 		if (**line == '#')
 		{
 			if (handle_commands(*line, &property) == -1)
@@ -183,7 +182,7 @@ int 	identify_rooms(t_lemin *l, t_room ***rooms, char **line)
 	return (1);
 }
 
-int		identify_ants_number(t_lemin *l)
+int		identify_ants_number(t_lem *l)
 {
 	char *line;
 
@@ -191,7 +190,6 @@ int		identify_ants_number(t_lemin *l)
 	while (get_next_line(0, &line) > 0)
 	{
 		add_line_to_list(l, line);
-	//	ft_printf("%s\n", line);
 		if (*line == '#')
 		{
 			if (ft_strstr(line, "##start") || ft_strstr(line, "##end"))
@@ -211,7 +209,7 @@ int		identify_ants_number(t_lemin *l)
 	return (delete_line_and_exit(&line));
 }
 
-void	record_links(t_lemin *l, char *room1, char *room2)
+void	record_links(t_lem *l, char *room1, char *room2)
 {
 	static t_link *links;
 
@@ -229,10 +227,9 @@ void	record_links(t_lemin *l, char *room1, char *room2)
 	}
 	links->room1 = ft_strdup(room1);
 	links->room2 = ft_strdup(room2);
-//	ft_printf("%s-%s\n", room1, room2);
 }
 
-int 	get_links(t_lemin *l, char **line, t_room ***rooms)
+int 	get_links(t_lem *l, char **line, t_room ***rooms)
 {
 	char **arr;
 	int 	i_room1;
@@ -247,7 +244,6 @@ int 	get_links(t_lemin *l, char **line, t_room ***rooms)
 			if (ft_strstr(*line, "##start") || ft_strstr(*line, "##end"))
 				return (delete_line_and_exit(line));
 			add_line_to_list(l, *line);
-		//	ft_printf("%s\n", *line);
 			continue ;
 		}
 		arr = ft_strsplit(*line, '-');
@@ -267,7 +263,7 @@ int 	get_links(t_lemin *l, char **line, t_room ***rooms)
 	return (1);
 }
 
-void	set_1st_levels(t_lemin *l, t_room ***rooms)
+void	set_1st_levels(t_lem *l, t_room ***rooms)
 {
 	t_room **r;
 	t_link *links;
@@ -304,7 +300,7 @@ void	free_the_link(t_link **links)
 	ft_memdel((void **)links);
 }
 
-void	drop_the_link(t_lemin *l, t_link **links)
+void	drop_the_link(t_lem *l, t_link **links)
 {
 	t_link *temp;
 
@@ -333,30 +329,7 @@ void	drop_the_link(t_lemin *l, t_link **links)
 	}
 }
 
-void	drop_bad_links(t_lemin *l, t_room ***rooms)
-{
-	int 	lvl_room1;
-	int 	lvl_room2;
-	t_link 	*links;
-	t_room 	**r;
-	
-	links = l->links;
-	r = *rooms;
-	while (links)
-	{
-		lvl_room1 = r[dict(r, l, links->room1)]->level;
-		lvl_room2 = r[dict(r, l, links->room2)]->level;
-		if (lvl_room1 == lvl_room2 && ft_strcmp(links->room1, l->end_room)
-			&& ft_strcmp(links->room2, l->end_room))
-		{
-			drop_the_link(l, &links);
-		}
-		else
-			links = links->next;
-	}
-}
-
-void	set_levels(t_lemin *l, t_room ***rooms)
+void	set_levels(t_lem *l, t_room ***rooms)
 {
 	t_room **r;
 	t_link *links;
@@ -364,8 +337,6 @@ void	set_levels(t_lemin *l, t_room ***rooms)
 	char 	change;
 
 	r = *rooms;
-	int i = 0; //@TEST ONLY !!!!!!!!!!!!!!!!!!!!!!!!!
-//	r[dict(r, l, l->end_room)]->level = -1;
 	set_1st_levels(l, rooms);
 	do
 	{
@@ -390,16 +361,9 @@ void	set_levels(t_lemin *l, t_room ***rooms)
 			links = links->next;
 		}
 	} while (change);
-	printf("\n\t%s\n\n", "BREADTH FIRST SEARCH:");
-	while (r[i]) //@TEST ONLY !!!!!!!!!!!!!!!!!!!!!!
-	{
-		printf("name: %s\t", r[i]->name);
-		printf("level: %d\n", r[i]->level);
-		i++;
-	}
 }
 
-void	link_the_rooms(t_lemin *l, t_room ***rooms, int i, char *linked_room)
+void	link_the_rooms(t_lem *l, t_room ***rooms, int i, char *linked_room)
 {
 	t_room **r;
 	t_linkage *linked_rooms;
@@ -421,7 +385,7 @@ void	link_the_rooms(t_lemin *l, t_room ***rooms, int i, char *linked_room)
 	linked_rooms->room = r[dict(r, l, linked_room)];
 }
 
-void	set_linkages(t_lemin *l, t_room ***rooms)
+void	set_linkages(t_lem *l, t_room ***rooms)
 {
 	int 	i;
 	t_room **r;
@@ -482,7 +446,7 @@ void	drop_the_way(char ***way, int i)
 	ft_memdel((void **)*way);
 }
 
-void	pave_the_ways(t_ways **ways, t_lemin *l, t_room ***rooms)
+void	pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms)
 {
 	int 	i;
 	int 	len;
@@ -560,7 +524,7 @@ void	define_nb_of_transfers(t_ways **ways)
 	}
 }
 
-void	define_ways_capacity(t_ways **ways, t_lemin *l)
+void	define_ways_capacity(t_ways **ways, t_lem *l)
 {
 	t_ways *w;
 	int 	turns;
@@ -585,8 +549,7 @@ void	define_ways_capacity(t_ways **ways, t_lemin *l)
 			w = w->next;
 		}
 		difference = l->ants_nb - sum_ants;
-		turns += difference / l->ways_nb;
-		(difference % l->ways_nb) ? (turns++) : 0;
+		turns += ft_ceil(difference, l->ways_nb);
 	} while (difference > 0);
 	if (difference < 0)
 	{
@@ -601,7 +564,7 @@ void	define_ways_capacity(t_ways **ways, t_lemin *l)
 	l->turns = turns;
 }
 
-void	move_ants(t_lemin *l, t_ways **ways, t_turn ***turns)
+void	move_ants(t_lem *l, t_ways **ways, t_turn ***turns)
 {
 	int n;
 	int ant;
@@ -659,4 +622,24 @@ void	move_ants(t_lemin *l, t_ways **ways, t_turn ***turns)
 	}
 }
 
+void	print_result(t_turn ***turns)
+{
+	t_turn	**t;
+	t_turn	*step;
+	int 	n;
+
+	t = *turns;
+	n = 0;
+	while (t[n])
+	{
+		step = t[n];
+		while (step)
+		{
+			printf("L%d-%s ", step->ant, step->room);
+			step = step->next;
+		}
+		n++;
+		printf("\n");
+	}
+}
 

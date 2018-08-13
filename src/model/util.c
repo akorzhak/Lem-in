@@ -12,20 +12,21 @@
 
 #include "lem-in.h"
 
-// int		skip_the_line(void)
-// {
-// 	char *line;
+int 	ft_ceil(int nb1, int nb2)
+{
+	int		res;
 
-// 	line = NULL;
-// 	if (get_next_line(0, &line) <= 0)
-// 	{
-// 		return (0);
-// 	}
-// 	ft_strdel(&line);
-// 	return (1);
-// }
+	if (nb2)
+	{
+		res = nb1 / nb2;
+		if (nb1 % nb2)
+			res++;
+		return (res);
+	}
+	return (0);
+}
 
-int		dict(t_room **rooms, t_lemin *l, char *value)
+int		dict(t_room **rooms, t_lem *l, char *value)
 {
 	int i;
 	static char **values;

@@ -12,9 +12,9 @@
 
 #include "lem-in.h"
 
-void	init_lemin(t_lemin *lem)
+void	init_lemin(t_lem *lem)
 {
-	ft_bzero(lem, sizeof(t_lemin));
+	ft_bzero(lem, sizeof(t_lem));
 }
 
 // void	identify_bots(t_filler *f)

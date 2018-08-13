@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int 	handle_args(int argc, char **argv, t_lemin *l)
+int 	handle_args(int argc, char **argv, t_lem *l)
 {
 	if (argc >= 2)
 	{
@@ -37,22 +37,13 @@ int 	handle_args(int argc, char **argv, t_lemin *l)
 
 int		main(int argc, char **argv)
 {
-	t_lemin	l;
+	t_lem	l;
 	t_room	**rooms;
-	t_room 	**r;
-	t_linkage *linked_rooms;
 	char	*line;
-	t_link	*links;
 	t_ways	*ways;
-	t_ways 	*w;
 	t_map 	*map;
 	t_turn	**turns;
-	t_turn	**t;
-	t_turn	*step;
-	int 	i = 0;
-	int n = 0;
 
-	printf("%s\n", "ZZZZZ");
 	if (argc <= 3)
 	{
 		init_lemin(&l);
@@ -71,69 +62,15 @@ int		main(int argc, char **argv)
 			map = map->next;
 		}
 		set_levels(&l, &rooms);
-		//	drop_bad_links(&l, &rooms);
-		links = l.links;
-
-		printf("\n\t%s\n\n", "PURE LINKS:"); //@DELETE
-		while (links) //@DELETE
-		{
-			printf("%s-%s\n", links->room1, links->room2);
-			links = links->next;
-		}
 		set_linkages(&l, &rooms);
-
-		printf("\n\t%s\n\n", "ADJACENCY LIST:");
-		r = rooms;
-		while (r[i])
-		{
-			linked_rooms = r[i]->linked_rooms;
-			printf("%s", r[i]->name);
-			while (linked_rooms)
-			{
-				printf("->%s", linked_rooms->room->name);
-				linked_rooms = linked_rooms->next;
-			}
-			printf("\n");
-			i++;
-		}
 		pave_the_ways(&ways, &l, &rooms);
-		w = ways;
-		printf("\n\t%s\n", "VALID WAYS:");
-		while (w)
-		{
-			n = 0;
-			printf("\n");
-			printf("%s", w->rooms[n++]->name);
-			while (w->rooms[n])
-				printf("->%s", w->rooms[n++]->name);
-			w = w->next;
-		}
 		printf("\n");
 		define_ways_capacity(&ways, &l);
-		w = ways;
-		n = 0;
-		printf("\n");
-		printf("\t%s\n", "WAYS CAPACITIES NB'S:");
-		while (w)
-		{
-			printf("%d way: ", ++n);
-				printf("%d\n", w->capacity_nb);
-			w = w->next;
-		}
+		if (l.a)
+			display_all_steps(&rooms, &ways);
 		move_ants(&l, &ways, &turns);
-		t = turns;
-		n = 0;
-		while (t[n])
-		{
-			step = t[n];
-			while (step)
-			{
-				printf("L%d-%s ", step->ant, step->room);
-				step = step->next;
-			}
-			n++;
-			printf("\n");
-		}
+		sort_result(&turns);
+		print_result(&turns);
 		return (0);
 	}
 	// ls: invalid option -- 'z'
