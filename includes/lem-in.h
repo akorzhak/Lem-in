@@ -22,18 +22,25 @@
 # define ORDINARY 0
 # define NOT_USED 0
 # define USED 1
+
+/***************************** STRING CONSTANTS *******************************/
 # define INCOMPLETE_ROOM_DATA "room name or coordinate is absent"
 # define INCOMPLETE_LINK_DATA "room name or dash is absent"
 # define INVALID_ROOM " - no such room"
+# define NO_START_END_ROOM "Parsing has reached the end of the map. "\
+							"No START or END room found."
+
+
 
 extern int line_nb;
+extern char **rooms_dict;
 
 typedef struct s_lem		t_lem;
 typedef struct s_map		t_map;
 typedef struct s_room		t_room;
 typedef struct s_link 		t_link;
 typedef struct s_linkage	t_linkage;
-typedef struct s_ways		t_ways;
+typedef struct s_way		t_way;
 typedef struct s_namelist	t_namelist;
 typedef struct s_turn		t_turn;
 typedef struct s_ant_room	t_ant_room;
@@ -67,12 +74,12 @@ struct				s_ant_room
 	int				ant;
 };
 
-struct				s_ways //list of all ways
+struct				s_way //list of all ways
 {
 	int				capacity_nb;
 	int 			len;
 	t_ant_room		**rooms;
-	t_ways			*next;
+	t_way			*next;
 };
 
 struct				s_link 
@@ -128,34 +135,39 @@ void				delete_2darray(char **arr);
 int					delete_line_and_exit(char **line);
 void				free_namelist(t_namelist **list);
 int					display_error_message(t_lem *l);
-int					get_links(t_lem *l, char **line, t_room ***rooms);
+int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***rooms);
 void				set_linkages(t_lem *l, t_room ***rooms);
-void				pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms);
-void				define_ways_capacity(t_ways **w, t_lem *l);
-void				move_ants(t_lem *l, t_ways **ways, t_turn ***turns);
+void				pave_the_ways(t_way **ways, t_lem *l, t_room ***rooms);
+void				define_ways_capacity(t_way **w, t_lem *l);
+void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 
-/*************************** SORT FUNCTION ****************************/
+/******************************* SORT FUNCTION ********************************/
 void				sort_result(t_turn ***turns);
 
+void				print_handled_data(t_lem *l, t_room ***rooms, t_way **ways);
+void				display_result(t_turn ***turns);
 
-void				print_result(t_turn ***turns);
-
-/*************************** UTIL FUNCTIONS ***************************/
-int					dict(t_room **rooms, t_lem *l, char *value);
+/******************************* UTIL FUNCTIONS *******************************/
+void				init_dict(t_lem *l, t_room **rooms);
+int					dict(t_lem *l, char *value);
 int					arrlen(char **arr);
 int					ft_ceil(int nb1, int nb2);
 
-/*************************** VIEW FUNCTIONS ***************************/
-void				display_all_steps(t_room ***rooms, t_ways **ways);
+/******************************* VIEW FUNCTIONS *******************************/
+void				display_map(t_map *map);
+void				display_bfs(t_room ***rooms);
+void				display_adjacency_list(t_room ***rooms);
+void				display_valid_ways(t_way **ways);
+void				display_ways_capacity(t_way **ways);
 
-/*************************** COLORS FUNCTIONS *************************/
+/******************************* COLORS FUNCTIONS *****************************/
 void				red(void);
 void				yellow(void);
 void				green(void);
 void				blue(void);
 
-/*************************** FORMAT FUNCTIONS **************************/
+/******************************* FORMAT FUNCTIONS ******************************/
 void				blink(void);
 void				underline(void);
 void				reset(void);

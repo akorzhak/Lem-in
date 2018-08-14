@@ -12,10 +12,10 @@
 
 #include "lem-in.h"
 
-void	display_ways_capacity(t_ways **ways)
+void	display_ways_capacity(t_way **ways)
 {
 	int		i;
-	t_ways	*w;
+	t_way	*w;
 
 	i = 0;
 	w = *ways;
@@ -33,10 +33,10 @@ void	display_ways_capacity(t_ways **ways)
 	ft_putchar('\n');
 }
 
-void	display_valid_ways(t_ways **ways)
+void	display_valid_ways(t_way **ways)
 {
 	int		i;
-	t_ways	*w;
+	t_way	*w;
 
 	w = *ways;
 	yellow();
@@ -99,10 +99,12 @@ void	display_bfs(t_room ***rooms)
 	}
 }
 
-void	display_all_steps(t_room ***rooms, t_ways **ways)
+void	display_map(t_map *map)
 {
-	display_bfs(rooms);
-	display_adjacency_list(rooms);
-	display_valid_ways(ways);
-	display_ways_capacity(ways);
+	while (map)
+	{
+		printf("%s\n", map->line);
+		map = map->next;
+	}
+	printf("\n");
 }

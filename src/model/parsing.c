@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int line_nb = 1;
+int 	line_nb = 1;
 
 t_map	*record_line(char *line)
 {
@@ -180,6 +180,11 @@ int 	identify_rooms(t_lem *l, t_room ***rooms, char **line)
 		property = ORDINARY;
 		l->rooms_nb++;
 	}
+	if (!l->start_room || !l->end_room)
+	{
+		l->e_message = ft_strdup(NO_START_END_ROOM);
+		return (delete_line_and_exit(line));
+	}
 	if (form_adjacency_list(l, rooms, names) == -1)
 		return (delete_line_and_exit(line));
 	return (1);
@@ -232,14 +237,12 @@ void	record_links(t_lem *l, char *room1, char *room2)
 	links->room2 = ft_strdup(room2);
 }
 
-int 	get_links(t_lem *l, char **line, t_room ***rooms)
+int 	get_links(t_lem *l, char **line)
 {
 	char **arr;
 	int 	i_room1;
 	int 	i_room2;
-	t_room 	**r;
 
-	r = *rooms;
 	do
 	{
 		if (**line == '#')
@@ -251,8 +254,8 @@ int 	get_links(t_lem *l, char **line, t_room ***rooms)
 		}
 		add_line_to_list(l, *line);
 		arr = ft_strsplit(*line, '-');
-		i_room1 = dict(r, l, arr[0]);
-		i_room2 = dict(r, l, arr[1]);
+		i_room1 = dict(l, arr[0]);
+		i_room2 = dict(l, arr[1]);
 		if (i_room1 == -1)
 			l->e_message = ft_strjoin(arr[0], INVALID_ROOM);
 		else if (i_room2 == -1)
@@ -290,13 +293,13 @@ void	set_1st_levels(t_lem *l, t_room ***rooms)
 			return ;
 		if (!ft_strcmp(links->room1, l->start_room))
 		{
-			r[dict(r, l, links->room1)]->level = level;
-			r[dict(r, l, links->room2)]->level = level + 1;
+			r[dict(l, links->room1)]->level = level;
+			r[dict(l, links->room2)]->level = level + 1;
 		}
 		else if (!ft_strcmp(links->room2, l->start_room))
 		{
-			r[dict(r, l, links->room2)]->level = level;
-			r[dict(r, l, links->room1)]->level = level + 1;
+			r[dict(l, links->room2)]->level = level;
+			r[dict(l, links->room1)]->level = level + 1;
 		}
 		links = links->next;
 	}
@@ -354,17 +357,17 @@ void	set_levels(t_lem *l, t_room ***rooms)
 		while (links)
 		{
 			if (ft_strcmp(links->room1, l->end_room)
-				&& (level = r[dict(r, l, links->room1)]->level)
-				&& !r[dict(r, l, links->room2)]->level)
+				&& (level = r[dict(l, links->room1)]->level)
+				&& !r[dict(l, links->room2)]->level)
 			{
-				r[dict(r, l, links->room2)]->level = level + 1;
+				r[dict(l, links->room2)]->level = level + 1;
 				change = 1;
 			}
 			else if (ft_strcmp(links->room2, l->end_room)
-				&& (level = r[dict(r, l, links->room2)]->level)
-				&& !r[dict(r, l, links->room1)]->level)
+				&& (level = r[dict(l, links->room2)]->level)
+				&& !r[dict(l, links->room1)]->level)
 			{
-				r[dict(r, l, links->room1)]->level = level + 1;
+				r[dict(l, links->room1)]->level = level + 1;
 				change = 1;
 			}
 			links = links->next;
@@ -391,7 +394,7 @@ void	link_the_rooms(t_lem *l, t_room ***rooms, int i, char *linked_room)
 		linked_rooms->next = (t_linkage *)ft_memalloc(sizeof(t_linkage));
 		linked_rooms = linked_rooms->next;
 	}
-	linked_rooms->room = r[dict(r, l, linked_room)];
+	linked_rooms->room = r[dict(l, linked_room)];
 }
 
 void	set_linkages(t_lem *l, t_room ***rooms)
@@ -455,7 +458,7 @@ void	drop_the_way(char ***way, int i)
 	ft_memdel((void **)*way);
 }
 
-void	pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms)
+void	pave_the_ways(t_way **ways, t_lem *l, t_room ***rooms)
 {
 	int 	i;
 	int 	len;
@@ -465,12 +468,12 @@ void	pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms)
 	t_linkage *penultimate_room;
 	t_linkage *link;
 	char	**way;
-	t_ways 	*w;
+	t_way 	*w;
 	int fl;
 
 	i = 0;
 	r = *rooms;
-	*ways = (t_ways *)ft_memalloc(sizeof(t_ways));
+	*ways = (t_way *)ft_memalloc(sizeof(t_way));
 	w = *ways;
 	fl = 0;
 	while (ft_strcmp(r[i]->name, l->end_room))
@@ -504,7 +507,7 @@ void	pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms)
 		}
 		if (w->rooms)
 		{
-			w->next = (t_ways *)ft_memalloc(sizeof(t_ways));
+			w->next = (t_way *)ft_memalloc(sizeof(t_way));
 			w = w->next;
 		}
 		w->rooms = (t_ant_room **)ft_memalloc(sizeof(t_ant_room *) * lenth--);
@@ -517,10 +520,10 @@ void	pave_the_ways(t_ways **ways, t_lem *l, t_room ***rooms)
 	}
 }
 
-void	define_nb_of_transfers(t_ways **ways)
+void	define_nb_of_transfers(t_way **ways)
 {
 	int len;
-	t_ways 	*w;
+	t_way 	*w;
 
 	len = 0;
 	w = *ways;
@@ -533,9 +536,9 @@ void	define_nb_of_transfers(t_ways **ways)
 	}
 }
 
-void	define_ways_capacity(t_ways **ways, t_lem *l)
+void	define_ways_capacity(t_way **ways, t_lem *l)
 {
-	t_ways *w;
+	t_way 	*w;
 	int 	turns;
 	int 	sum_ants;
 	int 	difference;
@@ -573,13 +576,13 @@ void	define_ways_capacity(t_ways **ways, t_lem *l)
 	l->turns = turns;
 }
 
-void	move_ants(t_lem *l, t_ways **ways, t_turn ***turns)
+void	move_ants(t_lem *l, t_way **ways, t_turn ***turns)
 {
 	int n;
 	int ant;
 	int tmp;
 	int temp;
-	t_ways *w;
+	t_way *w;
 
 	ant = 0;
 	line_nb = 0;
@@ -630,25 +633,3 @@ void	move_ants(t_lem *l, t_ways **ways, t_turn ***turns)
 		line_nb++;
 	}
 }
-
-void	print_result(t_turn ***turns)
-{
-	t_turn	**t;
-	t_turn	*step;
-	int 	n;
-
-	t = *turns;
-	n = 0;
-	while (t[n])
-	{
-		step = t[n];
-		while (step)
-		{
-			printf("L%d-%s ", step->ant, step->room);
-			step = step->next;
-		}
-		n++;
-		printf("\n");
-	}
-}
-

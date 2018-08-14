@@ -40,8 +40,7 @@ int		main(int argc, char **argv)
 	t_lem	l;
 	t_room	**rooms;
 	char	*line;
-	t_ways	*ways;
-	t_map 	*map;
+	t_way	*ways;
 	t_turn	**turns;
 
 	if (argc <= 3)
@@ -53,24 +52,17 @@ int		main(int argc, char **argv)
 		line = NULL;
 		if (!identify_ants_number(&l) || !(identify_rooms(&l, &rooms, &line)))
 			return (display_error_message(&l));
-		if (!get_links(&l, &line, &rooms))
+		init_dict(&l, rooms);
+		if (!get_links(&l, &line))
 			return (display_error_message(&l));
-		map = l.map;
-		while (map)
-		{
-			printf("%s\n", map->line);
-			map = map->next;
-		}
 		set_levels(&l, &rooms);
 		set_linkages(&l, &rooms);
 		pave_the_ways(&ways, &l, &rooms);
-		printf("\n");
 		define_ways_capacity(&ways, &l);
-		if (l.a)
-			display_all_steps(&rooms, &ways);
+		print_handled_data(&l, &rooms, &ways);
 		move_ants(&l, &ways, &turns);
 		sort_result(&turns);
-		print_result(&turns);
+		display_result(&turns);
 		return (0);
 	}
 	// ls: invalid option -- 'z'

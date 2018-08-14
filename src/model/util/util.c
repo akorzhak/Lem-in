@@ -12,6 +12,21 @@
 
 #include "lem-in.h"
 
+char	**rooms_dict;
+
+void	init_dict(t_lem *l, t_room **rooms)
+{
+	int i;
+
+	i = 0;
+	rooms_dict = (char **)ft_memalloc(sizeof(char *) * (l->rooms_nb + 1));
+	while (i < l->rooms_nb)
+	{
+		rooms_dict[i] = ft_strdup((rooms[i])->name);
+		i++;
+	}
+}
+
 int 	ft_ceil(int nb1, int nb2)
 {
 	int		res;
@@ -26,22 +41,14 @@ int 	ft_ceil(int nb1, int nb2)
 	return (0);
 }
 
-int		dict(t_room **rooms, t_lem *l, char *value)
+int		dict(t_lem *l, char *value)
 {
 	int i;
-	static char **values;
 
-	values = (char **)ft_memalloc(sizeof(char *) * l->rooms_nb);
-	i = 0;
-	while (rooms[i])
-	{
-		values[i] = ft_strdup((rooms[i])->name);
-		i++;
-	}
 	i = 0;
 	while (i < l->rooms_nb)
 	{
-		if (!ft_strcmp(values[i], value))
+		if (!ft_strcmp(rooms_dict[i], value))
 			return (i);
 		i++;
 	}

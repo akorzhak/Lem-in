@@ -37,7 +37,7 @@ UTILDIR = $(MODELDIR)util/
 OBJDIR = obj/
 
 SRC = main.c init.c free.c parsing.c util.c sort.c messages.c all_steps.c\
-	colors.c formats.c
+	colors.c formats.c result.c
 
 OBJ = $(SRC:.c=.o)
 
