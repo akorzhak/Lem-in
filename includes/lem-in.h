@@ -22,13 +22,18 @@
 # define ORDINARY 0
 # define NOT_USED 0
 # define USED 1
+# define OK 0
+# define ERROR 1
 
 /***************************** STRING CONSTANTS *******************************/
-# define INCOMPLETE_ROOM_DATA "room name or coordinate is absent"
-# define INCOMPLETE_LINK_DATA "room name or dash is absent"
-# define INVALID_ROOM " - no such room"
+# define EMPTY_LINE "Empty line."
+# define INCOMPLETE_ROOM_DATA "Room name or coordinate is absent."
+# define INCOMPLETE_LINK_DATA "Room name or dash is absent."
+# define INVALID_ROOM "Such room is NOT declared: "
 # define NO_START_END_ROOM "Parsing has reached the end of the map. "\
 							"No START or END room found."
+# define SELF_LINKED_ROOM "Room can NOT link itself."
+# define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
 
 
 
@@ -127,14 +132,20 @@ struct 				s_sort
 	t_turn			*sort;
 };
 
+/******************************* PARSING FUNCTIONS ***************************/
+int					handle_args(int argc, char **argv, t_lem *l);
+int					get_ants(t_lem *l);
+int					get_rooms(t_lem *l, t_room ***rooms, char **line);
+
+
+/******************************* SAVE_MAP FUNCTION ***************************/
+void				save_map_line(t_lem *l, char *line);
+void				save_link(t_lem *l, char *room1, char *room2);
+
 void				init_lemin(t_lem *l);
 int 				display_usage_message(void);
-int					identify_ants_number(t_lem *l);
-int					identify_rooms(t_lem *l, t_room ***rooms, char **line);
-void				delete_2darray(char **arr);
 int					delete_line_and_exit(char **line);
-void				free_namelist(t_namelist **list);
-int					display_error_message(t_lem *l);
+void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***rooms);
 void				set_linkages(t_lem *l, t_room ***rooms);
@@ -148,11 +159,20 @@ void				sort_result(t_turn ***turns);
 void				print_handled_data(t_lem *l, t_room ***rooms, t_way **ways);
 void				display_result(t_turn ***turns);
 
+/******************************* FREE FUNCTIONS *******************************/
+void				free_lem(t_lem *l);
+void				free_2darray(char ***arr);
+void				free_namelist(t_namelist **list);
+
+
 /******************************* UTIL FUNCTIONS *******************************/
-void				init_dict(t_lem *l, t_room **rooms);
-int					dict(t_lem *l, char *value);
 int					arrlen(char **arr);
 int					ft_ceil(int nb1, int nb2);
+
+/******************************* DICT FUNCTIONS *******************************/
+void				init_dict(t_lem *l, t_room **rooms);
+int					dict(t_lem *l, char *value);
+void				free_dict(void);
 
 /******************************* VIEW FUNCTIONS *******************************/
 void				display_map(t_map *map);

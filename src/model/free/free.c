@@ -28,19 +28,21 @@ void	free_namelist(t_namelist **list)
 	}
 }
 
-void	delete_2darray(char **arr)
+void	free_2darray(char ***arr)
 {
-	int i;
+	int 	i;
+	char	**array;
 
 	i = 0;
-	while (arr[i])
+	array = *arr;
+	while (array[i])
 	{
 	//	printf("%s\n", arr[i]);
-		ft_strdel(&arr[i]);
+		ft_strdel(&array[i]);
 	//	printf("%s\n", arr[i]);
 		i++;
 	}
-	ft_memdel((void **)arr);
+	ft_memdel((void **)array);
 }
 
 int 	delete_line_and_exit(char **line)

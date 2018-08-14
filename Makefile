@@ -18,57 +18,68 @@ CFLAG = -Wall -Wextra -Werror
 
 INC = -I ./includes -I ./ft_printf/includes
 
-PRINTFDIR = ft_printf/
+PRINTF_DIR = ft_printf/
 
-PRINTF = $(PRINTFDIR)libftprintf.a
+PRINTF = $(PRINTF_DIR)libftprintf.a
 
 LIBS = -L ./ft_printf -lftprintf
 
-SRCDIR = src/
+SRC_DIR = src/
 
-CONTROLLERDIR = $(SRCDIR)controller/
+CONTROLLER_DIR = $(SRC_DIR)controller/
 
-MODELDIR = $(SRCDIR)model/
+MODEL_DIR = $(SRC_DIR)model/
 
-VIEWDIR = $(SRCDIR)view/
+VIEW_DIR = $(SRC_DIR)view/
 
-UTILDIR = $(MODELDIR)util/
+UTIL_DIR = $(MODEL_DIR)util/
 
-OBJDIR = obj/
+FREE_DIR = $(MODEL_DIR)free/
 
-SRC = main.c init.c free.c parsing.c util.c sort.c messages.c all_steps.c\
-	colors.c formats.c result.c
+PARSING_DIR = $(MODEL_DIR)parsing/
+
+OBJ_DIR = obj/
+
+SRC = main.c init.c free.c ants.c math.c sort.c messages.c all_steps.c\
+	colors.c formats.c result.c dict.c free_lem.c tmp.c save_input.c\
+	args.c rooms.c links.c
 
 OBJ = $(SRC:.c=.o)
 
 .PHONY: all clean fclean
 
-%.o: $(CONTROLLERDIR)%.c
+%.o: $(CONTROLLER_DIR)%.c
 	@$(C) $(CFLAG) -c $< $(INC)
 
-%.o: $(MODELDIR)%.c
+%.o: $(MODEL_DIR)%.c
 	@$(C) $(CFLAG) -c $< $(INC)
 
-%.o: $(VIEWDIR)%.c
+%.o: $(VIEW_DIR)%.c
 	@$(C) $(CFLAG) -c $< $(INC)
 
-%.o: $(UTILDIR)%.c
+%.o: $(UTIL_DIR)%.c
+	@$(C) $(CFLAG) -c $< $(INC)
+
+%.o: $(FREE_DIR)%.c
+	@$(C) $(CFLAG) -c $< $(INC)
+
+%.o: $(PARSING_DIR)%.c
 	@$(C) $(CFLAG) -c $< $(INC)
 
 all: $(NAME)
 
 $(NAME): $(OBJ)
-	@make -C $(PRINTFDIR)
+	@make -C $(PRINTF_DIR)
 	@$(C) $(CFLAG) -o $(NAME) $(OBJ) $(LIBS)
 	@echo "\e[38;5;82m$(NAME) compilation is done\e[0m"
 
 clean:
-	@make clean -C $(PRINTFDIR)
+	@make clean -C $(PRINTF_DIR)
 	@/bin/rm -f $(OBJ) *~
 	@echo "\e[93mobject files have been cleaned\e[0m"
 
 fclean: clean
-	@make fclean -C $(PRINTFDIR)
+	@make fclean -C $(PRINTF_DIR)
 	@/bin/rm -f $(NAME)
 	@echo "\e[31m$(NAME) has been removed\e[0m"
 

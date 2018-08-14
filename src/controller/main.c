@@ -12,49 +12,43 @@
 
 #include "lem-in.h"
 
-int 	handle_args(int argc, char **argv, t_lem *l)
+int 	parsing_controller(t_lem *l, t_room ***rooms)
 {
-	if (argc >= 2)
+	char	*line;
+
+	line = NULL;
+	*rooms = NULL;
+	if (get_ants(l) == ERROR || get_rooms(l, rooms, &line) == ERROR)
 	{
-		if (!ft_strcmp(argv[1], "-e"))
-			l->e = 1;
-		else if (!ft_strcmp(argv[1], "-a"))
-			l->a = 1;
-		else
-			return (0);
-		if (argc == 3)
-		{
-			if (!ft_strcmp(argv[2], "-e") && !l->e)
-				l->e = 1;
-			else if (!ft_strcmp(argv[2], "-a") && !l->a)
-				l->a = 1;
-			else
-				return (0);
-		}
+		display_error_message(l);
+		free_lem(l);
+		return (ERROR);
 	}
-	return (1);
+	init_dict(l, *rooms);
+	if (get_links(l, &line) == ERROR)
+	{
+		display_error_message(l);
+		free_dict();
+		free_lem(l);
+		return (ERROR);
+	}
+	return (OK);
 }
 
 int		main(int argc, char **argv)
 {
 	t_lem	l;
 	t_room	**rooms;
-	char	*line;
 	t_way	*ways;
 	t_turn	**turns;
 
 	if (argc <= 3)
 	{
 		init_lemin(&l);
-		if (!handle_args(argc, argv, &l))
+		if (handle_args(argc, argv, &l) == ERROR)
 			return (display_usage_message());
-		rooms = NULL;
-		line = NULL;
-		if (!identify_ants_number(&l) || !(identify_rooms(&l, &rooms, &line)))
-			return (display_error_message(&l));
-		init_dict(&l, rooms);
-		if (!get_links(&l, &line))
-			return (display_error_message(&l));
+		if (parsing_controller(&l, &rooms) == ERROR)
+			return (ERROR);	
 		set_levels(&l, &rooms);
 		set_linkages(&l, &rooms);
 		pave_the_ways(&ways, &l, &rooms);
@@ -63,27 +57,8 @@ int		main(int argc, char **argv)
 		move_ants(&l, &ways, &turns);
 		sort_result(&turns);
 		display_result(&turns);
-		return (0);
+		return (OK);
 	}
-	// ls: invalid option -- 'z'
-	// Try 'ls --help' for more information.
-	// bash: cd: -w: invalid option
-	// cd: usage: cd [-L|[-P [-e]] [-@]] [dir]
-
-
-	// printf("%d\n", rooms[0]->level);
-	// printf("%d\n", rooms[3]->level);
-	// printf("%d\n", rooms[5]->level);
-	// printf("%d\n", rooms[6]->level);
-//	drop_dead_rooms(&lem, &rooms);
-
-	// while (rooms[i])
-	// {
-	// 	printf("%s\t", (rooms[i])->name);
-	// 	printf("%d\n", (rooms[i])->property);
-	// 	i++;
-	// }
-//	line is on first relation between rooms
-//	free_memory(&f);
-	return (display_error_message(&l));
+	display_error_message(&l);
+	return (ERROR);
 }

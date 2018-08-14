@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int		display_error_message(t_lem *l)
+void		display_error_message(t_lem *l)
 {
 	t_map	*map;
 
@@ -30,17 +30,13 @@ int		display_error_message(t_lem *l)
 		ft_printf("line %d: %s\n", map->nb, map->line);
 		if (l->e_message)
 		{
-		//	red();
-			ft_putstr(l->e_message);
-		//	reset();
+			ft_printf("%s\n", l->e_message);
 		}
-		ft_putchar('\n');
 	}
-	return (1);
 }
 
 int 	display_usage_message(void)
 {
-	ft_putstr("lem-in: usage: ./lem-in [-e] [-a] < map\n");
-	return (1);
+	ft_putstr(USAGE);
+	return (ERROR);
 }

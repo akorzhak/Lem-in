@@ -1,22 +1,36 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strdel.c                                        :+:      :+:    :+:   */
+/*   args.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/03 13:39:35 by akorzhak          #+#    #+#             */
-/*   Updated: 2017/11/03 13:39:38 by akorzhak         ###   ########.fr       */
+/*   Created: 2018/07/02 17:24:05 by akorzhak          #+#    #+#             */
+/*   Updated: 2018/07/02 17:24:07 by akorzhak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "lem-in.h"
 
-void	ft_strdel(char **s)
+int		handle_args(int argc, char **argv, t_lem *l)
 {
-	if (s && *s)
+	if (argc >= 2)
 	{
-		free(*s);
-		*s = NULL;
+		if (!ft_strcmp(argv[1], "-e"))
+			l->e = 1;
+		else if (!ft_strcmp(argv[1], "-a"))
+			l->a = 1;
+		else
+			return (ERROR);
+		if (argc == 3)
+		{
+			if (!ft_strcmp(argv[2], "-e") && !l->e)
+				l->e = 1;
+			else if (!ft_strcmp(argv[2], "-a") && !l->a)
+				l->a = 1;
+			else
+				return (ERROR);
+		}
 	}
+	return (OK);
 }
