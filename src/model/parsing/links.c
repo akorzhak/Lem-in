@@ -18,6 +18,11 @@ int 	get_links(t_lem *l, char **line)
 	int 	i_room1;
 	int 	i_room2;
 
+	if (!*line)
+	{
+		l->e_message = ft_strdup(NO_LINKS);
+		return (ERROR);
+	}
 	do
 	{
 		if (**line == '#')
@@ -28,6 +33,11 @@ int 	get_links(t_lem *l, char **line)
 			continue ;
 		}
 		save_map_line(l, *line);
+		if (has_spaces(*line))
+		{
+			l->e_message = ft_strdup(SPACES);
+			return (ERROR);
+		}
 		arr = ft_strsplit(*line, '-');
 		if (arrlen(arr) != 2)
 		{

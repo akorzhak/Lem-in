@@ -42,7 +42,8 @@ OBJ_DIR = obj/
 
 SRC = main.c init.c free.c ants.c math.c sort.c messages.c all_steps.c\
 	colors.c formats.c result.c dict.c free_lem.c tmp.c save_input.c\
-	args.c rooms.c links.c
+	args.c rooms.c links.c set_levels.c set_links.c set_ways.c\
+	set_capacity.c
 
 OBJ = $(SRC:.c=.o)
 

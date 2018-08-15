@@ -48,7 +48,7 @@ void	free_2darray(char ***arr)
 int 	delete_line_and_exit(char **line)
 {
 	ft_strdel(line);
-	return (0);
+	return (ERROR);
 }
 // void	free_the_grid_data(t_grid *grid)
 // {

@@ -12,6 +12,36 @@
 
 #include "lem-in.h"
 
+int		has_spaces(char	*str)
+{
+	int i;
+
+	i = 0;
+	while (str[i])
+	{
+		if (str[i] == ' ' || str[i] == '\t')
+			return (1);
+		i++;
+	}
+	return (0);
+}
+
+int		is_number(char	*nb)
+{
+	int	i;
+
+	i = 0;
+	if (nb[i] == '-' || nb[i] == '+')
+		i++;
+	while (ft_isdigit(nb[i]))
+	{
+		i++;
+		if (!nb[i])
+			return (1);
+	}
+	return (0);
+}
+
 int 	ft_ceil(int nb1, int nb2)
 {
 	int		res;

@@ -47,6 +47,13 @@ int 	record_room_name(char *line, t_namelist **names, int property, t_lem *l)
 	if (arrlen(arr) != 3)
 	{
 		l->e_message = ft_strdup(INCOMPLETE_ROOM_DATA);
+		free_2darray(&arr);
+		return (ERROR);
+	}
+	if (!is_number(arr[1]) || !is_number(arr[2]))
+	{
+		l->e_message = ft_strdup(INVALID_COORDINATE);
+		free_2darray(&arr);
 		return (ERROR);
 	}
 	if (add_name_to_list(names, arr[0], property) == ERROR)

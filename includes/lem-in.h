@@ -30,9 +30,12 @@
 # define INCOMPLETE_ROOM_DATA "Room name or coordinate is absent."
 # define INCOMPLETE_LINK_DATA "Room name or dash is absent."
 # define INVALID_ROOM "Such room is NOT declared: "
-# define NO_START_END_ROOM "Parsing has reached the end of the map. "\
+# define INVALID_COORDINATE "Coordinate is not a number."
+# define NO_START_END_ROOM "Parsing reached the end of the map. "\
 							"No START or END room found."
 # define SELF_LINKED_ROOM "Room can NOT link itself."
+# define NO_LINKS "Parsing reached the end of the map. No LINKS found."
+# define SPACES "LINKS can NOT contain any spaces or tabs."
 # define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
 
 
@@ -148,9 +151,9 @@ int					delete_line_and_exit(char **line);
 void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***rooms);
-void				set_linkages(t_lem *l, t_room ***rooms);
+void				set_links(t_lem *l, t_room ***rooms);
 void				pave_the_ways(t_way **ways, t_lem *l, t_room ***rooms);
-void				define_ways_capacity(t_way **w, t_lem *l);
+void				set_ways_capacity(t_way **w, t_lem *l);
 void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 
 /******************************* SORT FUNCTION ********************************/
@@ -165,9 +168,11 @@ void				free_2darray(char ***arr);
 void				free_namelist(t_namelist **list);
 
 
-/******************************* UTIL FUNCTIONS *******************************/
+/******************************* MATH FUNCTIONS *******************************/
 int					arrlen(char **arr);
 int					ft_ceil(int nb1, int nb2);
+int					is_number(char	*nb);
+int					has_spaces(char	*str);
 
 /******************************* DICT FUNCTIONS *******************************/
 void				init_dict(t_lem *l, t_room **rooms);
