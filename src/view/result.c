@@ -23,13 +23,13 @@ void	display_result(t_turn ***turns)
 	while (t[n])
 	{
 		step = t[n];
-		while (step)
+		while (step->next)
 		{
 			printf("L%d-%s ", step->ant, step->room);
 			step = step->next;
 		}
+		printf("L%d-%s\n", step->ant, step->room);
 		n++;
-		printf("\n");
 	}
 }
 

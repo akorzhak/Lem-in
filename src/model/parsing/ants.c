@@ -23,18 +23,18 @@ int		get_ants(t_lem *l)
 		if (*line == '#')
 		{
 			if (ft_strstr(line, "##start") || ft_strstr(line, "##end"))
-				return (delete_line_and_exit(&line));
+				return (exit_with_error(l, &line, IRRELEVANT_COMMAND));
 			continue ;
 		}
 		else if (ft_isdigit(*line))
 		{
 			if ((l->ants_nb = ft_atoi(line)) <= 0)
-				return (delete_line_and_exit(&line));
+				return (exit_with_error(l, &line, INVALID_ANTS_NB));
 		}
 		else
-			return (delete_line_and_exit(&line));
+			return (exit_with_error(l, &line, INVALID_ANTS_NB));
 		ft_strdel(&line);
 		return (OK);
 	}
-	return (delete_line_and_exit(&line));
+	return (exit_with_error(l, &line, TO_DO));
 }

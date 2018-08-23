@@ -27,7 +27,10 @@
 
 /***************************** STRING CONSTANTS *******************************/
 # define EMPTY_LINE "Empty line."
+# define TO_DO "TO DO!"
+# define IRRELEVANT_COMMAND "Irrelevant START/END command."
 # define INCOMPLETE_ROOM_DATA "Room name or coordinate is absent."
+# define TOO_MUCH_DATA "Redundant data is provided."
 # define INCOMPLETE_LINK_DATA "Room name or dash is absent."
 # define INVALID_ROOM "Such room is NOT declared: "
 # define INVALID_COORDINATE "Coordinate is not a number."
@@ -35,10 +38,12 @@
 							"No START or END room found."
 # define SELF_LINKED_ROOM "Room can NOT link itself."
 # define NO_LINKS "Parsing reached the end of the map. No LINKS found."
+# define MULTIPLE_START_END_ROOM "Multiple declaration of START/END room " \
+							"is forbidden."			
 # define SPACES "LINKS can NOT contain any spaces or tabs."
+# define INVALID_ANTS_NB "Invalid ants number."
+# define MALLOC_ERROR "Memory allocation has failed."
 # define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
-
-
 
 extern int line_nb;
 extern char **rooms_dict;
@@ -147,7 +152,7 @@ void				save_link(t_lem *l, char *room1, char *room2);
 
 void				init_lemin(t_lem *l);
 int 				display_usage_message(void);
-int					delete_line_and_exit(char **line);
+int					exit_with_error(t_lem *l, char **line, char *error_massage);
 void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***rooms);

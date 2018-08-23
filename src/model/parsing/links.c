@@ -28,22 +28,18 @@ int 	get_links(t_lem *l, char **line)
 		if (**line == '#')
 		{
 			if (ft_strstr(*line, "##start") || ft_strstr(*line, "##end"))
-				return (delete_line_and_exit(line));
+				return (exit_with_error(l, line, IRRELEVANT_COMMAND));
 			save_map_line(l, *line);
 			continue ;
 		}
 		save_map_line(l, *line);
 		if (has_spaces(*line))
-		{
-			l->e_message = ft_strdup(SPACES);
-			return (ERROR);
-		}
+			return (exit_with_error(l, line, SPACES));
 		arr = ft_strsplit(*line, '-');
 		if (arrlen(arr) != 2)
 		{
-			l->e_message = ft_strdup(INCOMPLETE_LINK_DATA);
 			free_2darray(&arr);
-			return (ERROR);
+			return (exit_with_error(l, line, INCOMPLETE_LINK_DATA));
 		}
 		i_room1 = dict(l, arr[0]);
 		i_room2 = dict(l, arr[1]);

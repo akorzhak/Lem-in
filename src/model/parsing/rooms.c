@@ -19,7 +19,7 @@ int		add_name_to_list(t_namelist **names, char *name, int property)
 
 	temp = *names;
 	if (!(new = (t_namelist *)ft_memalloc(sizeof(t_namelist))))
-		return (ERROR); 
+		return (ERROR);
 	new->name = ft_strdup(name);
 	new->property = property;
 	new->next = NULL;
@@ -34,37 +34,55 @@ int		add_name_to_list(t_namelist **names, char *name, int property)
 	return (OK);
 }
 
-int 	record_room_name(char *line, t_namelist **names, int property, t_lem *l)
+int 	handle_arr_content(t_lem *l, char **line, char ***arr)
+{
+	char **array;
+
+	array = *arr;
+	if (arrlen(array) < 3)
+		return (exit_with_error(l, line, INCOMPLETE_ROOM_DATA));
+	else if (arrlen(array) > 3)
+		return (exit_with_error(l, line, TOO_MUCH_DATA));
+	if (!is_number(array[1]) || !is_number(array[2]))
+		return (exit_with_error(l, line, INVALID_COORDINATE));
+	return (OK);
+}
+
+int 	handle_property(t_lem *l, char **line, int property, char *room_name)
+{
+	if (property == ENTRANCE)
+	{
+		if (l->start_room)
+			return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
+		l->start_room = ft_strdup(room_name);
+	}
+	else if (property == EXIT)
+	{
+		if (l->end_room)
+			return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
+		l->end_room = ft_strdup(room_name);
+	}
+	return (OK);
+}
+
+int 	record_room_name(char **line, t_namelist **names, int property, t_lem *l)
 {
 	char **arr;
 
-	if (!*line)
+	if (!**line)
+		return (exit_with_error(l, line, EMPTY_LINE));
+	arr = ft_split_white(*line);
+	if (handle_arr_content(l, line, &arr) == ERROR
+		|| handle_property(l, line, property, arr[0]) == ERROR)
 	{
-		l->e_message = ft_strdup(EMPTY_LINE);
-		return (ERROR);
-	}
-	arr = ft_split_white(line);
-	if (arrlen(arr) != 3)
-	{
-		l->e_message = ft_strdup(INCOMPLETE_ROOM_DATA);
-		free_2darray(&arr);
-		return (ERROR);
-	}
-	if (!is_number(arr[1]) || !is_number(arr[2]))
-	{
-		l->e_message = ft_strdup(INVALID_COORDINATE);
 		free_2darray(&arr);
 		return (ERROR);
 	}
 	if (add_name_to_list(names, arr[0], property) == ERROR)
 	{
 		free_2darray(&arr);
-		return (ERROR);
+		return (exit_with_error(l, line, MALLOC_ERROR));
 	}
-	if (property == ENTRANCE)
-		l->start_room = ft_strdup(arr[0]);
-	else if (property == EXIT)
-		l->end_room = ft_strdup(arr[0]);
 	free_2darray(&arr);
 	return (OK);
 }
@@ -126,21 +144,18 @@ int 	get_rooms(t_lem *l, t_room ***rooms, char **line)
 		if (**line == '#')
 		{
 			if (handle_commands(*line, &property) == ERROR)
-				return (delete_line_and_exit(line));
+				return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
 			continue ;
 		}
-		if (record_room_name(*line, &names, property, l) == ERROR) //1 23 3, null, 1
-			return (delete_line_and_exit(line));
+		if (record_room_name(line, &names, property, l) == ERROR)
+			return (ERROR);
 		ft_strdel(line);
 		property = ORDINARY;
 		l->rooms_nb++;
 	}
 	if (!l->start_room || !l->end_room)
-	{
-		l->e_message = ft_strdup(NO_START_END_ROOM);
-		return (delete_line_and_exit(line));
-	}
+		return (exit_with_error(l, line, NO_START_END_ROOM));
 	if (form_adjacency_list(l, rooms, names) == ERROR)
-		return (delete_line_and_exit(line));
+		return (exit_with_error(l, line, MALLOC_ERROR));
 	return (OK);
 }

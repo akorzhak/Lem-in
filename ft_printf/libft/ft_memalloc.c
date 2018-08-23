@@ -17,10 +17,7 @@ void	*ft_memalloc(size_t size)
 	void *arr;
 
 	if ((arr = (void*)malloc(sizeof(void) * size)) == NULL)
-	{
-		ft_putstr("Memory allocation failed.\n")
-		exit(EXIT_FAILURE);
-	}
+		return (NULL);
 	ft_bzero(arr, size);
 	return (arr);
 }

@@ -45,8 +45,9 @@ void	free_2darray(char ***arr)
 	ft_memdel((void **)array);
 }
 
-int 	delete_line_and_exit(char **line)
+int 	exit_with_error(t_lem *l, char **line, char *error_message)
 {
+	l->e_message = ft_strdup(error_message);
 	ft_strdel(line);
 	return (ERROR);
 }

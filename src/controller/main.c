@@ -30,10 +30,9 @@ int 	program_logic_controller(t_lem *l, t_room ***rooms)
 
 int 	parsing_controller(t_lem *l, t_room ***rooms)
 {
-	char	*line;
+	char *line;
 
 	line = NULL;
-	*rooms = NULL;
 	if (get_ants(l) == ERROR || get_rooms(l, rooms, &line) == ERROR)
 	{
 		display_error_message(l);
@@ -58,6 +57,7 @@ int		main(int argc, char **argv)
 	t_lem	l;
 	t_room	**rooms;
 
+	rooms = NULL;
 	if (argc <= 3)
 	{
 		init_lemin(&l);
