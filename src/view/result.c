@@ -33,7 +33,7 @@ void	display_result(t_turn ***turns)
 	}
 }
 
-void	print_handled_data(t_lem *l, t_room ***rooms, t_way **ways)
+void	print_handled_data(t_lem *l, t_room **rooms, t_way **ways)
 {
 	display_map(l->map);
 	if (l->a)

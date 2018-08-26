@@ -38,12 +38,15 @@ FREE_DIR = $(MODEL_DIR)free/
 
 PARSING_DIR = $(MODEL_DIR)parsing/
 
+ROOMS_DIR = $(PARSING_DIR)rooms/
+
 OBJ_DIR = obj/
 
 SRC = main.c init.c free.c ants.c math.c sort.c messages.c all_steps.c\
 	colors.c formats.c result.c dict.c free_lem.c tmp.c save_input.c\
-	args.c rooms.c links.c set_levels.c set_links.c set_ways.c\
-	set_capacity.c
+	args.c get_rooms.c form_adj_list.c record_name.c links.c\
+	set_levels.c set_links.c set_ways.c\
+	set_capacity.c free_rooms.c
 
 OBJ = $(SRC:.c=.o)
 
@@ -65,6 +68,9 @@ OBJ = $(SRC:.c=.o)
 	@$(C) $(CFLAG) -c $< $(INC)
 
 %.o: $(PARSING_DIR)%.c
+	@$(C) $(CFLAG) -c $< $(INC)
+
+%.o: $(ROOMS_DIR)%.c
 	@$(C) $(CFLAG) -c $< $(INC)
 
 all: $(NAME)

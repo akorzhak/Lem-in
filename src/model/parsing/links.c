@@ -12,17 +12,30 @@
 
 #include "lem-in.h"
 
-int 	get_links(t_lem *l, char **line)
+int 	validate_link(t_lem *l, char **arr, char **line)
 {
-	char	**arr;
 	int 	i_room1;
 	int 	i_room2;
 
+	if (arrlen(arr) != 2)
+		return (exit_with_error(l, line, INCOMPLETE_LINK_DATA));
+	i_room1 = dict(l, arr[0]);
+	i_room2 = dict(l, arr[1]);
+	if (i_room1 == -1)
+		return (exit_with_error(l, line, ft_strjoin(INVALID_ROOM, arr[0])));
+	if (i_room2 == -1)
+		return (exit_with_error(l, line, ft_strjoin(INVALID_ROOM, arr[1])));
+	if (i_room1 == i_room2)
+		return (exit_with_error(l, line, SELF_LINKED_ROOM));
+	return (OK);
+}
+
+int 	get_links(t_lem *l, char **line)
+{
+	char	**arr;
+
 	if (!*line)
-	{
-		l->e_message = ft_strdup(NO_LINKS);
-		return (ERROR);
-	}
+		return (exit_with_error(l, line, NO_LINKS));
 	do
 	{
 		if (**line == '#')
@@ -36,20 +49,7 @@ int 	get_links(t_lem *l, char **line)
 		if (has_spaces(*line))
 			return (exit_with_error(l, line, SPACES));
 		arr = ft_strsplit(*line, '-');
-		if (arrlen(arr) != 2)
-		{
-			free_2darray(&arr);
-			return (exit_with_error(l, line, INCOMPLETE_LINK_DATA));
-		}
-		i_room1 = dict(l, arr[0]);
-		i_room2 = dict(l, arr[1]);
-		if (i_room1 == -1)
-			l->e_message = ft_strjoin(INVALID_ROOM, arr[0]);
-		else if (i_room2 == -1)
-			l->e_message = ft_strjoin(INVALID_ROOM, arr[1]);
-		else if (i_room1 == i_room2)
-			l->e_message = ft_strdup(SELF_LINKED_ROOM);
-		if (i_room1 == -1 || i_room2 == -1 || i_room1 == i_room2)
+		if (validate_link(l, arr, line) == ERROR)
 		{
 			free_2darray(&arr);
 			return (ERROR);

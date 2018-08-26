@@ -12,13 +12,13 @@
 
 #include "lem-in.h"
 
-void	set_1st_levels(t_lem *l, t_room ***rooms)
+void	set_1st_levels(t_lem *l, t_room ***r)
 {
-	t_room **r;
 	t_link *links;
 	int 	level;
+	t_room	**rooms;
 
-	r = *rooms;
+	rooms = *r;
 	level = 1;
 	links = l->links;
 	while (links)
@@ -30,26 +30,46 @@ void	set_1st_levels(t_lem *l, t_room ***rooms)
 			return ;
 		if (!ft_strcmp(links->room1, l->start_room))
 		{
-			r[dict(l, links->room1)]->level = level;
-			r[dict(l, links->room2)]->level = level + 1;
+			rooms[dict(l, links->room1)]->level = level;
+			rooms[dict(l, links->room2)]->level = level + 1;
 		}
 		else if (!ft_strcmp(links->room2, l->start_room))
 		{
-			r[dict(l, links->room2)]->level = level;
-			r[dict(l, links->room1)]->level = level + 1;
+			rooms[dict(l, links->room2)]->level = level;
+			rooms[dict(l, links->room1)]->level = level + 1;
 		}
 		links = links->next;
 	}
 }
 
+int		set_level(t_lem *l, t_room ***r, t_link *links)
+{
+	int 	level;
+	t_room	**rooms;
+
+	rooms = *r;
+	if (ft_strcmp(links->room1, l->end_room)
+		&& (level = rooms[dict(l, links->room1)]->level)
+		&& !rooms[dict(l, links->room2)]->level)
+	{
+		rooms[dict(l, links->room2)]->level = level + 1;
+		return (1);
+	}
+	else if (ft_strcmp(links->room2, l->end_room)
+		&& (level = rooms[dict(l, links->room2)]->level)
+		&& !rooms[dict(l, links->room1)]->level)
+	{
+		rooms[dict(l, links->room1)]->level = level + 1;
+		return (1);
+	}
+	return (0);
+}
+
 void	set_levels(t_lem *l, t_room ***rooms)
 {
-	t_room **r;
 	t_link *links;
-	int 	level;
 	char 	change;
 
-	r = *rooms;
 	set_1st_levels(l, rooms);
 	do
 	{
@@ -57,20 +77,7 @@ void	set_levels(t_lem *l, t_room ***rooms)
 		links = l->links;
 		while (links)
 		{
-			if (ft_strcmp(links->room1, l->end_room)
-				&& (level = r[dict(l, links->room1)]->level)
-				&& !r[dict(l, links->room2)]->level)
-			{
-				r[dict(l, links->room2)]->level = level + 1;
-				change = 1;
-			}
-			else if (ft_strcmp(links->room2, l->end_room)
-				&& (level = r[dict(l, links->room2)]->level)
-				&& !r[dict(l, links->room1)]->level)
-			{
-				r[dict(l, links->room1)]->level = level + 1;
-				change = 1;
-			}
+			change = set_level(l, rooms, links);
 			links = links->next;
 		}
 	} while (change);

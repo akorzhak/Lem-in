@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int 	program_logic_controller(t_lem *l, t_room ***rooms)
+int		program_logic_controller(t_lem *l, t_room ***rooms)
 {
 	t_way	*ways;
 	t_turn	**turns;
@@ -21,14 +21,14 @@ int 	program_logic_controller(t_lem *l, t_room ***rooms)
 	set_links(l, rooms);
 	pave_the_ways(&ways, l, rooms);
 	set_ways_capacity(&ways, l);
-	print_handled_data(l, rooms, &ways);
+	print_handled_data(l, *rooms, &ways);
 	move_ants(l, &ways, &turns);
 	sort_result(&turns);
 	display_result(&turns);
 	return (OK);
 }
 
-int 	parsing_controller(t_lem *l, t_room ***rooms)
+int		parsing_controller(t_lem *l, t_room ***rooms)
 {
 	char *line;
 
@@ -37,6 +37,7 @@ int 	parsing_controller(t_lem *l, t_room ***rooms)
 	{
 		display_error_message(l);
 		free_lem(l);
+		free_rooms(rooms);
 		ft_strdel(&line);
 		return (ERROR);
 	}
@@ -44,8 +45,7 @@ int 	parsing_controller(t_lem *l, t_room ***rooms)
 	if (get_links(l, &line) == ERROR)
 	{
 		display_error_message(l);
-		free_dict();
-		free_lem(l);
+		free_all(l, rooms);
 		ft_strdel(&line);
 		return (ERROR);
 	}
@@ -65,8 +65,8 @@ int		main(int argc, char **argv)
 			return (display_usage_message());
 		if (parsing_controller(&l, &rooms) == ERROR)
 			return (ERROR);
-		if (program_logic_controller(&l, &rooms) == ERROR)
-			return (ERROR);
+		program_logic_controller(&l, &rooms);
+		free_all(&l, &rooms);
 		return (OK);
 	}
 	display_usage_message();

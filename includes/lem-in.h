@@ -144,6 +144,8 @@ struct 				s_sort
 int					handle_args(int argc, char **argv, t_lem *l);
 int					get_ants(t_lem *l);
 int					get_rooms(t_lem *l, t_room ***rooms, char **line);
+int 				record_name(char **line, t_namelist **n, int p, t_lem *l);
+int					form_adj_list(t_lem *l, t_room ***rooms, t_namelist *names);
 
 
 /******************************* SAVE_MAP FUNCTION ***************************/
@@ -155,22 +157,24 @@ int 				display_usage_message(void);
 int					exit_with_error(t_lem *l, char **line, char *error_massage);
 void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
-void				set_levels(t_lem *l, t_room ***rooms);
-void				set_links(t_lem *l, t_room ***rooms);
-void				pave_the_ways(t_way **ways, t_lem *l, t_room ***rooms);
+void				set_levels(t_lem *l, t_room ***r);
+void				set_links(t_lem *l, t_room ***r);
+void				pave_the_ways(t_way **ways, t_lem *l, t_room ***r);
 void				set_ways_capacity(t_way **w, t_lem *l);
 void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 
 /******************************* SORT FUNCTION ********************************/
 void				sort_result(t_turn ***turns);
 
-void				print_handled_data(t_lem *l, t_room ***rooms, t_way **ways);
+void				print_handled_data(t_lem *l, t_room **rooms, t_way **ways);
 void				display_result(t_turn ***turns);
 
 /******************************* FREE FUNCTIONS *******************************/
+void				free_all(t_lem *l, t_room ***rooms);
 void				free_lem(t_lem *l);
 void				free_2darray(char ***arr);
 void				free_namelist(t_namelist **list);
+void				free_rooms(t_room ***rooms);
 
 
 /******************************* MATH FUNCTIONS *******************************/
@@ -186,8 +190,8 @@ void				free_dict(void);
 
 /******************************* VIEW FUNCTIONS *******************************/
 void				display_map(t_map *map);
-void				display_bfs(t_room ***rooms);
-void				display_adjacency_list(t_room ***rooms);
+void				display_bfs(t_room **rooms);
+void				display_adjacency_list(t_room **rooms);
 void				display_valid_ways(t_way **ways);
 void				display_ways_capacity(t_way **ways);
 

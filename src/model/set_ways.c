@@ -45,28 +45,28 @@ t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 	return (penultimate_room);
 }
 
-void	pave_the_ways(t_way **ways, t_lem *l, t_room ***rooms)
+void	pave_the_ways(t_way **ways, t_lem *l, t_room ***r)
 {
 	int 	i;
 	int 	len;
 	int 	lenth;
 	int 	last_room_index;
-	t_room **r;
 	t_linkage *penultimate_room;
 	t_linkage *link;
 	char	**way;
 	t_way 	*w;
 	int fl;
+	t_room **rooms;
 
+	rooms = *r;
 	i = 0;
-	r = *rooms;
 	*ways = (t_way *)ft_memalloc(sizeof(t_way));
 	w = *ways;
 	fl = 0;
-	while (ft_strcmp(r[i]->name, l->end_room))
+	while (ft_strcmp(rooms[i]->name, l->end_room))
 		i++;
-	r[i]->used = USED;
-	while ((penultimate_room = choose_penultimate_room(&(r[i]->linked_rooms))))
+	rooms[i]->used = USED;
+	while ((penultimate_room = choose_penultimate_room(&(rooms[i]->linked_rooms))))
 	{
 		len = penultimate_room->room->level + 2;
 		lenth = len;

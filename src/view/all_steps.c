@@ -54,22 +54,20 @@ void	display_valid_ways(t_way **ways)
 	}
 }
 
-void	display_adjacency_list(t_room ***rooms)
+void	display_adjacency_list(t_room **rooms)
 {
 	int		i;
-	t_room	**r;
 	t_linkage *linked_rooms;
 
 	i = 0;
-	r = *rooms;
 	green();
 	underline();
 	ft_putstr("\nADJACENCY LIST:\n\n");
 	reset();
-	while (r[i])
+	while (rooms[i])
 	{
-		linked_rooms = r[i]->linked_rooms;
-		ft_putstr(r[i]->name);
+		linked_rooms = rooms[i]->linked_rooms;
+		ft_putstr(rooms[i]->name);
 		while (linked_rooms)
 		{
 			ft_printf("->%s", linked_rooms->room->name);
@@ -80,21 +78,19 @@ void	display_adjacency_list(t_room ***rooms)
 	}
 }
 
-void	display_bfs(t_room ***rooms)
+void	display_bfs(t_room **rooms)
 {
 	int		i;
-	t_room	**r;
 
 	i = 0;
-	r = *rooms;
 	blue();
 	underline();
 	ft_putstr("BREADTH FIRST SEARCH:\n\n");
 	reset();
-	while (r[i])
+	while (rooms[i])
 	{
-		ft_printf("room: %s ", r[i]->name);
-		ft_printf("level: %d\n", r[i]->level);
+		ft_printf("room: %s ", rooms[i]->name);
+		ft_printf("level: %d\n", rooms[i]->level);
 		i++;
 	}
 }

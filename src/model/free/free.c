@@ -51,6 +51,13 @@ int 	exit_with_error(t_lem *l, char **line, char *error_message)
 	ft_strdel(line);
 	return (ERROR);
 }
+
+void	free_all(t_lem *l, t_room ***rooms)
+{
+	free_dict();
+	free_lem(l);
+	free_rooms(rooms);
+}
 // void	free_the_grid_data(t_grid *grid)
 // {
 // 	int i;
