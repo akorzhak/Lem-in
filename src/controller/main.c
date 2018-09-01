@@ -19,7 +19,7 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 
 	set_levels(l, rooms);
 	set_links(l, rooms);
-	pave_the_ways(&ways, l, rooms);
+	pave_the_ways(&ways, l, *rooms);
 	set_ways_capacity(&ways, l);
 	print_handled_data(l, *rooms, &ways);
 	move_ants(l, &ways, &turns);

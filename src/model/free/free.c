@@ -37,12 +37,10 @@ void	free_2darray(char ***arr)
 	array = *arr;
 	while (array[i])
 	{
-	//	printf("%s\n", arr[i]);
 		ft_strdel(&array[i]);
-	//	printf("%s\n", arr[i]);
 		i++;
 	}
-	ft_memdel((void **)array);
+	ft_memdel((void **)arr);
 }
 
 int 	exit_with_error(t_lem *l, char **line, char *error_message)

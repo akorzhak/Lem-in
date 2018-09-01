@@ -12,35 +12,37 @@
 
 #include "lem-in.h"
 
-void	free_rooms(t_room ***rooms) //FAIL TO DO!!!!!!!!!!!!!
+void	free_rooms(t_room ***rooms)
 {
 	int	i;
+	t_room		**r;
 	t_linkage	*linked_rooms;
 	t_linkage	*next;
 
 	i = 0;
+	r = *rooms;
 	if (rooms && *rooms)
 	{
-		while (*rooms[i])
+		while (r[i])
 		{
-	 		linked_rooms = (*rooms[i])->linked_rooms;
-	// 		ft_strdel(&((*rooms[i])->name));
-	// 		ft_printf("2\n");
+	 		linked_rooms = (r[i])->linked_rooms;
 	 		while (linked_rooms)
 	 		{
-				ft_printf("3\n");
 				next = linked_rooms->next;
 				linked_rooms->room = NULL;
-				linked_rooms->next = NULL; //?????
+				linked_rooms->next = NULL;
 	 			ft_memdel((void **)&linked_rooms);
 	 			linked_rooms = next;
 	 		}
-	// 		ft_printf("4\n");
-	// 		ft_memdel((void **)rooms[i]);
-	// 		ft_printf("5\n");
 			i++;
 		}
-	// 	printf("6\n");
-	// 	ft_memdel((void **)rooms);
+		i = 0;
+		while (r[i])
+		{
+			ft_strdel(&(r[i])->name);
+			ft_memdel((void **)r[i]);
+			i++;
+		}
+ 		ft_memdel((void **)rooms);
 	}
 }

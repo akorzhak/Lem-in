@@ -58,6 +58,8 @@ typedef struct s_namelist	t_namelist;
 typedef struct s_turn		t_turn;
 typedef struct s_ant_room	t_ant_room;
 typedef struct s_sort		t_sort;
+typedef struct s_i			t_i;
+typedef struct s_lnk		t_lnk;
 
 struct 				s_map
 {
@@ -66,7 +68,7 @@ struct 				s_map
 	t_map			*next;
 };
 
-struct 				s_linkage //for adjacency list
+struct 				s_linkage
 {
 	t_room			*room;
 	t_linkage		*next;
@@ -75,8 +77,8 @@ struct 				s_linkage //for adjacency list
 struct				s_room
 {
 	char			*name;
-	int				level; //1, 2, 0 - if invalid path DROP
-	int				property; //DROP ???
+	int				level;
+	int				property;
 	char			used;
 	t_linkage		*linked_rooms;
 };
@@ -140,6 +142,20 @@ struct 				s_sort
 	t_turn			*sort;
 };
 
+struct 				s_i
+{
+	int 			i;
+	int 			len;
+	int 			lenth;
+	int 			last_room_index;
+};
+
+struct 				s_lnk
+{
+	t_linkage 		*penultimate_room;
+	t_linkage 		*link;
+};
+
 /******************************* PARSING FUNCTIONS ***************************/
 int					handle_args(int argc, char **argv, t_lem *l);
 int					get_ants(t_lem *l);
@@ -159,7 +175,7 @@ void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***r);
 void				set_links(t_lem *l, t_room ***r);
-void				pave_the_ways(t_way **ways, t_lem *l, t_room ***r);
+void				pave_the_ways(t_way **ways, t_lem *l, t_room **rooms);
 void				set_ways_capacity(t_way **w, t_lem *l);
 void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 
