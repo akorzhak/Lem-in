@@ -54,6 +54,6 @@ int 	get_rooms(t_lem *l, t_room ***rooms, char **line)
 	if (!l->start_room || !l->end_room)
 		return (exit_with_error(l, line, NO_START_END_ROOM));
 	if (form_adj_list(l, rooms, names) == ERROR)
-		return (exit_with_error(l, line, MALLOC_ERROR));
+		return (exit_with_error(l, line, MALLOC_FAIL));
 	return (OK);
 }

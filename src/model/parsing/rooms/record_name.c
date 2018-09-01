@@ -81,7 +81,7 @@ int 	record_name(char **line, t_namelist **n, int p, t_lem *l)
 	if (add_name_to_list(n, arr[0], p) == ERROR)
 	{
 		free_2darray(&arr);
-		return (exit_with_error(l, line, MALLOC_ERROR));
+		return (exit_with_error(l, line, MALLOC_FAIL));
 	}
 	free_2darray(&arr);
 	return (OK);

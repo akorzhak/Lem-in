@@ -24,6 +24,7 @@
 # define USED 1
 # define OK 0
 # define ERROR 1
+# define MALLOC_ERROR 2
 
 /***************************** STRING CONSTANTS *******************************/
 # define EMPTY_LINE "Empty line."
@@ -42,7 +43,7 @@
 							"is forbidden."			
 # define SPACES "LINKS can NOT contain any spaces or tabs."
 # define INVALID_ANTS_NB "Invalid ants number."
-# define MALLOC_ERROR "Memory allocation has failed."
+# define MALLOC_FAIL "Memory allocation has failed."
 # define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
 
 extern int line_nb;
@@ -175,7 +176,7 @@ void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***r);
 void				set_links(t_lem *l, t_room ***r);
-void				pave_the_ways(t_way **ways, t_lem *l, t_room **rooms);
+int					pave_the_ways(t_way **w, t_lem *l, t_room **rooms);
 void				set_ways_capacity(t_way **w, t_lem *l);
 void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 
@@ -191,7 +192,7 @@ void				free_lem(t_lem *l);
 void				free_2darray(char ***arr);
 void				free_namelist(t_namelist **list);
 void				free_rooms(t_room ***rooms);
-
+void				free_ways(t_way	**ways);
 
 /******************************* MATH FUNCTIONS *******************************/
 int					arrlen(char **arr);

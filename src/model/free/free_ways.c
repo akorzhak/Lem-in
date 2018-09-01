@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_rooms.c                                       :+:      :+:    :+:   */
+/*   free_ways.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,37 +12,25 @@
 
 #include "lem-in.h"
 
-void	free_rooms(t_room ***rooms)
+void	free_ways(t_way	**ways)
 {
-	int	i;
-	t_room		**r;
-	t_linkage	*linked_rooms;
-	t_linkage	*next;
+	t_way *w;
+	t_way *next;
+	int i;
 
-	i = 0;
-	r = *rooms;
-	if (rooms && *rooms)
+	w = *ways;
+	while (w)
 	{
-		while (r[i])
-		{
-	 		linked_rooms = (r[i])->linked_rooms;
-	 		while (linked_rooms)
-	 		{
-				next = linked_rooms->next;
-				linked_rooms->room = NULL;
-				linked_rooms->next = NULL;
-	 			ft_memdel((void **)&linked_rooms);
-	 			linked_rooms = next;
-	 		}
-			i++;
-		}
 		i = 0;
-		while (r[i])
+		next = w->next;
+		while (w->rooms[i])
 		{
-			ft_strdel(&(r[i])->name);
-			ft_memdel((void **)r[i]);
+			ft_strdel(&(w->rooms[i]->name));
+			ft_memdel((void **)&(w->rooms[i]));
 			i++;
 		}
- 		ft_memdel((void **)rooms);
+		ft_memdel((void **)&(w->rooms));
+		ft_memdel((void **)&w);
+		w = next;
 	}
 }

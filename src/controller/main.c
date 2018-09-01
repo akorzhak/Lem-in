@@ -19,12 +19,18 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 
 	set_levels(l, rooms);
 	set_links(l, rooms);
-	pave_the_ways(&ways, l, *rooms);
+	if (pave_the_ways(&ways, l, *rooms) == ERROR)
+	{
+		free_ways(&ways);
+		free_rooms(rooms);
+		return (ERROR);
+	}
 	set_ways_capacity(&ways, l);
 	print_handled_data(l, *rooms, &ways);
 	move_ants(l, &ways, &turns);
 	sort_result(&turns);
 	display_result(&turns);
+	free_ways(&ways);
 	return (OK);
 }
 
@@ -65,7 +71,8 @@ int		main(int argc, char **argv)
 			return (display_usage_message());
 		if (parsing_controller(&l, &rooms) == ERROR)
 			return (ERROR);
-		program_logic_controller(&l, &rooms);
+		if (program_logic_controller(&l, &rooms) == ERROR)
+			return (ERROR);
 		free_all(&l, &rooms);
 		return (OK);
 	}

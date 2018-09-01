@@ -47,27 +47,29 @@ t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 	return (penultimate_room);
 }
 
-void	add_way_to_list(char ***way, int lenth, int last_room_index)
+int		add_way_to_list(char ***way, int lenth)
 {
 	char **w;
 
 	w = *way;
 	if (!w[0])
-	{
-		drop_the_way(way, last_room_index);
-		return ;
-	}
+		return (ERROR);
 	if (ways->rooms)
 	{
-		ways->next = (t_way *)ft_memalloc(sizeof(t_way));
+		if (!(ways->next = (t_way *)ft_memalloc(sizeof(t_way))))
+			return (MALLOC_ERROR);
 		ways = ways->next;
 	}
-	ways->rooms = (t_ant_room **)ft_memalloc(sizeof(t_ant_room *) * lenth--);
+	if (!(ways->rooms = (t_ant_room **)ft_memalloc(sizeof(t_ant_room *) * lenth--)))
+		return (MALLOC_ERROR);
 	while (lenth--)
 	{
-		ways->rooms[lenth] = (t_ant_room *)ft_memalloc(sizeof(t_ant_room));
-		ways->rooms[lenth]->name = ft_strdup(w[lenth]);
+		if (!(ways->rooms[lenth] = (t_ant_room *)ft_memalloc(sizeof(t_ant_room))))
+			return (MALLOC_ERROR);
+		if (!(ways->rooms[lenth]->name = ft_strdup(w[lenth])))
+			return (MALLOC_ERROR);
 	}
+	return (OK);
 }
 
 void	prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l)
@@ -99,11 +101,12 @@ void	prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l)
 	*way = w;
 }
 
-void	pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
+int		pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 {
 	t_i 	i;
 	t_lnk 	lnk;
 	char	**way;
+	int		res;
 
 	i.i = 0;
 	*w = (t_way *)ft_memalloc(sizeof(t_way));
@@ -115,7 +118,14 @@ void	pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 		choose_penultimate_room(&(rooms[i.i]->linked_rooms))))
 	{
 		prepare_way(&lnk, &way, &i, l);
-		add_way_to_list(&way, i.lenth, i.last_room_index);
+		res = add_way_to_list(&way, i.lenth);
+		if (res == OK)
+			free_2darray(&way);
+		else if (res == ERROR)
+			drop_the_way(&way, i.last_room_index);
+		else if (res == MALLOC_ERROR)
+			return (ERROR);
 		l->ways_nb++;
 	}
+	return (OK);
 }
