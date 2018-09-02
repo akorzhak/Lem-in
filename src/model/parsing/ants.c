@@ -19,7 +19,8 @@ int		get_ants(t_lem *l)
 	line = NULL;
 	while (get_next_line(0, &line) > 0)
 	{
-		save_map_line(l, line);
+		if (save_map_line(l, line) == MALLOC_ERROR)
+			return (exit_with_error(l, &line, MALLOC_FAIL));
 		if (*line == '#')
 		{
 			if (ft_strstr(line, "##start") || ft_strstr(line, "##end"))

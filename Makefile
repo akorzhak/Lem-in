@@ -46,7 +46,7 @@ SRC = main.c init.c free.c ants.c math.c sort.c messages.c all_steps.c\
 	colors.c formats.c result.c dict.c free_lem.c tmp.c save_input.c\
 	args.c get_rooms.c form_adj_list.c record_name.c links.c\
 	set_levels.c set_links.c set_ways.c\
-	set_capacity.c free_rooms.c free_ways.c
+	set_capacity.c free_rooms.c free_ways.c prepare_way.c
 
 OBJ = $(SRC:.c=.o)
 

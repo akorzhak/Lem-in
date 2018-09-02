@@ -24,7 +24,7 @@
 # define USED 1
 # define OK 0
 # define ERROR 1
-# define MALLOC_ERROR 2
+# define MALLOC_ERROR -1
 
 /***************************** STRING CONSTANTS *******************************/
 # define EMPTY_LINE "Empty line."
@@ -61,6 +61,7 @@ typedef struct s_ant_room	t_ant_room;
 typedef struct s_sort		t_sort;
 typedef struct s_i			t_i;
 typedef struct s_lnk		t_lnk;
+typedef struct s_ints		t_ints;
 
 struct 				s_map
 {
@@ -153,8 +154,16 @@ struct 				s_i
 
 struct 				s_lnk
 {
-	t_linkage 		*penultimate_room;
+	t_linkage 		*p_room;
 	t_linkage 		*link;
+};
+
+struct 				s_ints
+{
+	int 			n;
+	int 			ant;
+	int 			tmp;
+	int 			temp;
 };
 
 /******************************* PARSING FUNCTIONS ***************************/
@@ -166,7 +175,7 @@ int					form_adj_list(t_lem *l, t_room ***rooms, t_namelist *names);
 
 
 /******************************* SAVE_MAP FUNCTION ***************************/
-void				save_map_line(t_lem *l, char *line);
+int					save_map_line(t_lem *l, char *line);
 void				save_link(t_lem *l, char *room1, char *room2);
 
 void				init_lemin(t_lem *l);
@@ -175,8 +184,9 @@ int					exit_with_error(t_lem *l, char **line, char *error_massage);
 void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
 void				set_levels(t_lem *l, t_room ***r);
-void				set_links(t_lem *l, t_room ***r);
+int					set_links(t_lem *l, t_room ***r);
 int					pave_the_ways(t_way **w, t_lem *l, t_room **rooms);
+int					prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l);
 void				set_ways_capacity(t_way **w, t_lem *l);
 void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 
@@ -193,6 +203,8 @@ void				free_2darray(char ***arr);
 void				free_namelist(t_namelist **list);
 void				free_rooms(t_room ***rooms);
 void				free_ways(t_way	**ways);
+void				drop_the_way(char ***way, int i);
+void				clean_way(char ***w, int len);
 
 /******************************* MATH FUNCTIONS *******************************/
 int					arrlen(char **arr);

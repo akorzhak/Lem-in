@@ -12,6 +12,26 @@
 
 #include "lem-in.h"
 
+void	clean_way(char ***w, int len)
+{
+	char **way;
+
+	way = *w;
+	while (way[++len])
+		ft_strdel(w[len]);
+	ft_memdel((void **)w);
+}
+
+void	drop_the_way(char ***way, int i)
+{
+	char **w;
+
+	w = *way;
+	while (w[i])
+		ft_strdel(&w[i--]);
+	ft_memdel((void **)way);
+}
+
 void	free_ways(t_way	**ways)
 {
 	t_way *w;

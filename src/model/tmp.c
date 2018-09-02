@@ -80,15 +80,31 @@ void	drop_the_link(t_lem *l, t_link **links)
 	}
 }
 
-void	move_ants(t_lem *l, t_way **ways, t_turn ***turns)
+void	let_the_ant_move(t_way **ways, t_ints *i, t_turn ***turns)
 {
-	int n;
-	int ant;
-	int tmp;
-	int temp;
 	t_way *w;
 
-	ant = 0;
+	w = *ways;
+	if (w->rooms[i->n]->ant)
+	{
+		i->tmp = w->rooms[i->n]->ant;
+		w->rooms[i->n]->ant = 0;
+	}
+	if (w->capacity_nb)
+	{
+		w->rooms[i->n]->ant = ++i->ant;
+		w->capacity_nb--;
+		add_step_to_turns(turns, w->rooms[i->n]->name, w->rooms[i->n]->ant);
+	}
+	i->n++;
+}
+
+void	move_ants(t_lem *l, t_way **ways, t_turn ***turns)
+{
+	t_ints i;
+	t_way *w;
+
+	i.ant = 0;
 	line_nb = 0;
 	*turns = (t_turn **)ft_memalloc(sizeof(t_turn *) * (l->turns + 1));
 	while (line_nb < l->turns)
@@ -96,41 +112,30 @@ void	move_ants(t_lem *l, t_way **ways, t_turn ***turns)
 		w = *ways;
 		while (w)
 		{	
-			n = 1;
-			tmp = 0;
-			if (w->rooms[n]->ant)
+			i.n = 1;
+			i.tmp = 0;
+			let_the_ant_move(&w, &i, turns);
+			while (w->rooms[i.n])
 			{
-				tmp = w->rooms[n]->ant;
-				w->rooms[n]->ant = 0;
-			}
-			if (w->capacity_nb)
-			{
-				w->rooms[n]->ant = ++ant;
-				w->capacity_nb--;
-				add_step_to_turns(turns, w->rooms[n]->name, w->rooms[n]->ant);
-			}
-			n++;
-			while (w->rooms[n])
-			{
-				temp = 0;
-				if (w->rooms[n]->ant)
-					temp = w->rooms[n]->ant;
-				if ((w->rooms[n]->ant = tmp))
-					add_step_to_turns(turns, w->rooms[n]->name, w->rooms[n]->ant);
-				tmp = 0;
-				if (w->rooms[++n])
+				i.temp = 0;
+				if (w->rooms[i.n]->ant)
+					i.temp = w->rooms[i.n]->ant;
+				if ((w->rooms[i.n]->ant = i.tmp))
+					add_step_to_turns(turns, w->rooms[i.n]->name, w->rooms[i.n]->ant);
+				i.tmp = 0;
+				if (w->rooms[++i.n])
 				{
-					if (w->rooms[n]->ant)
+					if (w->rooms[i.n]->ant)
 					{
-						tmp = w->rooms[n]->ant;
-						w->rooms[n]->ant = 0;
+						i.tmp = w->rooms[i.n]->ant;
+						w->rooms[i.n]->ant = 0;
 					}
-					if ((w->rooms[n]->ant = temp))
-						add_step_to_turns(turns, w->rooms[n]->name, w->rooms[n]->ant);
+					if ((w->rooms[i.n]->ant = i.temp))
+						add_step_to_turns(turns, w->rooms[i.n]->name, w->rooms[i.n]->ant);
 				}
 				else
 					break ;
-				n++;
+				i.n++;
 			}
 			w = w->next;
 		}

@@ -45,7 +45,8 @@ int 	get_links(t_lem *l, char **line)
 			save_map_line(l, *line);
 			continue ;
 		}
-		save_map_line(l, *line);
+		if (save_map_line(l, *line) == MALLOC_ERROR)
+			return (exit_with_error(l, line, MALLOC_FAIL));
 		if (has_spaces(*line))
 			return (exit_with_error(l, line, SPACES));
 		arr = ft_strsplit(*line, '-');

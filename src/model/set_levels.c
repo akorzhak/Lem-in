@@ -15,11 +15,9 @@
 void	set_1st_levels(t_lem *l, t_room ***r)
 {
 	t_link *links;
-	int 	level;
 	t_room	**rooms;
 
 	rooms = *r;
-	level = 1;
 	links = l->links;
 	while (links)
 	{
@@ -30,13 +28,13 @@ void	set_1st_levels(t_lem *l, t_room ***r)
 			return ;
 		if (!ft_strcmp(links->room1, l->start_room))
 		{
-			rooms[dict(l, links->room1)]->level = level;
-			rooms[dict(l, links->room2)]->level = level + 1;
+			rooms[dict(l, links->room1)]->level = 1;
+			rooms[dict(l, links->room2)]->level = 2;
 		}
 		else if (!ft_strcmp(links->room2, l->start_room))
 		{
-			rooms[dict(l, links->room2)]->level = level;
-			rooms[dict(l, links->room1)]->level = level + 1;
+			rooms[dict(l, links->room2)]->level = 1;
+			rooms[dict(l, links->room1)]->level = 2;
 		}
 		links = links->next;
 	}

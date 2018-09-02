@@ -36,24 +36,32 @@ t_map	*add_line_to_list(char *line)
 {
 	t_map *map;
 
-	map = (t_map *)ft_memalloc(sizeof(t_map));
-	map->line = ft_strdup(line);
+	if (!(map = (t_map *)ft_memalloc(sizeof(t_map))))
+		return (NULL);
+	if (!(map->line = ft_strdup(line)))
+	{
+		ft_memdel((void **)&map);
+		return (NULL);
+	}
 	map->nb = line_nb++;
 	return (map);
 }
 
-void	save_map_line(t_lem *l, char *line)
+int		save_map_line(t_lem *l, char *line)
 {
 	static t_map 	*map;
 
 	if (l->map)
 	{
-		map->next = add_line_to_list(line);
+		if (!(map->next = add_line_to_list(line)))
+			return (MALLOC_ERROR);
 		map = map->next;
 	}
 	else
 	{
-		l->map = add_line_to_list(line);
+		if (!(l->map = add_line_to_list(line)))
+			return (MALLOC_ERROR);
 		map = l->map;
 	}
+	return (OK);
 }

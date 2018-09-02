@@ -14,18 +14,6 @@
 
 t_way 	*ways;
 
-void	drop_the_way(char ***way, int i)
-{
-	char **w;
-
-	w = *way;
-	while (w[i])
-		ft_strdel(&w[i--]);
-	// free(way);
-	// way = NULL;
-	ft_memdel((void **)*way);
-}
-
 t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 {
 	int 	lowest_lvl = 0;
@@ -72,35 +60,6 @@ int		add_way_to_list(char ***way, int lenth)
 	return (OK);
 }
 
-void	prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l)
-{
-	char **w;
-
-	i->len = lnk->penultimate_room->room->level + 2;
-	i->lenth = i->len;
-	w = (char **)ft_memalloc(sizeof(char *) * i->len--);
-	w[--i->len] = ft_strdup(l->end_room);
-	i->last_room_index = i->len;
-	w[--i->len] = ft_strdup(lnk->penultimate_room->room->name);
-	lnk->penultimate_room->room->used = USED;
-	lnk->link = lnk->penultimate_room->room->linked_rooms;
-	while (i->len)
-	{
-		while (lnk->link && (lnk->link->room->level != (i->len)
-			|| (lnk->link->room->used
-			&& ft_strcmp(lnk->link->room->name, l->start_room))))
-		{
-			lnk->link = lnk->link->next;
-		}
-		if (!lnk->link)
-			break ;
-		w[--i->len] = ft_strdup(lnk->link->room->name);
-		lnk->link->room->used = USED;
-		lnk->link = lnk->link->room->linked_rooms;
-	}
-	*way = w;
-}
-
 int		pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 {
 	t_i 	i;
@@ -114,10 +73,10 @@ int		pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 	while (ft_strcmp(rooms[i.i]->name, l->end_room))
 		i.i++;
 	rooms[i.i]->used = USED;
-	while ((lnk.penultimate_room =
-		choose_penultimate_room(&(rooms[i.i]->linked_rooms))))
+	while ((lnk.p_room = choose_penultimate_room(&(rooms[i.i]->linked_rooms))))
 	{
-		prepare_way(&lnk, &way, &i, l);
+		if (prepare_way(&lnk, &way, &i, l) == MALLOC_ERROR)
+			return (ERROR);
 		res = add_way_to_list(&way, i.lenth);
 		if (res == OK)
 			free_2darray(&way);

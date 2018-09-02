@@ -17,8 +17,13 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 	t_way	*ways;
 	t_turn	**turns;
 
+	ways = NULL;
 	set_levels(l, rooms);
-	set_links(l, rooms);
+	if (set_links(l, rooms) == ERROR)
+	{
+		free_rooms(rooms);
+		return (ERROR);
+	}
 	if (pave_the_ways(&ways, l, *rooms) == ERROR)
 	{
 		free_ways(&ways);
@@ -30,7 +35,7 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 	move_ants(l, &ways, &turns);
 	sort_result(&turns);
 	display_result(&turns);
-	free_ways(&ways);
+	free_ways(&ways); //free
 	return (OK);
 }
 
