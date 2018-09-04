@@ -43,11 +43,14 @@
 							"is forbidden."			
 # define SPACES "LINKS can NOT contain any spaces or tabs."
 # define INVALID_ANTS_NB "Invalid ants number."
+# define ADJ_LIST "\nADJACENCY LIST:\n\n"
+# define VALID_WAYS "\nVALID WAYS:\n\n"
+# define CAPACITY "\nWAYS' CAPACITIES:\n\n"
+# define BFS "BREADTH FIRST SEARCH:\n\n"
 # define MALLOC_FAIL "Memory allocation has failed."
 # define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
 
 extern int line_nb;
-extern char **rooms_dict;
 
 typedef struct s_lem		t_lem;
 typedef struct s_map		t_map;
@@ -203,6 +206,8 @@ void				free_2darray(char ***arr);
 void				free_namelist(t_namelist **list);
 void				free_rooms(t_room ***rooms);
 void				free_ways(t_way	**ways);
+void				free_links(t_link **l);
+void				free_turns(t_turn ***turns);
 void				drop_the_way(char ***way, int i);
 void				clean_way(char ***w, int len);
 

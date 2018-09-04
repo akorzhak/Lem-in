@@ -18,6 +18,7 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 	t_turn	**turns;
 
 	ways = NULL;
+	turns = NULL;
 	set_levels(l, rooms);
 	if (set_links(l, rooms) == ERROR)
 	{
@@ -35,7 +36,8 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 	move_ants(l, &ways, &turns);
 	sort_result(&turns);
 	display_result(&turns);
-	free_ways(&ways); //free
+	free_ways(&ways);
+	free_turns(&turns);
 	return (OK);
 }
 

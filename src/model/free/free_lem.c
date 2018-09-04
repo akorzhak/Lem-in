@@ -12,22 +12,6 @@
 
 #include "lem-in.h"
 
-void	free_links(t_link **l)
-{
-	t_link	*links;
-	t_link	*next;
-
-	links = *l;
-	while (links)
-	{
-		ft_strdel(&links->room1);
-		ft_strdel(&links->room2);
-		next = links->next;
-		ft_memdel((void **)&links);
-		links = next;
-	}
-}
-
 void	free_map(t_map **m)
 {
 	t_map 	*map;
@@ -38,7 +22,7 @@ void	free_map(t_map **m)
 	{
 		ft_strdel(&map->line);
 		next = map->next;
-		ft_memdel((void **)map);
+		ft_memdel((void **)&map);
 		map = next;
 	}
 }

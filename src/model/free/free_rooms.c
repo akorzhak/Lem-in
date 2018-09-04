@@ -40,7 +40,7 @@ void	free_rooms(t_room ***rooms)
 		while (r[i])
 		{
 			ft_strdel(&(r[i])->name);
-			ft_memdel((void **)r[i]);
+			ft_memdel((void **)&r[i]);
 			i++;
 		}
  		ft_memdel((void **)rooms);

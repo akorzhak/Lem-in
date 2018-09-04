@@ -12,22 +12,6 @@
 
 #include "lem-in.h"
 
-/**
-uses bubble sort
-returns 0 if list unsorted;
-1 - if sorted
-*/
-int 	is_sorted_list(t_turn *list)
-{
-	while (list && list->next)
-	{
-		if (list->ant > list->next->ant)
-			return (0);
-		list = list->next;
-	}
-	return (1);
-}
-
 void 	select_prior_step(t_turn **loop, t_turn **prior, t_turn **prev)
 {
 	t_turn	*step;
@@ -82,14 +66,9 @@ void	sort_result(t_turn ***turns)
 	int 	i;
 
 	t = *turns;
-	i = 0;
+	i = 1;
 	while (t[i])
 	{
-		if (is_sorted_list(t[i]))
-		{
-			i++;
-			continue ;
-		}
 		s.loop = t[i];
 		s.sort = 0;
 		while (s.loop->next)

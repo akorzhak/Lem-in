@@ -25,10 +25,10 @@ void	display_result(t_turn ***turns)
 		step = t[n];
 		while (step->next)
 		{
-			printf("L%d-%s ", step->ant, step->room);
+			ft_printf("L%d-%s ", step->ant, step->room);
 			step = step->next;
 		}
-		printf("L%d-%s\n", step->ant, step->room);
+		ft_printf("L%d-%s\n", step->ant, step->room);
 		n++;
 	}
 }

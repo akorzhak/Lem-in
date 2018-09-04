@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   parsing.c                                          :+:      :+:    :+:   */
+/*   move_ants.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -26,7 +26,7 @@ t_turn 	*record_step(char *room, int ant)
 
 void	add_step_to_turns(t_turn ***turns, char *room, int ant)
 {
-	static t_turn **t; //maybe not static
+	t_turn **t;
 	static t_turn *step;
 
 	t = *turns;
@@ -39,44 +39,6 @@ void	add_step_to_turns(t_turn ***turns, char *room, int ant)
 	{
 		t[line_nb] = record_step(room, ant);
 		step = t[line_nb];
-	}
-}
-
-
-
-void	free_the_link(t_link **links)
-{
-	ft_strdel(&(*links)->room1);
-	ft_strdel(&(*links)->room2);
-	ft_memdel((void **)links);
-}
-
-void	drop_the_link(t_lem *l, t_link **links)
-{
-	t_link *temp;
-
-	temp = l->links;
-	if (temp == (*links))
-	{
-		temp = temp->next;
-		free_the_link(links);
-		(*links) = temp;
-	}
-	else
-	{
-		while (temp->next && temp->next != (*links))
-			temp = temp->next;
-		if ((*links)->next == NULL)
-		{
-			temp->next = NULL;
-			free_the_link(links);
-		}
-		else
-		{
-			temp->next = temp->next->next;
-			free_the_link(links);
-			(*links) = temp->next;
-		}
 	}
 }
 
@@ -99,6 +61,33 @@ void	let_the_ant_move(t_way **ways, t_ints *i, t_turn ***turns)
 	i->n++;
 }
 
+int 	relocate_moving_ants(t_way **ways, t_ints *i, t_turn ***turns)
+{
+	t_way *w;
+
+	w = *ways;
+	i->temp = 0;
+	if (w->rooms[i->n]->ant)
+		i->temp = w->rooms[i->n]->ant;
+	if ((w->rooms[i->n]->ant = i->tmp))
+		add_step_to_turns(turns, w->rooms[i->n]->name, w->rooms[i->n]->ant);
+	i->tmp = 0;
+	if (w->rooms[++i->n])
+	{
+		if (w->rooms[i->n]->ant)
+		{
+			i->tmp = w->rooms[i->n]->ant;
+			w->rooms[i->n]->ant = 0;
+		}
+		if ((w->rooms[i->n]->ant = i->temp))
+			add_step_to_turns(turns, w->rooms[i->n]->name, w->rooms[i->n]->ant);
+	}
+	else
+		return (0);
+	i->n++;
+	return (1);
+}
+
 void	move_ants(t_lem *l, t_way **ways, t_turn ***turns)
 {
 	t_ints i;
@@ -117,25 +106,8 @@ void	move_ants(t_lem *l, t_way **ways, t_turn ***turns)
 			let_the_ant_move(&w, &i, turns);
 			while (w->rooms[i.n])
 			{
-				i.temp = 0;
-				if (w->rooms[i.n]->ant)
-					i.temp = w->rooms[i.n]->ant;
-				if ((w->rooms[i.n]->ant = i.tmp))
-					add_step_to_turns(turns, w->rooms[i.n]->name, w->rooms[i.n]->ant);
-				i.tmp = 0;
-				if (w->rooms[++i.n])
-				{
-					if (w->rooms[i.n]->ant)
-					{
-						i.tmp = w->rooms[i.n]->ant;
-						w->rooms[i.n]->ant = 0;
-					}
-					if ((w->rooms[i.n]->ant = i.temp))
-						add_step_to_turns(turns, w->rooms[i.n]->name, w->rooms[i.n]->ant);
-				}
-				else
+				if (!relocate_moving_ants(&w, &i, turns))
 					break ;
-				i.n++;
 			}
 			w = w->next;
 		}
