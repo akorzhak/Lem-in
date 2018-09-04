@@ -17,6 +17,7 @@
 # include <fcntl.h>
 # include <stdio.h>
 
+/***************************** INTEGER CONSTANTS ******************************/
 # define ENTRANCE 1
 # define EXIT 2
 # define ORDINARY 0
@@ -28,7 +29,7 @@
 
 /***************************** STRING CONSTANTS *******************************/
 # define EMPTY_LINE "Empty line."
-# define TO_DO "TO DO!"
+# define EMPTY_MAP "Empty map."
 # define IRRELEVANT_COMMAND "Irrelevant START/END command."
 # define INCOMPLETE_ROOM_DATA "Room name or coordinate is absent."
 # define TOO_MUCH_DATA "Redundant data is provided."
@@ -43,6 +44,7 @@
 							"is forbidden."			
 # define SPACES "LINKS can NOT contain any spaces or tabs."
 # define INVALID_ANTS_NB "Invalid ants number."
+# define NO_WAY "NO any way possible."
 # define ADJ_LIST "\nADJACENCY LIST:\n\n"
 # define VALID_WAYS "\nVALID WAYS:\n\n"
 # define CAPACITY "\nWAYS' CAPACITIES:\n\n"
@@ -52,6 +54,7 @@
 
 extern int line_nb;
 
+/***************************** TYPEDEFS ***************************************/
 typedef struct s_lem		t_lem;
 typedef struct s_map		t_map;
 typedef struct s_room		t_room;
@@ -182,11 +185,10 @@ int					save_map_line(t_lem *l, char *line);
 void				save_link(t_lem *l, char *room1, char *room2);
 
 void				init_lemin(t_lem *l);
-int 				display_usage_message(void);
 int					exit_with_error(t_lem *l, char **line, char *error_massage);
 void				display_error_message(t_lem *l);
 int					get_links(t_lem *l, char **line);
-void				set_levels(t_lem *l, t_room ***r);
+int					set_levels(t_lem *l, t_room ***r);
 int					set_links(t_lem *l, t_room ***r);
 int					pave_the_ways(t_way **w, t_lem *l, t_room **rooms);
 int					prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l);
@@ -228,6 +230,7 @@ void				display_bfs(t_room **rooms);
 void				display_adjacency_list(t_room **rooms);
 void				display_valid_ways(t_way **ways);
 void				display_ways_capacity(t_way **ways);
+void 				display_usage_message(void);
 
 /******************************* COLORS FUNCTIONS *****************************/
 void				red(void);

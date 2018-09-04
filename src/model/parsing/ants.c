@@ -37,5 +37,5 @@ int		get_ants(t_lem *l)
 		ft_strdel(&line);
 		return (OK);
 	}
-	return (exit_with_error(l, &line, TO_DO));
+	return (exit_with_error(l, &line, EMPTY_MAP));
 }

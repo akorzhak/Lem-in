@@ -63,11 +63,13 @@ int		set_level(t_lem *l, t_room ***r, t_link *links)
 	return (0);
 }
 
-void	set_levels(t_lem *l, t_room ***rooms)
+int		set_levels(t_lem *l, t_room ***rooms)
 {
 	t_link *links;
 	char 	change;
+	t_room	**r;
 
+	r = *rooms;
 	set_1st_levels(l, rooms);
 	do
 	{
@@ -79,4 +81,11 @@ void	set_levels(t_lem *l, t_room ***rooms)
 			links = links->next;
 		}
 	} while (change);
+	if ((r[dict(l, l->start_room)]->level == 0)
+		|| (r[dict(l, l->end_room)]->level == 0))
+	{
+		l->e_message = ft_strdup(NO_WAY);
+		return (ERROR);
+	}
+	return (OK);
 }

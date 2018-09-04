@@ -19,16 +19,15 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 
 	ways = NULL;
 	turns = NULL;
-	set_levels(l, rooms);
-	if (set_links(l, rooms) == ERROR)
+	if ((set_levels(l, rooms) == ERROR) || (set_links(l, rooms) == ERROR))
 	{
-		free_rooms(rooms);
+		display_error_message(l);
 		return (ERROR);
 	}
 	if (pave_the_ways(&ways, l, *rooms) == ERROR)
 	{
+		display_error_message(l);
 		free_ways(&ways);
-		free_rooms(rooms);
 		return (ERROR);
 	}
 	set_ways_capacity(&ways, l);
@@ -49,8 +48,6 @@ int		parsing_controller(t_lem *l, t_room ***rooms)
 	if (get_ants(l) == ERROR || get_rooms(l, rooms, &line) == ERROR)
 	{
 		display_error_message(l);
-		free_lem(l);
-		free_rooms(rooms);
 		ft_strdel(&line);
 		return (ERROR);
 	}
@@ -58,7 +55,7 @@ int		parsing_controller(t_lem *l, t_room ***rooms)
 	if (get_links(l, &line) == ERROR)
 	{
 		display_error_message(l);
-		free_all(l, rooms);
+		free_dict();
 		ft_strdel(&line);
 		return (ERROR);
 	}
@@ -71,15 +68,16 @@ int		main(int argc, char **argv)
 	t_room	**rooms;
 
 	rooms = NULL;
-	if (argc <= 3)
+	init_lemin(&l);
+	if (argc <= 3 && (handle_args(argc, argv, &l) == OK))
 	{
-		init_lemin(&l);
-		if (handle_args(argc, argv, &l) == ERROR)
-			return (display_usage_message());
-		if (parsing_controller(&l, &rooms) == ERROR)
+		if ((parsing_controller(&l, &rooms) == ERROR)
+			|| (program_logic_controller(&l, &rooms) == ERROR))
+		{
+			free_lem(&l);
+			free_rooms(&rooms);
 			return (ERROR);
-		if (program_logic_controller(&l, &rooms) == ERROR)
-			return (ERROR);
+		}
 		free_all(&l, &rooms);
 		return (OK);
 	}

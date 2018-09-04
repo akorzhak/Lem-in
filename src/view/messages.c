@@ -25,9 +25,12 @@ void		display_error_message(t_lem *l)
 		red();
 		ft_putstr("ERROR\n");
 		reset();
-		while (map && map->next)
-			map = map->next;
-		ft_printf("line %d: %s\n", map->nb, map->line);
+		if (map)
+		{
+			while (map->next)
+				map = map->next;
+			ft_printf("line %d: %s\n", map->nb, map->line);
+		}
 		if (l->e_message)
 		{
 			ft_printf("%s\n", l->e_message);
@@ -35,8 +38,7 @@ void		display_error_message(t_lem *l)
 	}
 }
 
-int 	display_usage_message(void)
+void 	display_usage_message(void)
 {
 	ft_putstr(USAGE);
-	return (ERROR);
 }
