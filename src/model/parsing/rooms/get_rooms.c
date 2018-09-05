@@ -43,6 +43,7 @@ int 	get_rooms(t_lem *l, t_room ***rooms, char **line)
 		{
 			if (handle_commands(*line, &property) == ERROR)
 				return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
+			ft_strdel(line);
 			continue ;
 		}
 		if (record_name(line, &names, property, l) == ERROR)

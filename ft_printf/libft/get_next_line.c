@@ -12,6 +12,8 @@
 
 #include "libft.h"
 
+t_dlist	*dlist = 0;
+
 void				*ft_realloc(void *arr, size_t size)
 {
 	void			*new;
@@ -105,22 +107,22 @@ t_dlist				*get_list(int fd, t_dlist *list, int flag)
 
 int					get_next_line(const int fd, char **line)
 {
-	static t_dlist	*list = 0;
 	int				ret;
 
 	if (BUFF_SIZE < 1 || fd == -1 || !line)
 		return (-1);
-	if (!(list = get_list(fd, list, '-')))
+	if (!(dlist = get_list(fd, dlist, '-')))
 		return (-1);
-	if (*(list->buff) && !ft_memchr(list->buff, '\n', ft_strlen(list->buff)))
+	if (*(dlist->buff) && !ft_memchr(dlist->buff, '\n', ft_strlen(dlist->buff)))
 	{
-		*line = ft_strnew(ft_strlen(list->buff));
-		ft_strcpy(*line, list->buff);
+		*line = ft_strnew(ft_strlen(dlist->buff));
+		ft_strcpy(*line, dlist->buff);
 	}
 	else
 		*line = ft_strnew(1);
-	ret = read_write(fd, list->buff, line);
+	ret = read_write(fd, dlist->buff, line);
 	if (ret != '+')
 		return (ret);
-	return (get_line(list->buff, line));
+	ret = get_line(dlist->buff, line);
+	return (ret);
 }

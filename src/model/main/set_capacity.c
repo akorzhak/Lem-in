@@ -70,11 +70,6 @@ void	set_ways_capacity(t_way **ways, t_lem *l)
 	int 	difference;
 
 	define_nb_of_transfers(ways);
-	if (l->ways_nb == 1)
-	{
-		(*ways)->capacity_nb = l->ants_nb;
-		return ;
-	}
 	allocate_ants(ways, &difference, l);
 	if (difference < 0)
 		reduce_capacity(difference, ways);

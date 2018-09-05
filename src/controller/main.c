@@ -21,6 +21,7 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 	turns = NULL;
 	if ((set_levels(l, rooms) == ERROR) || (set_links(l, rooms) == ERROR))
 	{
+		display_bfs(*rooms);
 		display_error_message(l);
 		return (ERROR);
 	}
@@ -76,9 +77,11 @@ int		main(int argc, char **argv)
 		{
 			free_lem(&l);
 			free_rooms(&rooms);
+			free_gnl_remainders();
 			return (ERROR);
 		}
 		free_all(&l, &rooms);
+		free_gnl_remainders();
 		return (OK);
 	}
 	display_usage_message();

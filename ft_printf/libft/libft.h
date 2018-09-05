@@ -17,7 +17,7 @@
 # include <unistd.h>
 # include <string.h>
 
-# define BUFF_SIZE 1024
+# define BUFF_SIZE 10
 
 typedef struct		s_list
 {
@@ -33,6 +33,8 @@ typedef struct		s_dlist
 	struct s_dlist	*next;
 	struct s_dlist	*prev;
 }					t_dlist;
+
+extern t_dlist		*dlist;
 
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
@@ -103,5 +105,6 @@ void				ft_print_bits(unsigned char octet);
 unsigned char		ft_reverse_bits(unsigned char octet);
 
 int					get_next_line(const int fd, char **line);
+void				free_gnl_remainders(void);
 
 #endif

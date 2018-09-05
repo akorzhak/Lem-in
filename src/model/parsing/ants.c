@@ -25,6 +25,7 @@ int		get_ants(t_lem *l)
 		{
 			if (ft_strstr(line, "##start") || ft_strstr(line, "##end"))
 				return (exit_with_error(l, &line, IRRELEVANT_COMMAND));
+			ft_strdel(&line);
 			continue ;
 		}
 		else if (ft_isdigit(*line))

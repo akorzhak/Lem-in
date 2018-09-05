@@ -77,7 +77,8 @@ int		set_levels(t_lem *l, t_room ***rooms)
 		links = l->links;
 		while (links)
 		{
-			change = set_level(l, rooms, links);
+			if (set_level(l, rooms, links))
+				change = 1;
 			links = links->next;
 		}
 	} while (change);

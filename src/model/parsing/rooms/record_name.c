@@ -83,6 +83,7 @@ int 	record_name(char **line, t_namelist **n, int p, t_lem *l)
 		free_2darray(&arr);
 		return (exit_with_error(l, line, MALLOC_FAIL));
 	}
+	ft_strdel(line);
 	free_2darray(&arr);
 	return (OK);
 }

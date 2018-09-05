@@ -40,7 +40,7 @@
 							"No START or END room found."
 # define SELF_LINKED_ROOM "Room can NOT link itself."
 # define NO_LINKS "Parsing reached the end of the map. No LINKS found."
-# define MULTIPLE_START_END_ROOM "Multiple declaration of START/END room " \
+# define MULTIPLE_START_END_ROOM "Multiple declaration of START/END room "\
 							"is forbidden."			
 # define SPACES "LINKS can NOT contain any spaces or tabs."
 # define INVALID_ANTS_NB "Invalid ants number."
@@ -58,7 +58,7 @@ extern int line_nb;
 typedef struct s_lem		t_lem;
 typedef struct s_map		t_map;
 typedef struct s_room		t_room;
-typedef struct s_link 		t_link;
+typedef struct s_link		t_link;
 typedef struct s_linkage	t_linkage;
 typedef struct s_way		t_way;
 typedef struct s_namelist	t_namelist;
@@ -69,14 +69,15 @@ typedef struct s_i			t_i;
 typedef struct s_lnk		t_lnk;
 typedef struct s_ints		t_ints;
 
-struct 				s_map
+/***************************** STRUCTURES *************************************/
+struct				s_map
 {
 	char			*line;
 	int 			nb;
 	t_map			*next;
 };
 
-struct 				s_linkage
+struct				s_linkage
 {
 	t_room			*room;
 	t_linkage		*next;
@@ -97,7 +98,7 @@ struct				s_ant_room
 	int				ant;
 };
 
-struct				s_way //list of all ways
+struct				s_way
 {
 	int				capacity_nb;
 	int 			len;
@@ -109,7 +110,7 @@ struct				s_link
 {
 	char			*room1;
 	char			*room2;
-	t_link 			*next;
+	t_link			*next;
 };
 
 struct				s_lem
@@ -119,8 +120,8 @@ struct				s_lem
 	int				ants_nb;
 	int				rooms_nb;
 	int				links_nb;
-	int 			ways_nb;
-	int 			turns;
+	int				ways_nb;
+	int				turns;
 	char			*start_room;
 	char			*end_room;
 	char			*e_message;
@@ -142,7 +143,7 @@ struct				s_turn
 	t_turn			*next;
 };
 
-struct 				s_sort
+struct				s_sort
 {
 	t_turn			*prior;
 	t_turn			*loop;
@@ -150,56 +151,47 @@ struct 				s_sort
 	t_turn			*sort;
 };
 
-struct 				s_i
+struct				s_i
 {
-	int 			i;
-	int 			len;
-	int 			lenth;
-	int 			last_room_index;
+	int				i;
+	int				len;
+	int				lenth;
+	int				last_room_index;
 };
 
-struct 				s_lnk
+struct				s_lnk
 {
-	t_linkage 		*p_room;
-	t_linkage 		*link;
+	t_linkage		*p_room;
+	t_linkage		*link;
 };
 
-struct 				s_ints
+struct				s_ints
 {
-	int 			n;
-	int 			ant;
-	int 			tmp;
-	int 			temp;
+	int				n;
+	int				ant;
+	int				tmp;
+	int				temp;
 };
 
 /******************************* PARSING FUNCTIONS ***************************/
 int					handle_args(int argc, char **argv, t_lem *l);
 int					get_ants(t_lem *l);
+int					get_links(t_lem *l, char **line);
 int					get_rooms(t_lem *l, t_room ***rooms, char **line);
 int 				record_name(char **line, t_namelist **n, int p, t_lem *l);
 int					form_adj_list(t_lem *l, t_room ***rooms, t_namelist *names);
-
-
-/******************************* SAVE_MAP FUNCTION ***************************/
 int					save_map_line(t_lem *l, char *line);
 void				save_link(t_lem *l, char *room1, char *room2);
 
+/******************************* MAIN FUNCTIONS *******************************/
 void				init_lemin(t_lem *l);
-int					exit_with_error(t_lem *l, char **line, char *error_massage);
-void				display_error_message(t_lem *l);
-int					get_links(t_lem *l, char **line);
+void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
+int					prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l);
+void				set_ways_capacity(t_way **w, t_lem *l);
 int					set_levels(t_lem *l, t_room ***r);
 int					set_links(t_lem *l, t_room ***r);
 int					pave_the_ways(t_way **w, t_lem *l, t_room **rooms);
-int					prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l);
-void				set_ways_capacity(t_way **w, t_lem *l);
-void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
-
-/******************************* SORT FUNCTION ********************************/
 void				sort_result(t_turn ***turns);
-
-void				print_handled_data(t_lem *l, t_room **rooms, t_way **ways);
-void				display_result(t_turn ***turns);
 
 /******************************* FREE FUNCTIONS *******************************/
 void				free_all(t_lem *l, t_room ***rooms);
@@ -212,6 +204,7 @@ void				free_links(t_link **l);
 void				free_turns(t_turn ***turns);
 void				drop_the_way(char ***way, int i);
 void				clean_way(char ***w, int len);
+int					exit_with_error(t_lem *l, char **line, char *error_massage);
 
 /******************************* MATH FUNCTIONS *******************************/
 int					arrlen(char **arr);
@@ -225,12 +218,15 @@ int					dict(t_lem *l, char *value);
 void				free_dict(void);
 
 /******************************* VIEW FUNCTIONS *******************************/
+void				print_handled_data(t_lem *l, t_room **rooms, t_way **ways);
 void				display_map(t_map *map);
 void				display_bfs(t_room **rooms);
 void				display_adjacency_list(t_room **rooms);
 void				display_valid_ways(t_way **ways);
 void				display_ways_capacity(t_way **ways);
+void				display_error_message(t_lem *l);
 void 				display_usage_message(void);
+void				display_result(t_turn ***turns);
 
 /******************************* COLORS FUNCTIONS *****************************/
 void				red(void);
@@ -238,7 +234,7 @@ void				yellow(void);
 void				green(void);
 void				blue(void);
 
-/******************************* FORMAT FUNCTIONS ******************************/
+/******************************* FORMAT FUNCTIONS *****************************/
 void				blink(void);
 void				underline(void);
 void				reset(void);

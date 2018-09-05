@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int 	validate_link(t_lem *l, char **arr, char **line)
+static int 	validate_link(t_lem *l, char **arr, char **line)
 {
 	int 	i_room1;
 	int 	i_room2;
@@ -30,34 +30,50 @@ int 	validate_link(t_lem *l, char **arr, char **line)
 	return (OK);
 }
 
-int 	get_links(t_lem *l, char **line)
+int 	validate_and_save(t_lem *l, char **line)
 {
 	char	**arr;
 
+	if (save_map_line(l, *line) == MALLOC_ERROR)
+		return (exit_with_error(l, line, MALLOC_FAIL));
+	if (has_spaces(*line))
+		return (exit_with_error(l, line, SPACES));
+	arr = ft_strsplit(*line, '-');
+	if (validate_link(l, arr, line) == ERROR)
+	{
+		free_2darray(&arr);
+		ft_strdel(line);
+		return (ERROR);
+	}
+	save_link(l, arr[0], arr[1]);
+	free_2darray(&arr);
+	ft_strdel(line);
+	return (OK);
+}
+
+int		get_links(t_lem *l, char **line)
+{
+	int 	gnl;
+
+	gnl = 1;
 	if (!*line)
 		return (exit_with_error(l, line, NO_LINKS));
-	do
+	while (gnl > 0)
 	{
+		gnl = 0;
 		if (**line == '#')
 		{
 			if (ft_strstr(*line, "##start") || ft_strstr(*line, "##end"))
 				return (exit_with_error(l, line, IRRELEVANT_COMMAND));
 			save_map_line(l, *line);
+			ft_strdel(line);
+			gnl = get_next_line(0, line);
 			continue ;
 		}
-		if (save_map_line(l, *line) == MALLOC_ERROR)
-			return (exit_with_error(l, line, MALLOC_FAIL));
-		if (has_spaces(*line))
-			return (exit_with_error(l, line, SPACES));
-		arr = ft_strsplit(*line, '-');
-		if (validate_link(l, arr, line) == ERROR)
-		{
-			free_2darray(&arr);
-			return (ERROR);
-		}
-		save_link(l, arr[0], arr[1]);
-		free_2darray(&arr);
-		ft_strdel(line);
-	} while (get_next_line(0, line) > 0);
+		if (validate_and_save(l, line) == ERROR)
+			return (ERROR);	
+		gnl = get_next_line(0, line);
+	}
+	ft_strdel(line);
 	return (OK);
 }

@@ -36,7 +36,7 @@ void	free_dict(void)
 	{
 		while(rooms_dict[i])
 			ft_strdel(&rooms_dict[i++]);
-		ft_memdel((void **)rooms_dict);
+		ft_memdel((void **)&rooms_dict);
 	}
 }
 
