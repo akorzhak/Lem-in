@@ -30,7 +30,7 @@ void	free_namelist(t_namelist **list)
 
 void	free_2darray(char ***arr)
 {
-	int 	i;
+	int		i;
 	char	**array;
 
 	i = 0;
@@ -43,7 +43,7 @@ void	free_2darray(char ***arr)
 	ft_memdel((void **)arr);
 }
 
-int 	exit_with_error(t_lem *l, char **line, char *error_message)
+int		exit_with_error(t_lem *l, char **line, char *error_message)
 {
 	l->e_message = ft_strdup(error_message);
 	ft_strdel(line);

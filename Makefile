@@ -57,15 +57,15 @@ SRC = main.c init.c get_rooms.c ants.c\
 OBJ = $(SRC:.c=.o)
 
 # Colors constants
-RED = \e[31m
+RED = \033[31m
 
-YELLOW = \e[93m
+YELLOW = \033[93m
 
-GREEN = \e[38;5;82m
+GREEN = \033[38;5;82m
 
 BLUE = \033[1;34m
 
-RESET = \e[0m
+RESET = \033[0m
 
 .PHONY: all clean fclean
 

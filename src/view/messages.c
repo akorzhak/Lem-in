@@ -21,8 +21,8 @@ void		display_error_message(t_lem *l)
 		ft_putstr("ERROR\n");
 	else
 	{
-		blink();
 		red();
+		blink();
 		ft_putstr("ERROR\n");
 		reset();
 		if (map)

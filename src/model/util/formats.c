@@ -18,16 +18,16 @@
 
 void	blink(void)
 {
-  ft_putstr("\e[5m");
+  ft_putstr("\033[5m");
 }
 
 void	underline(void)
 {
-	ft_putstr("\e[4m");
+	ft_putstr("\033[4m");
 }
 
 void	reset(void)
 {
-	ft_putstr("\e[0m");
+	ft_putstr("\033[0m");
 }
 

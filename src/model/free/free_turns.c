@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   free_turns.c                                        :+:      :+:    :+:   */
+/*   free_turns.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,9 +14,9 @@
 
 void	free_turns(t_turn ***turns)
 {
-	t_turn **t;
-	t_turn *next;
-	int 	i;
+	t_turn	**t;
+	t_turn	*next;
+	int		i;
 
 	t = *turns;
 	i = 0;
