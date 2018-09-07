@@ -43,7 +43,7 @@ int		is_number(char *nb)
 }
 
 /*
-** Function Divides two integers,
+** Function divides two integers,
 ** rounding result to ceil number.
 */
 

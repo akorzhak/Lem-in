@@ -30,6 +30,16 @@ void	define_nb_of_transfers(t_way **ways)
 
 /*
 ** Function uses author algorithm for defining each way's capacity.
+** @turns denotes the number of all turns needed to pass the farm.
+**		(a row with simultaneous steps)
+** The program initially assumes, that it is possible to pass it in one turn.
+** Then it calculates pseudo capacity for ways (it can be negative).
+** Thereafter program finds the difference between real ants number
+** and summary pseudo capacity.
+** Being based on mentioned difference, program calculates true number
+** of turns and new capacities.
+** Gotten summary capacity can a bit exceed total number of ants.
+** In this case the program evenly reduces capacities.
 */
 
 void	allocate_ants(t_way **ways, int *difference, t_lem *l)
