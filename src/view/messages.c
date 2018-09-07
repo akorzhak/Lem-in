@@ -25,7 +25,7 @@ void		display_error_message(t_lem *l)
 		blink();
 		ft_putstr("ERROR\n");
 		reset();
-		if (map)
+		if (!l->clone_rooms && map)
 		{
 			while (map->next)
 				map = map->next;
@@ -38,7 +38,7 @@ void		display_error_message(t_lem *l)
 	}
 }
 
-void 	display_usage_message(void)
+void		display_usage_message(void)
 {
 	ft_putstr(USAGE);
 }

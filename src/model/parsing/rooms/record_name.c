@@ -34,7 +34,7 @@ int		add_name_to_list(t_namelist **names, char *name, int property)
 	return (OK);
 }
 
-int 	handle_arr_content(t_lem *l, char **line, char ***arr)
+int		handle_arr_content(t_lem *l, char **line, char ***arr)
 {
 	char **array;
 
@@ -48,7 +48,7 @@ int 	handle_arr_content(t_lem *l, char **line, char ***arr)
 	return (OK);
 }
 
-int 	handle_property(t_lem *l, char **line, int property, char *room_name)
+int		handle_property(t_lem *l, char **line, int property, char *room_name)
 {
 	if (property == ENTRANCE)
 	{
@@ -65,7 +65,7 @@ int 	handle_property(t_lem *l, char **line, int property, char *room_name)
 	return (OK);
 }
 
-int 	record_name(char **line, t_namelist **n, int p, t_lem *l)
+int		record_name(char **line, t_namelist **n, int p, t_lem *l)
 {
 	char **arr;
 

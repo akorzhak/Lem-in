@@ -20,20 +20,19 @@ int		program_logic_controller(t_lem *l, t_room ***rooms)
 	ways = NULL;
 	turns = NULL;
 	if ((set_levels(l, rooms) == ERROR) || (set_links(l, rooms) == ERROR))
-	{
-		display_bfs(*rooms);
-		display_error_message(l);
 		return (ERROR);
-	}
 	if (pave_the_ways(&ways, l, *rooms) == ERROR)
 	{
-		display_error_message(l);
 		free_ways(&ways);
 		return (ERROR);
 	}
 	set_ways_capacity(&ways, l);
 	print_handled_data(l, *rooms, &ways);
-	move_ants(l, &ways, &turns);
+	if (move_ants(l, &ways, &turns) == MALLOC_ERROR)
+	{
+		free_ways(&ways);
+		return (ERROR);
+	}
 	sort_result(&turns);
 	display_result(&turns);
 	free_ways(&ways);
@@ -48,14 +47,12 @@ int		parsing_controller(t_lem *l, t_room ***rooms)
 	line = NULL;
 	if (get_ants(l) == ERROR || get_rooms(l, rooms, &line) == ERROR)
 	{
-		display_error_message(l);
 		ft_strdel(&line);
 		return (ERROR);
 	}
-	init_dict(l, *rooms);
-	if (get_links(l, &line) == ERROR)
+	init_dict(l->rooms_nb, *rooms);
+	if (get_links(l, &line) == ERROR || validate_dict(l) == ERROR)
 	{
-		display_error_message(l);
 		free_dict();
 		ft_strdel(&line);
 		return (ERROR);
@@ -70,11 +67,13 @@ int		main(int argc, char **argv)
 
 	rooms = NULL;
 	init_lemin(&l);
+	g_line_nb = 1;
 	if (argc <= 3 && (handle_args(argc, argv, &l) == OK))
 	{
 		if ((parsing_controller(&l, &rooms) == ERROR)
 			|| (program_logic_controller(&l, &rooms) == ERROR))
 		{
+			display_error_message(&l);
 			free_lem(&l);
 			free_rooms(&rooms);
 			return (ERROR);

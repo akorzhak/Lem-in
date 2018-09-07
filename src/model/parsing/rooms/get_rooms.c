@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int 	handle_commands(char *line, int *property)
+int		handle_commands(char *line, int *property)
 {
 	if (ft_strstr(line, "##start"))
 	{
@@ -29,17 +29,16 @@ int 	handle_commands(char *line, int *property)
 	return (OK);
 }
 
-int 	get_rooms(t_lem *l, t_room ***rooms, char **line)
+int		get_rooms(t_lem *l, t_room ***rooms, char **line)
 {
-	int property;
-	t_namelist *names;
+	int			property;
+	t_namelist	*names;
 
 	property = ORDINARY;
 	names = NULL;
 	while (get_next_line(0, line) > 0 && !ft_strchr(*line, '-'))
 	{
-		save_map_line(l, *line);
-		if (**line == '#')
+		if ((save_map_line(l, *line) == OK) && **line == '#')
 		{
 			if (handle_commands(*line, &property) == ERROR)
 				return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));

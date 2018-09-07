@@ -38,21 +38,23 @@
 # define INVALID_COORDINATE "Coordinate is not a number."
 # define NO_START_END_ROOM "Parsing reached the end of the map. "\
 							"No START or END room found."
-# define SELF_LINKED_ROOM "Room can NOT link itself."
+# define SELF_LINKED_ROOM "Room canNOT link itself."
 # define NO_LINKS "Parsing reached the end of the map. No LINKS found."
 # define MULTIPLE_START_END_ROOM "Multiple declaration of START/END room "\
 							"is forbidden."			
-# define SPACES "LINKS can NOT contain any spaces or tabs."
+# define SPACES "LINKS canNOT contain any spaces or tabs."
 # define INVALID_ANTS_NB "Invalid ants number."
+# define TOO_MUCH_ANTS "Sorry, but the farm canNOT hold so much ants."							
 # define NO_WAY "NO any way possible."
 # define ADJ_LIST "\nADJACENCY LIST:\n\n"
 # define VALID_WAYS "\nVALID WAYS:\n\n"
 # define CAPACITY "\nWAYS' CAPACITIES:\n\n"
 # define BFS "BREADTH FIRST SEARCH:\n\n"
 # define MALLOC_FAIL "Memory allocation has failed."
+# define CLONE_ROOMS "Multiple rooms with the same name: "
 # define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
 
-extern int line_nb;
+extern int g_line_nb;
 
 /***************************** TYPEDEFS ***************************************/
 typedef struct s_lem		t_lem;
@@ -125,6 +127,7 @@ struct				s_lem
 	char			*start_room;
 	char			*end_room;
 	char			*e_message;
+	char			clone_rooms;
 	t_map			*map;
 	t_link			*links;
 };
@@ -185,7 +188,7 @@ void				save_link(t_lem *l, char *room1, char *room2);
 
 /******************************* MAIN FUNCTIONS *******************************/
 void				init_lemin(t_lem *l);
-void				move_ants(t_lem *l, t_way **ways, t_turn ***turns);
+int					move_ants(t_lem *l, t_way **ways, t_turn ***turns);
 int					prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l);
 void				set_ways_capacity(t_way **w, t_lem *l);
 int					set_levels(t_lem *l, t_room ***r);
@@ -213,8 +216,9 @@ int					is_number(char	*nb);
 int					has_spaces(char	*str);
 
 /******************************* DICT FUNCTIONS *******************************/
-void				init_dict(t_lem *l, t_room **rooms);
-int					dict(t_lem *l, char *value);
+void				init_dict(int rooms_nb, t_room **rooms);
+int					validate_dict(t_lem *l);
+int					dict(char *value);
 void				free_dict(void);
 
 /******************************* VIEW FUNCTIONS *******************************/

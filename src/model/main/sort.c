@@ -12,10 +12,10 @@
 
 #include "lem-in.h"
 
-void 	select_prior_step(t_turn **loop, t_turn **prior, t_turn **prev)
+void	select_prior_step(t_turn **loop, t_turn **prior, t_turn **prev)
 {
 	t_turn	*step;
-	t_turn  *temp;
+	t_turn	*temp;
 
 	temp = 0;
 	*prev = 0;
@@ -33,7 +33,7 @@ void 	select_prior_step(t_turn **loop, t_turn **prior, t_turn **prev)
 	}
 }
 
-void	add_step_to_sorted_part(t_turn  **sort, t_turn  **prior)
+void	add_step_to_sorted_part(t_turn **sort, t_turn **prior)
 {
 	if (*sort)
 	{
@@ -46,7 +46,6 @@ void	add_step_to_sorted_part(t_turn  **sort, t_turn  **prior)
 	}
 }
 
-
 void	set_pointers(t_turn **loop, t_turn **prior, t_turn **prev)
 {
 	if (*prev)
@@ -56,14 +55,11 @@ void	set_pointers(t_turn **loop, t_turn **prior, t_turn **prev)
 	(*prior)->next = *loop;
 }
 
-/**
-uses selection sort
-*/
 void	sort_result(t_turn ***turns)
 {
 	t_turn	**t;
-	t_sort 	s;
-	int 	i;
+	t_sort	s;
+	int		i;
 
 	t = *turns;
 	i = 1;
@@ -74,7 +70,7 @@ void	sort_result(t_turn ***turns)
 		while (s.loop->next)
 		{
 			select_prior_step(&s.loop, &s.prior, &s.prev);
-			set_pointers(&s.loop, &s.prior, &s.prev);	
+			set_pointers(&s.loop, &s.prior, &s.prev);
 			if (!s.sort)
 				t[i] = s.prior;
 			add_step_to_sorted_part(&s.sort, &s.prior);

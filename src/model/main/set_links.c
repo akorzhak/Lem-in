@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int		link_the_rooms(t_lem *l, t_room ***r, int i, char *linked_room)
+int		link_the_rooms(t_room ***r, int i, char *linked_room)
 {
 	t_linkage	*linked_rooms;
 	t_room		**rooms;
@@ -33,7 +33,7 @@ int		link_the_rooms(t_lem *l, t_room ***r, int i, char *linked_room)
 			return (MALLOC_ERROR);
 		linked_rooms = linked_rooms->next;
 	}
-	linked_rooms->room = rooms[dict(l, linked_room)];
+	linked_rooms->room = rooms[dict(linked_room)];
 	return (OK);
 }
 
@@ -41,7 +41,7 @@ int		connect_rooms(t_lem *l, t_link **links, t_room **rooms, int i)
 {
 	if (!ft_strcmp(rooms[i]->name, (*links)->room1))
 	{
-		if (link_the_rooms(l, &rooms, i, (*links)->room2) == MALLOC_ERROR)
+		if (link_the_rooms(&rooms, i, (*links)->room2) == MALLOC_ERROR)
 		{
 			l->e_message = ft_strdup(MALLOC_FAIL);
 			return (MALLOC_ERROR);
@@ -49,7 +49,7 @@ int		connect_rooms(t_lem *l, t_link **links, t_room **rooms, int i)
 	}
 	else if (!ft_strcmp(rooms[i]->name, (*links)->room2))
 	{
-		if (link_the_rooms(l, &rooms, i, (*links)->room1) == MALLOC_ERROR)
+		if (link_the_rooms(&rooms, i, (*links)->room1) == MALLOC_ERROR)
 		{
 			l->e_message = ft_strdup(MALLOC_FAIL);
 			return (MALLOC_ERROR);

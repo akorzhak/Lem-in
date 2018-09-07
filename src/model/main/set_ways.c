@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_ways.c                                          :+:      :+:    :+:   */
+/*   set_ways.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -12,14 +12,13 @@
 
 #include "lem-in.h"
 
-t_way 	*ways;
-
-t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
+t_linkage	*choose_penultimate_room(t_linkage **linked_rooms)
 {
-	int 	lowest_lvl = 0;
-	t_linkage 	*rooms;
-	t_linkage 	*penultimate_room;
+	int			lowest_lvl;
+	t_linkage	*rooms;
+	t_linkage	*penultimate_room;
 
+	lowest_lvl = 0;
 	rooms = *linked_rooms;
 	penultimate_room = NULL;
 	while (rooms)
@@ -35,41 +34,43 @@ t_linkage *choose_penultimate_room(t_linkage **linked_rooms)
 	return (penultimate_room);
 }
 
-int		add_way_to_list(char ***way, int lenth)
+int			add_way_to_list(t_way **ways, char ***way, int len)
 {
-	char **w;
+	char			**w;
+	static t_way	*ws;
 
+	if (!ws)
+		ws = *ways;
 	w = *way;
 	if (!w[0])
 		return (ERROR);
-	if (ways->rooms)
+	if (ws->rooms)
 	{
-		if (!(ways->next = (t_way *)ft_memalloc(sizeof(t_way))))
+		if (!(ws->next = (t_way *)ft_memalloc(sizeof(t_way))))
 			return (MALLOC_ERROR);
-		ways = ways->next;
+		ws = ws->next;
 	}
-	if (!(ways->rooms = (t_ant_room **)ft_memalloc(sizeof(t_ant_room *) * lenth--)))
+	if (!(ws->rooms = (t_ant_room **)ft_memalloc(sizeof(t_ant_room *) * len--)))
 		return (MALLOC_ERROR);
-	while (lenth--)
+	while (len--)
 	{
-		if (!(ways->rooms[lenth] = (t_ant_room *)ft_memalloc(sizeof(t_ant_room))))
+		if (!(ws->rooms[len] = (t_ant_room *)ft_memalloc(sizeof(t_ant_room))))
 			return (MALLOC_ERROR);
-		if (!(ways->rooms[lenth]->name = ft_strdup(w[lenth])))
+		if (!(ws->rooms[len]->name = ft_strdup(w[len])))
 			return (MALLOC_ERROR);
 	}
 	return (OK);
 }
 
-int		pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
+int			pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 {
-	t_i 	i;
-	t_lnk 	lnk;
+	t_i		i;
+	t_lnk	lnk;
 	char	**way;
 	int		res;
 
 	i.i = 0;
 	*w = (t_way *)ft_memalloc(sizeof(t_way));
-	ways = *w;
 	while (ft_strcmp(rooms[i.i]->name, l->end_room))
 		i.i++;
 	rooms[i.i]->used = USED;
@@ -77,7 +78,7 @@ int		pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 	{
 		if (prepare_way(&lnk, &way, &i, l) == MALLOC_ERROR)
 			return (ERROR);
-		res = add_way_to_list(&way, i.lenth);
+		res = add_way_to_list(w, &way, i.lenth);
 		if (res == OK)
 			free_2darray(&way);
 		else if (res == ERROR)

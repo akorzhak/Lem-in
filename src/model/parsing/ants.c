@@ -12,6 +12,15 @@
 
 #include "lem-in.h"
 
+int		validate_ants_nb(char **line, t_lem *l)
+{
+	if (ft_strlen(*line) > 10 || (l->ants_nb = ft_atoi(*line)) > 21474830)
+		return (exit_with_error(l, line, TOO_MUCH_ANTS));
+	else if (l->ants_nb <= 0)
+		return (exit_with_error(l, line, INVALID_ANTS_NB));
+	return (OK);
+}
+
 int		get_ants(t_lem *l)
 {
 	char *line;
@@ -30,8 +39,8 @@ int		get_ants(t_lem *l)
 		}
 		else if (ft_isdigit(*line))
 		{
-			if ((l->ants_nb = ft_atoi(line)) <= 0)
-				return (exit_with_error(l, &line, INVALID_ANTS_NB));
+			if (validate_ants_nb(&line, l) == ERROR)
+				return (ERROR);
 		}
 		else
 			return (exit_with_error(l, &line, INVALID_ANTS_NB));

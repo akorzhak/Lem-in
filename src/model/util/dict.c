@@ -12,42 +12,72 @@
 
 #include "lem-in.h"
 
-char	**rooms_dict;
+char	**g_rooms_dict;
 
-void	init_dict(t_lem *l, t_room **rooms)
+void	init_dict(int rooms_nb, t_room **rooms)
 {
-	int 	i;
+	int i;
 
 	i = 0;
-	rooms_dict = (char **)ft_memalloc(sizeof(char *) * (l->rooms_nb + 1));
-	while (i < l->rooms_nb)
+	g_rooms_dict = (char **)ft_memalloc(sizeof(char *) * (rooms_nb + 1));
+	while (i < rooms_nb)
 	{
-		rooms_dict[i] = ft_strdup((rooms[i])->name);
+		g_rooms_dict[i] = ft_strdup((rooms[i])->name);
 		i++;
 	}
 }
 
 void	free_dict(void)
 {
-	int 	i;
+	int i;
 
 	i = 0;
-	if (rooms_dict)
+	if (g_rooms_dict)
 	{
-		while(rooms_dict[i])
-			ft_strdel(&rooms_dict[i++]);
-		ft_memdel((void **)&rooms_dict);
+		while (g_rooms_dict[i])
+		{
+			ft_strdel(&g_rooms_dict[i++]);
+		}
+		ft_memdel((void **)&g_rooms_dict);
 	}
 }
 
-int		dict(t_lem *l, char *value)
+int		validate_dict(t_lem *l)
+{
+	int i;
+	int n;
+	int nb;
+
+	n = 0;
+	while (g_rooms_dict[n])
+	{
+		i = 0;
+		nb = 0;
+		while (g_rooms_dict[i])
+		{
+			if (!ft_strcmp(g_rooms_dict[n], g_rooms_dict[i]))
+				nb++;
+			i++;
+		}
+		if (nb > 1)
+		{
+			l->e_message = ft_strjoin(CLONE_ROOMS, g_rooms_dict[n]);
+			l->clone_rooms = 1;
+			return (ERROR);
+		}
+		n++;
+	}
+	return (OK);
+}
+
+int		dict(char *value)
 {
 	int i;
 
 	i = 0;
-	while (i < l->rooms_nb)
+	while (g_rooms_dict[i])
 	{
-		if (!ft_strcmp(rooms_dict[i], value))
+		if (!ft_strcmp(g_rooms_dict[i], value))
 			return (i);
 		i++;
 	}

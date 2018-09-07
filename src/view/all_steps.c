@@ -19,7 +19,6 @@ void	display_ways_capacity(t_way **ways)
 
 	i = 0;
 	w = *ways;
-
 	red();
 	underline();
 	ft_putstr(CAPACITY);
@@ -27,7 +26,7 @@ void	display_ways_capacity(t_way **ways)
 	while (w)
 	{
 		ft_printf("%d way: ", ++i);
-			ft_printf("%d\n", w->capacity_nb);
+		ft_printf("%d\n", w->capacity_nb);
 		w = w->next;
 	}
 	ft_putchar('\n');
@@ -56,8 +55,8 @@ void	display_valid_ways(t_way **ways)
 
 void	display_adjacency_list(t_room **rooms)
 {
-	int		i;
-	t_linkage *linked_rooms;
+	int			i;
+	t_linkage	*linked_rooms;
 
 	i = 0;
 	green();

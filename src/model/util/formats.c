@@ -12,13 +12,9 @@
 
 #include "lem-in.h"
 
-/**
-* Control sequenses for format.
-*/
-
 void	blink(void)
 {
-  ft_putstr("\033[5m");
+	ft_putstr("\033[5m");
 }
 
 void	underline(void)
@@ -30,4 +26,3 @@ void	reset(void)
 {
 	ft_putstr("\033[0m");
 }
-

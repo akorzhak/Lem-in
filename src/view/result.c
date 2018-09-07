@@ -16,7 +16,7 @@ void	display_result(t_turn ***turns)
 {
 	t_turn	**t;
 	t_turn	*step;
-	int 	n;
+	int		n;
 
 	t = *turns;
 	n = 0;

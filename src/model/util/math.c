@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-int		has_spaces(char	*str)
+int		has_spaces(char *str)
 {
 	int i;
 
@@ -26,7 +26,7 @@ int		has_spaces(char	*str)
 	return (0);
 }
 
-int		is_number(char	*nb)
+int		is_number(char *nb)
 {
 	int	i;
 
@@ -42,7 +42,7 @@ int		is_number(char	*nb)
 	return (0);
 }
 
-int 	ft_ceil(int nb1, int nb2)
+int		ft_ceil(int nb1, int nb2)
 {
 	int		res;
 

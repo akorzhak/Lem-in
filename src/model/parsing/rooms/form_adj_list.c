@@ -14,9 +14,9 @@
 
 int		form_adj_list(t_lem *l, t_room ***rooms, t_namelist *names)
 {
-	int i;
-	t_namelist *head;
-	t_room **r;
+	int			i;
+	t_namelist	*head;
+	t_room		**r;
 
 	i = 0;
 	head = names;

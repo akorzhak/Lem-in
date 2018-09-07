@@ -12,15 +12,15 @@
 
 #include "lem-in.h"
 
-static int 	validate_link(t_lem *l, char **arr, char **line)
+static int	validate_link(t_lem *l, char **arr, char **line)
 {
-	int 	i_room1;
-	int 	i_room2;
+	int	i_room1;
+	int	i_room2;
 
 	if (arrlen(arr) != 2)
 		return (exit_with_error(l, line, INCOMPLETE_LINK_DATA));
-	i_room1 = dict(l, arr[0]);
-	i_room2 = dict(l, arr[1]);
+	i_room1 = dict(arr[0]);
+	i_room2 = dict(arr[1]);
 	if (i_room1 == -1)
 		return (exit_with_error(l, line, ft_strjoin(INVALID_ROOM, arr[0])));
 	if (i_room2 == -1)
@@ -30,7 +30,7 @@ static int 	validate_link(t_lem *l, char **arr, char **line)
 	return (OK);
 }
 
-int 	validate_and_save(t_lem *l, char **line)
+int			validate_and_save(t_lem *l, char **line)
 {
 	char	**arr;
 
@@ -51,9 +51,9 @@ int 	validate_and_save(t_lem *l, char **line)
 	return (OK);
 }
 
-int		get_links(t_lem *l, char **line)
+int			get_links(t_lem *l, char **line)
 {
-	int 	gnl;
+	int	gnl;
 
 	gnl = 1;
 	if (!*line)
@@ -71,7 +71,7 @@ int		get_links(t_lem *l, char **line)
 			continue ;
 		}
 		if (validate_and_save(l, line) == ERROR)
-			return (ERROR);	
+			return (ERROR);
 		gnl = get_next_line(0, line);
 	}
 	ft_strdel(line);
