@@ -32,7 +32,7 @@ int		get_ants(t_lem *l)
 			return (exit_with_error(l, &line, MALLOC_FAIL));
 		if (*line == '#')
 		{
-			if (ft_strstr(line, "##start") || ft_strstr(line, "##end"))
+			if (ft_strnstr(line, "##", 2))
 				return (exit_with_error(l, &line, IRRELEVANT_COMMAND));
 			ft_strdel(&line);
 			continue ;

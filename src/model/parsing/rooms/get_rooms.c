@@ -12,19 +12,26 @@
 
 #include "lem-in.h"
 
-int		handle_commands(char *line, int *property)
+int		handle_commands(t_lem *l, char **line, int *property)
 {
-	if (ft_strstr(line, "##start"))
+	if (ft_strstr(*line, "##start"))
 	{
 		if (*property)
-			return (ERROR);
+			return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
 		*property = ENTRANCE;
 	}
-	else if (ft_strstr(line, "##end"))
+	else if (ft_strstr(*line, "##end"))
 	{
 		if (*property)
-			return (ERROR);
+			return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
 		*property = EXIT;
+	}
+	else if (ft_strnstr(*line, "##", 2))
+		return (exit_with_error(l, line, IRRELEVANT_COMMAND));
+	else
+	{
+		if (*property)
+			return (exit_with_error(l, line, COMMENT_AFTER_COMMAND));
 	}
 	return (OK);
 }
@@ -40,8 +47,8 @@ int		get_rooms(t_lem *l, t_room ***rooms, char **line)
 	{
 		if ((save_map_line(l, *line) == OK) && **line == '#')
 		{
-			if (handle_commands(*line, &property) == ERROR)
-				return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
+			if (handle_commands(l, line, &property) == ERROR)
+				return (ERROR);
 			ft_strdel(line);
 			continue ;
 		}

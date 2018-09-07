@@ -12,6 +12,11 @@
 
 #include "lem-in.h"
 
+/*
+** Escape sequences for formats.
+** blink works only on Linux OS, on Mac OS it is simply ignored.
+*/
+
 void	blink(void)
 {
 	ft_putstr("\033[5m");

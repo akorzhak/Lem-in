@@ -108,4 +108,3 @@ int					get_next_line(const int fd, char **line)
 	ret = get_line(buff, line);
 	return (ret);
 }
-

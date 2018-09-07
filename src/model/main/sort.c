@@ -55,6 +55,10 @@ void	set_pointers(t_turn **loop, t_turn **prior, t_turn **prev)
 	(*prior)->next = *loop;
 }
 
+/*
+** Uses selection sort.
+*/
+
 void	sort_result(t_turn ***turns)
 {
 	t_turn	**t;

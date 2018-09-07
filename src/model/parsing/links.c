@@ -61,11 +61,10 @@ int			get_links(t_lem *l, char **line)
 	while (gnl > 0)
 	{
 		gnl = 0;
-		if (**line == '#')
+		if ((save_map_line(l, *line) == OK) && **line == '#')
 		{
-			if (ft_strstr(*line, "##start") || ft_strstr(*line, "##end"))
+			if (ft_strnstr(*line, "##", 2))
 				return (exit_with_error(l, line, IRRELEVANT_COMMAND));
-			save_map_line(l, *line);
 			ft_strdel(line);
 			gnl = get_next_line(0, line);
 			continue ;

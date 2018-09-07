@@ -12,6 +12,10 @@
 
 #include "lem-in.h"
 
+/*
+** Emulation of Dictionary object with key-value params.
+*/
+
 char	**g_rooms_dict;
 
 void	init_dict(int rooms_nb, t_room **rooms)
@@ -72,14 +76,14 @@ int		validate_dict(t_lem *l)
 
 int		dict(char *value)
 {
-	int i;
+	int key;
 
-	i = 0;
-	while (g_rooms_dict[i])
+	key = 0;
+	while (g_rooms_dict[key])
 	{
-		if (!ft_strcmp(g_rooms_dict[i], value))
-			return (i);
-		i++;
+		if (!ft_strcmp(g_rooms_dict[key], value))
+			return (key);
+		key++;
 	}
 	return (-1);
 }

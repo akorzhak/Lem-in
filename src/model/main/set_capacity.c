@@ -28,6 +28,10 @@ void	define_nb_of_transfers(t_way **ways)
 	}
 }
 
+/*
+** Function uses author algorithm for defining each way's capacity.
+*/
+
 void	allocate_ants(t_way **ways, int *difference, t_lem *l)
 {
 	int		turns;
@@ -51,6 +55,11 @@ void	allocate_ants(t_way **ways, int *difference, t_lem *l)
 	}
 	l->turns = turns;
 }
+
+/*
+** In case summary rooms' capacity exceeds total number
+** of ants - following funcion equalizes mentioned values.
+*/
 
 void	reduce_capacity(int difference, t_way **ways)
 {
