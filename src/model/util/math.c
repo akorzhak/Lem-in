@@ -42,7 +42,12 @@ int		is_number(char *nb)
 	return (0);
 }
 
-int		ft_ceil(int nb1, int nb2)
+/*
+** Function Divides two integers,
+** rounding result to ceil number.
+*/
+
+int		ceil_div(int nb1, int nb2)
 {
 	int		res;
 

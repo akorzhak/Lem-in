@@ -226,7 +226,7 @@ int					exit_with_error(t_lem *l, char **line, char *error_massage);
 ******************************** MATH FUNCTIONS ********************************
 */
 int					arrlen(char **arr);
-int					ft_ceil(int nb1, int nb2);
+int					ceil_div(int nb1, int nb2);
 int					is_number(char	*nb);
 int					has_spaces(char	*str);
 

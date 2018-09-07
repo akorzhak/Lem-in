@@ -51,7 +51,7 @@ void	allocate_ants(t_way **ways, int *difference, t_lem *l)
 			w = w->next;
 		}
 		*difference = l->ants_nb - sum_ants;
-		turns += ft_ceil(*difference, l->ways_nb);
+		turns += ceil_div(*difference, l->ways_nb);
 	}
 	l->turns = turns;
 }
