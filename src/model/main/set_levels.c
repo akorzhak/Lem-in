@@ -14,7 +14,7 @@
 
 void	set_1st_levels(t_lem *l, t_room ***r)
 {
-	t_link *links;
+	t_link	*links;
 	t_room	**rooms;
 
 	rooms = *r;
@@ -42,7 +42,7 @@ void	set_1st_levels(t_lem *l, t_room ***r)
 
 int		set_level(t_lem *l, t_room ***r, t_link *links)
 {
-	int 	level;
+	int		level;
 	t_room	**rooms;
 
 	rooms = *r;
@@ -65,13 +65,14 @@ int		set_level(t_lem *l, t_room ***r, t_link *links)
 
 int		set_levels(t_lem *l, t_room ***rooms)
 {
-	t_link *links;
-	char 	change;
+	t_link	*links;
+	char	change;
 	t_room	**r;
 
 	r = *rooms;
+	change = 1;
 	set_1st_levels(l, rooms);
-	do
+	while (change)
 	{
 		change = 0;
 		links = l->links;
@@ -81,7 +82,7 @@ int		set_levels(t_lem *l, t_room ***rooms)
 				change = 1;
 			links = links->next;
 		}
-	} while (change);
+	}
 	if ((r[dict(l, l->start_room)]->level == 0)
 		|| (r[dict(l, l->end_room)]->level == 0))
 	{

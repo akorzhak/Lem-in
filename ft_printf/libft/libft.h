@@ -26,16 +26,6 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-typedef struct		s_dlist
-{
-	char			*buff;
-	int				fd;
-	struct s_dlist	*next;
-	struct s_dlist	*prev;
-}					t_dlist;
-
-extern t_dlist		*dlist;
-
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_bzero(void *s, size_t n);
 void				*ft_memcpy(void *dst, const void *src, size_t n);
@@ -105,6 +95,5 @@ void				ft_print_bits(unsigned char octet);
 unsigned char		ft_reverse_bits(unsigned char octet);
 
 int					get_next_line(const int fd, char **line);
-void				free_gnl_remainders(void);
 
 #endif

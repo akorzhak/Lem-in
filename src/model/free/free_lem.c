@@ -14,7 +14,7 @@
 
 void	free_map(t_map **m)
 {
-	t_map 	*map;
+	t_map	*map;
 	t_map	*next;
 
 	map = *m;
@@ -50,4 +50,3 @@ void	free_lem(t_lem *l)
 		free_links(&l->links);
 	}
 }
-

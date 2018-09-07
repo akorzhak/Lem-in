@@ -12,8 +12,6 @@
 
 #include "libft.h"
 
-t_dlist	*dlist = 0;
-
 void				*ft_realloc(void *arr, size_t size)
 {
 	void			*new;
@@ -28,7 +26,8 @@ void				*ft_realloc(void *arr, size_t size)
 			ft_memcpy(new, arr, size - 1);
 		else
 			ft_memcpy(new, arr, ft_strlen(arr));
-		ft_memdel((void **)&arr);
+		free(arr);
+		arr = 0;
 	}
 	return (new);
 }
@@ -81,49 +80,32 @@ int					read_write(int fd, char *buff, char **line)
 	return ('+');
 }
 
-t_dlist				*get_list(int fd, t_dlist *list, int flag)
-{
-	t_dlist			*new;
-
-	while (list && list->prev && flag == '-')
-		list = list->prev;
-	if (!list || flag == '+')
-	{
-		if ((new = (t_dlist *)ft_memalloc(sizeof(t_dlist))) == 0)
-			return (0);
-		new->fd = fd;
-		new->buff = ft_strnew(BUFF_SIZE);
-		new->next = 0;
-		new->prev = list;
-		(list) ? (list->next = new) : 0;
-		return (new);
-	}
-	while (list->fd != fd && list->next)
-		list = list->next;
-	if (list->fd == fd)
-		return (list);
-	return (get_list(fd, list, '+'));
-}
-
 int					get_next_line(const int fd, char **line)
 {
+	static char		*buff;
 	int				ret;
 
 	if (BUFF_SIZE < 1 || fd == -1 || !line)
 		return (-1);
-	if (!(dlist = get_list(fd, dlist, '-')))
-		return (-1);
-	if (*(dlist->buff) && !ft_memchr(dlist->buff, '\n', ft_strlen(dlist->buff)))
+	if (!buff)
 	{
-		*line = ft_strnew(ft_strlen(dlist->buff));
-		ft_strcpy(*line, dlist->buff);
+		if (!(buff = ft_strnew(BUFF_SIZE)))
+			return (-1);
+	}
+	if ((*buff) && !ft_memchr(buff, '\n', ft_strlen(buff)))
+	{
+		*line = ft_strnew(ft_strlen(buff));
+		ft_strcpy(*line, buff);
 	}
 	else
 		*line = ft_strnew(1);
-	ret = read_write(fd, dlist->buff, line);
+	ret = read_write(fd, buff, line);
 	if (ret != '+')
+	{
+		ft_strdel(&buff);
 		return (ret);
-	ret = get_line(dlist->buff, line);
+	}
+	ret = get_line(buff, line);
 	return (ret);
 }
 

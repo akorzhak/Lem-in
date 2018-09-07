@@ -32,11 +32,11 @@ void	drop_the_way(char ***way, int i)
 	ft_memdel((void **)way);
 }
 
-void	free_ways(t_way	**ways)
+void	free_ways(t_way **ways)
 {
-	t_way *w;
-	t_way *next;
-	int i;
+	t_way	*w;
+	t_way	*next;
+	int		i;
 
 	w = *ways;
 	while (w)

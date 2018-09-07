@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   set_links.c                                         :+:      :+:    :+:   */
+/*   set_links.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -14,8 +14,8 @@
 
 int		link_the_rooms(t_lem *l, t_room ***r, int i, char *linked_room)
 {
-	t_linkage *linked_rooms;
-	t_room 		**rooms;
+	t_linkage	*linked_rooms;
+	t_room		**rooms;
 
 	rooms = *r;
 	linked_rooms = rooms[i]->linked_rooms;
@@ -60,9 +60,9 @@ int		connect_rooms(t_lem *l, t_link **links, t_room **rooms, int i)
 
 int		set_links(t_lem *l, t_room ***r)
 {
-	int 	i;
-	t_link *links;
-	t_room **rooms;
+	int		i;
+	t_link	*links;
+	t_room	**rooms;
 
 	rooms = *r;
 	i = 0;

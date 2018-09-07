@@ -12,7 +12,7 @@
 
 NAME = lem-in
 
-C = gcc #-fsanitize=address
+C = gcc
 
 CFLAG = -Wall -Wextra -Werror
 

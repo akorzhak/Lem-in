@@ -77,11 +77,9 @@ int		main(int argc, char **argv)
 		{
 			free_lem(&l);
 			free_rooms(&rooms);
-			free_gnl_remainders();
 			return (ERROR);
 		}
 		free_all(&l, &rooms);
-		free_gnl_remainders();
 		return (OK);
 	}
 	display_usage_message();

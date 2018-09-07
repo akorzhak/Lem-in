@@ -14,8 +14,8 @@
 
 void	define_nb_of_transfers(t_way **ways)
 {
-	int len;
-	t_way 	*w;
+	int		len;
+	t_way	*w;
 
 	len = 0;
 	w = *ways;
@@ -30,13 +30,13 @@ void	define_nb_of_transfers(t_way **ways)
 
 void	allocate_ants(t_way **ways, int *difference, t_lem *l)
 {
-	int 	turns;
-	int 	sum_ants;
-	t_way 	*w;
+	int		turns;
+	int		sum_ants;
+	t_way	*w;
 
 	w = (*ways);
 	turns = 1;
-	do
+	while (*difference > 0)
 	{
 		w = (*ways);
 		sum_ants = 0;
@@ -48,13 +48,13 @@ void	allocate_ants(t_way **ways, int *difference, t_lem *l)
 		}
 		*difference = l->ants_nb - sum_ants;
 		turns += ft_ceil(*difference, l->ways_nb);
-	} while (*difference > 0);
+	}
 	l->turns = turns;
 }
 
 void	reduce_capacity(int difference, t_way **ways)
 {
-	t_way 	*w;
+	t_way *w;
 
 	w = (*ways);
 	while (w && difference)
@@ -67,8 +67,9 @@ void	reduce_capacity(int difference, t_way **ways)
 
 void	set_ways_capacity(t_way **ways, t_lem *l)
 {
-	int 	difference;
+	int difference;
 
+	difference = 1;
 	define_nb_of_transfers(ways);
 	allocate_ants(ways, &difference, l);
 	if (difference < 0)
