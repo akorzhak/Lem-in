@@ -14,24 +14,19 @@
 
 int		handle_commands(t_lem *l, char **line, int *property)
 {
-	if (ft_strstr(*line, "##start"))
+	if (*property)
 	{
-		if (*property)
-			return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
+		if (ft_strnstr(*line, "##", 2))
+			return (exit_with_error(l, line, MULTIPLE_COMMANDS));
+		return (exit_with_error(l, line, COMMENT_AFTER_COMMAND));
+	}
+	if (ft_strcmp(*line, "##start") == EQUAL)
+	{
 		*property = ENTRANCE;
 	}
-	else if (ft_strstr(*line, "##end"))
+	else if (ft_strcmp(*line, "##end") == EQUAL)
 	{
-		if (*property)
-			return (exit_with_error(l, line, MULTIPLE_START_END_ROOM));
 		*property = EXIT;
-	}
-	else if (ft_strnstr(*line, "##", 2))
-		return (exit_with_error(l, line, IRRELEVANT_COMMAND));
-	else
-	{
-		if (*property)
-			return (exit_with_error(l, line, COMMENT_AFTER_COMMAND));
 	}
 	return (OK);
 }
@@ -39,11 +34,11 @@ int		handle_commands(t_lem *l, char **line, int *property)
 int		get_rooms(t_lem *l, t_room ***rooms, char **line)
 {
 	int			property;
-	t_namelist	*names;
+	t_namelist	*n;
 
 	property = ORDINARY;
-	names = NULL;
-	while (get_next_line(0, line) > 0 && !ft_strchr(*line, '-'))
+	n = NULL;
+	while (get_next_line(0, line) > 0 && (has_chr(*line, ' ') || **line == '#'))
 	{
 		if ((save_map_line(l, *line) == OK) && **line == '#')
 		{
@@ -52,15 +47,15 @@ int		get_rooms(t_lem *l, t_room ***rooms, char **line)
 			ft_strdel(line);
 			continue ;
 		}
-		if (record_name(line, &names, property, l) == ERROR)
+		if ((record_name(line, &n, property, l) == ERROR) && free_namelist(&n))
 			return (ERROR);
 		ft_strdel(line);
 		property = ORDINARY;
 		l->rooms_nb++;
 	}
-	if (!l->start_room || !l->end_room)
+	if (!line && (!l->start_room || !l->end_room) && free_namelist(&n))
 		return (exit_with_error(l, line, NO_START_END_ROOM));
-	if (form_adj_list(l, rooms, names) == ERROR)
+	if ((form_adj_list(l, rooms, n) == ERROR) && free_namelist(&n))
 		return (exit_with_error(l, line, MALLOC_FAIL));
 	return (OK);
 }

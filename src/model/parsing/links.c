@@ -34,10 +34,8 @@ int			validate_and_save(t_lem *l, char **line)
 {
 	char	**arr;
 
-	if (save_map_line(l, *line) == MALLOC_ERROR)
-		return (exit_with_error(l, line, MALLOC_FAIL));
-	if (has_spaces(*line))
-		return (exit_with_error(l, line, SPACES));
+	if (has_chr(*line, ' ') || count_chr(*line, '-') != 1)
+		return (exit_with_error(l, line, INVALID_FORMAT_LINK));
 	arr = ft_strsplit(*line, '-');
 	if (validate_link(l, arr, line) == ERROR)
 	{
@@ -61,7 +59,9 @@ int			get_links(t_lem *l, char **line)
 	while (gnl > 0)
 	{
 		gnl = 0;
-		if ((save_map_line(l, *line) == OK) && **line == '#')
+		if (save_map_line(l, *line) == MALLOC_ERROR)
+			return (exit_with_error(l, line, MALLOC_FAIL));
+		if (**line == '#')
 		{
 			if (ft_strnstr(*line, "##", 2))
 				return (exit_with_error(l, line, IRRELEVANT_COMMAND));

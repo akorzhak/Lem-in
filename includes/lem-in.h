@@ -24,6 +24,7 @@
 # define EXIT 2
 # define ORDINARY 0
 # define NOT_USED 0
+# define EQUAL 0
 # define USED 1
 # define OK 0
 # define ERROR 1
@@ -34,17 +35,22 @@
 */
 # define EMPTY_LINE "Empty line."
 # define EMPTY_MAP "Empty map."
+# define ANTS_NOT_NUMBER "Given number of ants contains NON-digit symbols."
+# define INVALID_FORMAT_ROOM "Invalid room format. Use 'name coord coord'."
+# define INVALID_FORMAT_LINK "Invalid link format. Use 'name-name'."
 # define IRRELEVANT_COMMAND "Irrelevant command."
+# define TRASH_DELIM "Room declaration contains trash delimiters (tabs)."
+# define NON_MODIFIABLE "START/END commands canNOT modify other commands."
+# define MULTIPLE_START_END_ROOM "Multiple declaration of START/END room."
 # define COMMENT_AFTER_COMMAND "Comment canNOT come right after command."
 # define INCOMPLETE_ROOM_DATA "Room name or coordinate is absent."
-# define TOO_MUCH_DATA "Redundant data is provided."
 # define INCOMPLETE_LINK_DATA "Room name or dash is absent."
 # define INVALID_ROOM "Such room is NOT declared: "
 # define INVALID_COORDINATE "Coordinate is not a number."
 # define NO_START_END_ROOM "No START or END room found."
 # define SELF_LINKED_ROOM "Room canNOT link itself."
 # define NO_LINKS "Control reached the end of the map. No LINKS found."
-# define MULTIPLE_START_END_ROOM "Multiple declaration of START/END room "
+# define MULTIPLE_COMMANDS "Two or more commands in a row."
 # define SPACES "LINKS canNOT contain any spaces or tabs."
 # define INVALID_ANTS_NB "Invalid ants number."
 # define TOO_MUCH_ANTS "Sorry, but the farm canNOT hold so much ants."
@@ -54,7 +60,7 @@
 # define CAPACITY "\nWAYS' CAPACITIES:\n\n"
 # define BFS "BREADTH FIRST SEARCH:\n\n"
 # define MALLOC_FAIL "Memory allocation has failed."
-# define CLONE_ROOMS "Multiple rooms with the same name: "
+# define CLONE_ROOMS "Multiple rooms with the same name."
 # define USAGE "lem-in: usage: ./lem-in [-e] [-a] < map\n"
 
 extern int g_line_nb;
@@ -213,7 +219,7 @@ void				sort_result(t_turn ***turns);
 void				free_all(t_lem *l, t_room ***rooms);
 void				free_lem(t_lem *l);
 void				free_2darray(char ***arr);
-void				free_namelist(t_namelist **list);
+int					free_namelist(t_namelist **list);
 void				free_rooms(t_room ***rooms);
 void				free_ways(t_way	**ways);
 void				free_links(t_link **l);
@@ -228,13 +234,13 @@ int					exit_with_error(t_lem *l, char **line, char *error_massage);
 int					arrlen(char **arr);
 int					ceil_div(int nb1, int nb2);
 int					is_number(char	*nb);
-int					has_spaces(char	*str);
+int					has_chr(char *str, char c);
+int					count_chr(char *str, char c);
 
 /*
 ******************************** DICT FUNCTIONS *******************************
 */
 void				init_dict(int rooms_nb, t_room **rooms);
-int					validate_dict(t_lem *l);
 int					dict(char *value);
 void				free_dict(void);
 

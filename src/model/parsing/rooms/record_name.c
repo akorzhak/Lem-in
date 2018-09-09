@@ -18,8 +18,15 @@ int		add_name_to_list(t_namelist **names, char *name, int property)
 	t_namelist *new;
 
 	temp = *names;
+	while (temp)
+	{
+		if (ft_strcmp(temp->name, name) == EQUAL)
+			return (ERROR);
+		temp = temp->next;
+	}
+	temp = *names;
 	if (!(new = (t_namelist *)ft_memalloc(sizeof(t_namelist))))
-		return (ERROR);
+		return (MALLOC_ERROR);
 	new->name = ft_strdup(name);
 	new->property = property;
 	new->next = NULL;
@@ -41,8 +48,8 @@ int		handle_arr_content(t_lem *l, char **line, char ***arr)
 	array = *arr;
 	if (arrlen(array) < 3)
 		return (exit_with_error(l, line, INCOMPLETE_ROOM_DATA));
-	else if (arrlen(array) > 3)
-		return (exit_with_error(l, line, TOO_MUCH_DATA));
+	if (has_chr(array[1], '\t') || has_chr(array[2], '\t'))
+		return (exit_with_error(l, line, TRASH_DELIM));
 	if (!is_number(array[1]) || !is_number(array[2]))
 		return (exit_with_error(l, line, INVALID_COORDINATE));
 	return (OK);
@@ -67,10 +74,13 @@ int		handle_property(t_lem *l, char **line, int property, char *room_name)
 
 int		record_name(char **line, t_namelist **n, int p, t_lem *l)
 {
-	char **arr;
+	char	**arr;
+	int		res;
 
 	if (!**line)
 		return (exit_with_error(l, line, EMPTY_LINE));
+	if (count_chr(*line, ' ') != 2)
+		return (exit_with_error(l, line, INVALID_FORMAT_ROOM));
 	arr = ft_split_white(*line);
 	if (handle_arr_content(l, line, &arr) == ERROR
 		|| handle_property(l, line, p, arr[0]) == ERROR)
@@ -78,10 +88,13 @@ int		record_name(char **line, t_namelist **n, int p, t_lem *l)
 		free_2darray(&arr);
 		return (ERROR);
 	}
-	if (add_name_to_list(n, arr[0], p) == ERROR)
+	if ((res = add_name_to_list(n, arr[0], p)) != OK)
 	{
 		free_2darray(&arr);
-		return (exit_with_error(l, line, MALLOC_FAIL));
+		if (res == ERROR)
+			return (exit_with_error(l, line, CLONE_ROOMS));
+		if (res == MALLOC_ERROR)
+			return (exit_with_error(l, line, MALLOC_FAIL));
 	}
 	ft_strdel(line);
 	free_2darray(&arr);

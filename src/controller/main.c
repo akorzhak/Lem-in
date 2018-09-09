@@ -51,7 +51,7 @@ int		parsing_controller(t_lem *l, t_room ***rooms)
 		return (ERROR);
 	}
 	init_dict(l->rooms_nb, *rooms);
-	if (get_links(l, &line) == ERROR || validate_dict(l) == ERROR)
+	if (get_links(l, &line) == ERROR)
 	{
 		free_dict();
 		ft_strdel(&line);

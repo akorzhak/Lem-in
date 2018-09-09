@@ -14,7 +14,6 @@
 
 /*
 ** Escape sequences for formats.
-** blink works only on Linux OS, on Mac OS it is simply ignored.
 */
 
 void	blink(void)

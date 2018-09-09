@@ -14,6 +14,8 @@
 
 int		validate_ants_nb(char **line, t_lem *l)
 {
+	if (!is_number(*line))
+		return (exit_with_error(l, line, ANTS_NOT_NUMBER));
 	if (ft_strlen(*line) > 10 || (l->ants_nb = ft_atoi(*line)) > 21474830)
 		return (exit_with_error(l, line, TOO_MUCH_ANTS));
 	else if (l->ants_nb <= 0)

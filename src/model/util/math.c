@@ -12,18 +12,34 @@
 
 #include "lem-in.h"
 
-int		has_spaces(char *str)
+int		has_chr(char *str, char c)
 {
 	int i;
 
 	i = 0;
 	while (str[i])
 	{
-		if (str[i] == ' ' || str[i] == '\t')
+		if (str[i] == c)
 			return (1);
 		i++;
 	}
 	return (0);
+}
+
+int		count_chr(char *str, char c)
+{
+	int	i;
+	int	nb;
+
+	i = 0;
+	nb = 0;
+	while (str[i])
+	{
+		if (str[i] == c)
+			nb++;
+		i++;
+	}
+	return (nb);
 }
 
 int		is_number(char *nb)

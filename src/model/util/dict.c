@@ -46,34 +46,6 @@ void	free_dict(void)
 	}
 }
 
-int		validate_dict(t_lem *l)
-{
-	int i;
-	int n;
-	int nb;
-
-	n = 0;
-	while (g_rooms_dict[n])
-	{
-		i = 0;
-		nb = 0;
-		while (g_rooms_dict[i])
-		{
-			if (!ft_strcmp(g_rooms_dict[n], g_rooms_dict[i]))
-				nb++;
-			i++;
-		}
-		if (nb > 1)
-		{
-			l->e_message = ft_strjoin(CLONE_ROOMS, g_rooms_dict[n]);
-			l->clone_rooms = 1;
-			return (ERROR);
-		}
-		n++;
-	}
-	return (OK);
-}
-
 int		dict(char *value)
 {
 	int key;

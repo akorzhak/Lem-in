@@ -101,5 +101,5 @@ void	display_map(t_map *map)
 		ft_printf("%s\n", map->line);
 		map = map->next;
 	}
-	ft_putchar('\n');
+	ft_putchar('\n'); //???????
 }

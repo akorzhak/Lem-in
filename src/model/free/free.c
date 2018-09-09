@@ -12,7 +12,7 @@
 
 #include "lem-in.h"
 
-void	free_namelist(t_namelist **list)
+int		free_namelist(t_namelist **list)
 {
 	t_namelist *next;
 
@@ -26,6 +26,7 @@ void	free_namelist(t_namelist **list)
 			(*list) = next;
 		}
 	}
+	return (1);
 }
 
 void	free_2darray(char ***arr)
