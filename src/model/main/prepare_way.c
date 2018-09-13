@@ -37,7 +37,7 @@ int		add_next_room(t_linkage **link, char ***w, int len, char *start_room)
 			clean_way(w, len);
 			return (MALLOC_ERROR);
 		}
-		(*link)->room->used = USED;
+		(*link)->room->used = TRUE;
 		*link = (*link)->room->linked_rooms;
 	}
 	return (OK);
@@ -62,7 +62,7 @@ int		prepare_way(t_lnk *lnk, char ***way, t_i *i, t_lem *l)
 		clean_way(&w, i->len);
 		return (MALLOC_ERROR);
 	}
-	lnk->p_room->room->used = USED;
+	lnk->p_room->room->used = TRUE;
 	lnk->link = lnk->p_room->room->linked_rooms;
 	if (add_next_room(&lnk->link, &w, i->len, l->start_room) == MALLOC_ERROR)
 		return (MALLOC_ERROR);

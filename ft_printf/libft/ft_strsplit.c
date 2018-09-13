@@ -50,13 +50,13 @@ static char		**filling(char const *s, char c, char **arr, size_t words)
 		b = 0;
 		while (*s == c)
 			s++;
-		if ((arr[a] = (char*)malloc(sizeof(char) * let_count(s, c))) == NULL)
+		if ((arr[a] = (char *)malloc(sizeof(char) * let_count(s, c))) == NULL)
 			return (NULL);
 		while (*s != c && *s)
 			arr[a][b++] = *(s++);
 		arr[a++][b] = '\0';
 	}
-	arr[a] = 0;
+	arr[a] = NULL;
 	return (arr);
 }
 
@@ -68,7 +68,7 @@ char			**ft_strsplit(char const *s, char c)
 	if (!s)
 		return (NULL);
 	words = word_count(s, c);
-	if ((arr = (char**)malloc(sizeof(char*) * (words + 1))) == NULL)
+	if ((arr = (char **)malloc(sizeof(char*) * (words + 1))) == NULL)
 		return (NULL);
 	return (filling(s, c, arr, words));
 }

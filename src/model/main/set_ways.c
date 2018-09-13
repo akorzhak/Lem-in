@@ -24,7 +24,7 @@ t_linkage	*choose_penultimate_room(t_linkage **linked_rooms)
 	while (rooms)
 	{
 		if ((!lowest_lvl || rooms->room->level < lowest_lvl)
-			&& (rooms->room->used == NOT_USED) && rooms->room->level)
+			&& (rooms->room->used == FALSE) && rooms->room->level)
 		{
 			lowest_lvl = rooms->room->level;
 			penultimate_room = rooms;
@@ -73,7 +73,7 @@ int			pave_the_ways(t_way **w, t_lem *l, t_room **rooms)
 	*w = (t_way *)ft_memalloc(sizeof(t_way));
 	while (ft_strcmp(rooms[i.i]->name, l->end_room))
 		i.i++;
-	rooms[i.i]->used = USED;
+	rooms[i.i]->used = TRUE;
 	while ((lnk.p_room = choose_penultimate_room(&(rooms[i.i]->linked_rooms))))
 	{
 		if (prepare_way(&lnk, &way, &i, l) == MALLOC_ERROR)

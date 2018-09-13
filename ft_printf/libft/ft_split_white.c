@@ -17,7 +17,7 @@ static int		let_count(char *str, int i)
 	int		len;
 
 	len = 1;
-	while (str[i] != ' ' && str[i] != '\n' && str[i++])
+	while (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' && str[i++])
 		len++;
 	return (len);
 }
@@ -30,18 +30,19 @@ static char		**fill(char *str, char **arr)
 
 	i = 0;
 	a = 0;
+	b = 0;
 	while (str[i])
 	{
-		b = 0;
-		while (str[i] == ' ' || str[i] == '\n')
+		while (str[i] == ' ' || str[i] == '\n' || str[i] == '\t')
 			i++;
-		if (!str[i])
-			break ;
-		arr[a] = (char*)ft_memalloc(sizeof(char) * let_count(str, i));
-		while (str[i] != ' ' && str[i] != '\n' && str[i])
+		arr[a] = (char*)malloc(sizeof(char) * let_count(str, i));
+		while (str[i] != ' ' && str[i] != '\n' && str[i] != '\t' && str[i])
 			arr[a][b++] = str[i++];
 		arr[a++][b] = '\0';
+		b = 0;
 	}
+	arr[a] = (char *)malloc(sizeof(char));
+	arr[a] = NULL;
 	return (arr);
 }
 
@@ -54,11 +55,11 @@ static int		word_count(char *str)
 	nb = 1;
 	while (str[i])
 	{
-		if (str[i] != ' ' && str[i] != '\n')
+		if (str[i] != ' ' && str[i] != '\t' && str[i] != '\n')
 			nb++;
-		while (str[i] != ' ' && str[i] != '\n' && str[i])
+		while (str[i] != ' ' && str[i] != '\t' && str[i] != '\n' && str[i])
 			i++;
-		while (str[i] == ' ' || str[i] == '\n')
+		while (str[i] == ' ' || str[i] == '\t' || str[i] == '\n')
 			i++;
 	}
 	return (nb);
@@ -70,8 +71,8 @@ char			**ft_split_white(char *str)
 
 	if (str)
 	{
-		arr = (char**)ft_memalloc(sizeof(char*) * (word_count(str)));
+		arr = (char **)malloc(sizeof(char*) * (word_count(str)));
 		return (fill(str, arr));
 	}
-	return (0);
+	return (NULL);
 }

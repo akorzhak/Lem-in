@@ -20,10 +20,10 @@ int		has_chr(char *str, char c)
 	while (str[i])
 	{
 		if (str[i] == c)
-			return (1);
+			return (TRUE);
 		i++;
 	}
-	return (0);
+	return (FALSE);
 }
 
 int		count_chr(char *str, char c)
@@ -53,9 +53,9 @@ int		is_number(char *nb)
 	{
 		i++;
 		if (!nb[i])
-			return (1);
+			return (TRUE);
 	}
-	return (0);
+	return (FALSE);
 }
 
 /*
@@ -74,7 +74,7 @@ int		ceil_div(int nb1, int nb2)
 			res++;
 		return (res);
 	}
-	return (0);
+	return (FALSE);
 }
 
 int		arrlen(char **arr)

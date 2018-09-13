@@ -81,7 +81,7 @@ int		record_name(char **line, t_namelist **n, int p, t_lem *l)
 		return (exit_with_error(l, line, EMPTY_LINE));
 	if (count_chr(*line, ' ') != 2)
 		return (exit_with_error(l, line, INVALID_FORMAT_ROOM));
-	arr = ft_split_white(*line);
+	arr = ft_strsplit(*line, ' ');
 	if (handle_arr_content(l, line, &arr) == ERROR
 		|| handle_property(l, line, p, arr[0]) == ERROR)
 	{

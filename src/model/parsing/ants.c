@@ -28,7 +28,7 @@ int		get_ants(t_lem *l)
 	char *line;
 
 	line = NULL;
-	while (get_next_line(0, &line) > 0)
+	while (get_next_line(0, &line) == TRUE)
 	{
 		if (save_map_line(l, line) == MALLOC_ERROR)
 			return (exit_with_error(l, &line, MALLOC_FAIL));

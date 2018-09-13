@@ -53,12 +53,12 @@ int			get_links(t_lem *l, char **line)
 {
 	int	gnl;
 
-	gnl = 1;
+	gnl = TRUE;
 	if (!*line)
 		return (exit_with_error(l, line, NO_LINKS));
-	while (gnl > 0)
+	while (gnl == TRUE)
 	{
-		gnl = 0;
+		gnl = FALSE;
 		if (save_map_line(l, *line) == MALLOC_ERROR)
 			return (exit_with_error(l, line, MALLOC_FAIL));
 		if (**line == '#')

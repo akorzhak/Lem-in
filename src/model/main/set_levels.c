@@ -51,16 +51,16 @@ int		set_level(t_lem *l, t_room ***r, t_link *links)
 		&& !rooms[dict(links->room2)]->level)
 	{
 		rooms[dict(links->room2)]->level = level + 1;
-		return (1);
+		return (TRUE);
 	}
 	else if (ft_strcmp(links->room2, l->end_room)
 		&& (level = rooms[dict(links->room2)]->level)
 		&& !rooms[dict(links->room1)]->level)
 	{
 		rooms[dict(links->room1)]->level = level + 1;
-		return (1);
+		return (TRUE);
 	}
-	return (0);
+	return (FALSE);
 }
 
 int		set_levels(t_lem *l, t_room ***rooms)
@@ -72,14 +72,14 @@ int		set_levels(t_lem *l, t_room ***rooms)
 	r = *rooms;
 	change = 1;
 	set_1st_levels(l, rooms);
-	while (change)
+	while (change == TRUE)
 	{
-		change = 0;
+		change = FALSE;
 		links = l->links;
 		while (links)
 		{
-			if (set_level(l, rooms, links))
-				change = 1;
+			if (set_level(l, rooms, links) == TRUE)
+				change = TRUE;
 			links = links->next;
 		}
 	}
