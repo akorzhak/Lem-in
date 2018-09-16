@@ -10,11 +10,11 @@
 /*                                                                            */
 /* ************************************************************************** */
 
+#include "lemin.h"
+
 /*
 ** Escape sequences for colors.
 */
-
-#include "lem-in.h"
 
 void	red(void)
 {

@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 void	display_result(t_turn ***turns)
 {

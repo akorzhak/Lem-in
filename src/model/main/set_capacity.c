@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 void	define_nb_of_transfers(t_way **ways)
 {

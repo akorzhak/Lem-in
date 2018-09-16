@@ -1,7 +1,7 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   lem-in.h                                           :+:      :+:    :+:   */
+/*   lemin.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
@@ -10,8 +10,8 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef LEM_IN_H
-# define LEM_IN_H
+#ifndef LEMIN_H
+# define LEMIN_H
 
 # include "libftprintf.h"
 # include <fcntl.h>
@@ -140,7 +140,6 @@ struct				s_lem
 	char			*start_room;
 	char			*end_room;
 	char			*e_message;
-	char			clone_rooms;
 	t_map			*map;
 	t_link			*links;
 };
@@ -200,6 +199,7 @@ int					record_name(char **line, t_namelist **n, int p, t_lem *l);
 int					form_adj_list(t_lem *l, t_room ***rooms, t_namelist *names);
 int					save_map_line(t_lem *l, char *line);
 void				save_link(t_lem *l, char *room1, char *room2);
+int					validate_rooms(t_lem *l);
 
 /*
 ******************************** MAIN FUNCTIONS ********************************

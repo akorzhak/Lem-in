@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 int		form_adj_list(t_lem *l, t_room ***rooms, t_namelist *names)
 {

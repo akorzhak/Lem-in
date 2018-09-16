@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 int		program_logic_controller(t_lem *l, t_room ***rooms)
 {
@@ -45,7 +45,8 @@ int		parsing_controller(t_lem *l, t_room ***rooms)
 	char *line;
 
 	line = NULL;
-	if (get_ants(l) == ERROR || get_rooms(l, rooms, &line) == ERROR)
+	if (get_ants(l) == ERROR || get_rooms(l, rooms, &line) == ERROR
+		|| validate_rooms(l) == ERROR)
 	{
 		ft_strdel(&line);
 		return (ERROR);

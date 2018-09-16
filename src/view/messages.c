@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 void		display_error_message(t_lem *l)
 {
@@ -25,7 +25,7 @@ void		display_error_message(t_lem *l)
 		blink();
 		ft_putstr("ERROR\n");
 		reset();
-		if (!l->clone_rooms && map)
+		if (map)
 		{
 			while (map->next)
 				map = map->next;

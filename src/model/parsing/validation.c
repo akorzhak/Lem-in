@@ -1,18 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   init.c                                             :+:      :+:    :+:   */
+/*   validation.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: akorzhak <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/07/02 17:09:14 by akorzhak          #+#    #+#             */
-/*   Updated: 2018/07/02 17:09:18 by akorzhak         ###   ########.fr       */
+/*   Created: 2018/07/02 17:24:05 by akorzhak          #+#    #+#             */
+/*   Updated: 2018/07/02 17:24:07 by akorzhak         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "lemin.h"
 
-void	init_lemin(t_lem *lem)
+int		validate_rooms(t_lem *l)
 {
-	ft_bzero(lem, sizeof(t_lem));
+	if (!l->start_room || !l->end_room)
+	{
+		l->e_message = ft_strdup(NO_START_END_ROOM);
+		return (ERROR);
+	}
+	return (OK);
 }

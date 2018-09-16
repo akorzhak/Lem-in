@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 void	select_prior_step(t_turn **loop, t_turn **prior, t_turn **prev)
 {

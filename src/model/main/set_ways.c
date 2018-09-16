@@ -10,7 +10,7 @@
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "lem-in.h"
+#include "lemin.h"
 
 t_linkage	*choose_penultimate_room(t_linkage **linked_rooms)
 {

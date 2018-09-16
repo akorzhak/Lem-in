@@ -46,8 +46,8 @@ OBJ_DIR = obj/
 
 SRC = main.c init.c get_rooms.c ants.c\
 	form_adj_list.c record_name.c args.c\
-	links.c save_input.c move_ants.c\
-	prepare_way.c set_capacity.c\
+	links.c save_input.c validation.c\
+	move_ants.c prepare_way.c set_capacity.c\
 	set_levels.c set_links.c set_ways.c\
 	sort.c colors.c dict.c formats.c\
 	math.c free.c free_lem.c free_links.c\
