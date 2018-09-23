@@ -16,7 +16,7 @@ r11 11 11
 r1-r2
 r1-r5
 r1-r3
-##starte
+##startz
 r2-r4
 r5-r8
 r4-r7
@@ -27,4 +27,3 @@ r6-r9
 r10-r7
 r9-r11
 r11-r7
-##xstart

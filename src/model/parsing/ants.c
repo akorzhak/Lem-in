@@ -18,7 +18,7 @@ int		validate_ants_nb(char **line, t_lem *l)
 		return (exit_with_error(l, line, INVALID_ANTS_NB));
 	if (is_number(*line) == FALSE)
 		return (exit_with_error(l, line, ANTS_NOT_NUMBER));
-	if (ft_strlen(*line) > 10 || (l->ants_nb = ft_atoi(*line)) > 21474830)
+	if (ft_strlen(*line) > 10 || (l->ants_nb = ft_atoi(*line)) > 21000000)
 		return (exit_with_error(l, line, TOO_MUCH_ANTS));
 	else if (l->ants_nb <= 0)
 		return (exit_with_error(l, line, INVALID_ANTS_NB));
@@ -36,7 +36,7 @@ int		get_ants(t_lem *l)
 			return (exit_with_error(l, &line, MALLOC_FAIL));
 		if (*line == '#')
 		{
-			if (ft_strnstr(line, "##", 2))
+			if (!ft_strcmp(line, "##start") || !ft_strcmp(line, "##end"))
 				return (exit_with_error(l, &line, COMMAND_BEFORE_NB));
 			ft_strdel(&line);
 			continue ;
