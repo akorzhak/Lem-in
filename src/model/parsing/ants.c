@@ -14,7 +14,9 @@
 
 int		validate_ants_nb(char **line, t_lem *l)
 {
-	if (!is_number(*line))
+	if (**line == '0')
+		return (exit_with_error(l, line, INVALID_ANTS_NB));
+	if (is_number(*line) == FALSE)
 		return (exit_with_error(l, line, ANTS_NOT_NUMBER));
 	if (ft_strlen(*line) > 10 || (l->ants_nb = ft_atoi(*line)) > 21474830)
 		return (exit_with_error(l, line, TOO_MUCH_ANTS));
@@ -35,17 +37,15 @@ int		get_ants(t_lem *l)
 		if (*line == '#')
 		{
 			if (ft_strnstr(line, "##", 2))
-				return (exit_with_error(l, &line, IRRELEVANT_COMMAND));
+				return (exit_with_error(l, &line, COMMAND_BEFORE_NB));
 			ft_strdel(&line);
 			continue ;
 		}
-		else if (ft_isdigit(*line))
+		else
 		{
 			if (validate_ants_nb(&line, l) == ERROR)
 				return (ERROR);
 		}
-		else
-			return (exit_with_error(l, &line, INVALID_ANTS_NB));
 		ft_strdel(&line);
 		return (OK);
 	}

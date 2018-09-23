@@ -38,6 +38,7 @@
 # define ANTS_NOT_NUMBER "Given number of ants contains NON-digit symbols."
 # define INVALID_FORMAT_ROOM "Invalid room format. Use 'name coord coord'."
 # define INVALID_FORMAT_LINK "Invalid link format. Use 'name-name'."
+# define COMMAND_BEFORE_NB "Commands canNOT precede ants number declaration."
 # define IRRELEVANT_COMMAND "Irrelevant command."
 # define TRASH_DELIM "Room declaration contains trash delimiters (tabs)."
 # define NON_MODIFIABLE "START/END commands canNOT modify other commands."

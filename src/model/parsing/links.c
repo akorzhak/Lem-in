@@ -63,7 +63,7 @@ int			get_links(t_lem *l, char **line)
 			return (exit_with_error(l, line, MALLOC_FAIL));
 		if (**line == '#')
 		{
-			if (ft_strnstr(*line, "##", 2))
+			if (!ft_strcmp(*line, "##start") || !ft_strcmp(*line, "##end"))
 				return (exit_with_error(l, line, IRRELEVANT_COMMAND));
 			ft_strdel(line);
 			gnl = get_next_line(0, line);

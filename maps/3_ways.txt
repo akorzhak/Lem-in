@@ -1,5 +1,5 @@
-#sdfsvdjs
-22
+212
+##start
 r1 1 1
 r2 2 2
 r3 3 3
@@ -16,12 +16,15 @@ r11 11 11
 r1-r2
 r1-r5
 r1-r3
+##starte
 r2-r4
 r5-r8
 r4-r7
 r3-r6
+####sdhbfskdbf
 r8-r10
 r6-r9
 r10-r7
 r9-r11
 r11-r7
+##xstart
