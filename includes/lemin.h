@@ -37,6 +37,8 @@
 # define EMPTY_MAP "Empty map."
 # define ANTS_NOT_NUMBER "Given number of ants contains NON-digit symbols."
 # define INVALID_FORMAT_ROOM "Invalid room format. Use 'name coord coord'."
+# define TRASH_IN_ROOM "Room name canNOT contain any dashes or tabs."
+# define L_IN_ROOM "Room name canNOT start with 'L' letter."
 # define INVALID_FORMAT_LINK "Invalid link format. Use 'name-name'."
 # define COMMAND_BEFORE_NB "Commands canNOT precede ants number declaration."
 # define IRRELEVANT_COMMAND "Irrelevant command."

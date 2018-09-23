@@ -50,6 +50,10 @@ int		handle_arr_content(t_lem *l, char **line, char ***arr)
 		return (exit_with_error(l, line, INCOMPLETE_ROOM_DATA));
 	if (has_chr(array[1], '\t') || has_chr(array[2], '\t'))
 		return (exit_with_error(l, line, TRASH_DELIM));
+	if (has_chr(array[0], '-') || has_chr(array[0], '\t'))
+		return (exit_with_error(l, line, TRASH_IN_ROOM));
+	if (array[0][0] == 'L')
+		return (exit_with_error(l, line, L_IN_ROOM));
 	if (!is_number(array[1]) || !is_number(array[2]))
 		return (exit_with_error(l, line, INVALID_COORDINATE));
 	return (OK);
